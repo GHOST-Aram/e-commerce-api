@@ -17,6 +17,6 @@
       "outDir": "./build",
       "rootDir": "./src"
     },
-    "include": ["src/**/*.ts"]
+    "include": ["src/**/*.ts", "src/test/id.js", "utils/validators.ts"]
   }
   

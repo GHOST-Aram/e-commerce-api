@@ -1,9 +1,9 @@
 import { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose"
 
-interface IProduct{
+export interface IProduct{
     name: string
-    image_url: string
-    image_file: Buffer
+    image_url?: string
+    image_file?: Buffer
     description: string
     brand: string
     manufacturer: string
@@ -13,8 +13,8 @@ interface IProduct{
     marked_price: number
     availabile_units: number 
     specifications: string[]
-    ratings: number[]
-    createdAt: Date
+    ratings?: number[]
+    createdAt?: Date
 }
 
 interface ProductVirtuals{
@@ -36,13 +36,8 @@ IProduct, ProductModel,{}, {}, ProductVirtuals>({
     },
     image_url: {
         type: String,
-        required: false
-    },
-    image_file: {
-        type: Buffer,
-        required() {
-            return this.image_url === undefined
-        },
+        required: false,
+        default: undefined
     },
     description: {
         type: String,
