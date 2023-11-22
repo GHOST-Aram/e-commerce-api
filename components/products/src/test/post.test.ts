@@ -85,15 +85,15 @@ describe('POST PRODUCTS ROUTE', () =>{
             /\/products\//)
     })
     
-    test('Responds with status 403 Bad request and errors array for no input', 
+    test('Responds with status 400 Bad request and errors array for no input', 
     async() =>{
         const response =  await request(app).post('/products')
             
-        expect(response.status).toEqual(403)
+        expect(response.status).toEqual(400)
         expect(response.body.message).toMatch(/Invalid input/i)
     }) 
     
-    test('Responds with status 403 Bad request for Invalid input', 
+    test('Responds with status 400 Bad request for Invalid input', 
     async() =>{
         const response =  await request(app).post('/products')
             .send({
@@ -114,7 +114,7 @@ describe('POST PRODUCTS ROUTE', () =>{
                 ],
             })
         
-        expect(response.status).toEqual(403)
+        expect(response.status).toEqual(400)
         expect(response.body.message).toMatch(/Invalid input/i)
     })
     
