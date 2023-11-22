@@ -1,7 +1,8 @@
 import { IProduct, Product } from "./model"
 
 export class ProductsDAL{
-    createNewProduct = async( productData: IProduct): Promise<string> =>{
+    
+    public createNewProduct = async( productData: IProduct): Promise<string> =>{
         const product =  new Product({
             name: productData.name,
             image_file: productData.image_file ? productData.image_file : null,
