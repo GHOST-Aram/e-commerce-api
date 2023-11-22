@@ -11,28 +11,28 @@ export class ProductsController{
 
     public AddNewProduct = async(
             req: Request, res: Response, next: NextFunction
-        ) =>{
-            const productData: IProduct = req.body
-            const errors = validationResult(req)
+    ) =>{
+        const productData: IProduct = req.body
+        const errors = validationResult(req)
 
-            if(errors.isEmpty()){
+        if(errors.isEmpty()){
 
-                try {
-                
-                    const productId = await this.dal.createNewProduct(productData)
-    
-                    res.location(`/products/${productId}`)
-                    res.status(201).json({ message: 'Created'})
-    
-                } catch (error) {
-                    console.log(error)
-                    next(error)
-                }
-            } else {
-                res.status(403).json({
-                    message: 'Invalid input',
-                    errors: errors.array()
-                })
+            try {
+            
+                const productId = await this.dal.createNewProduct(productData)
+
+                res.location(`/products/${productId}`)
+                res.status(201).json({ message: 'Created'})
+
+            } catch (error) {
+                console.log(error)
+                next(error)
             }
+        } else {
+            res.status(403).json({
+                message: 'Invalid input',
+                errors: errors.array()
+            })
         }
+    }
 }

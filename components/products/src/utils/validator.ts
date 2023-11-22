@@ -43,8 +43,7 @@ export class Validator{
             .escape()
     }
 }
-
-export const validator = new Validator()
+const validator = new Validator()
 
 export const productValidators = [
     validator.validateName('name'),
