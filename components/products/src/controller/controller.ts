@@ -29,7 +29,7 @@ export class ProductsController{
                 next(error)
             }
         } else {
-            res.status(403).json({
+            res.status(400).json({
                 message: 'Invalid input',
                 errors: errors.array()
             })
