@@ -30,9 +30,6 @@ export class ProductsController{
                     next(error)
                 }
             } else {
-                errors.array().forEach(element => {
-                    console.log(element)
-                });
                 res.status(403).json({
                     message: 'Invalid input',
                     errors: errors.array()
