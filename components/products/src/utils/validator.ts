@@ -22,37 +22,17 @@ export class Validator{
     }
 
 
-    public validateSellingPrice(fieldName: string):ValidationChain{
+    public validateNumberField(fieldName: string):ValidationChain{
+        const formattedName = formatter.formatFieldName(fieldName)
+
         return body(fieldName).notEmpty()
-            .withMessage('Selling Price field is required')
+            .withMessage(`${formattedName} field is required`)
             .trim()
             .escape()
             .custom((value) =>{
                 return Number(value) > 1
             })
-            .withMessage('Selling price must be greater than 1')
-    }
-
-    public validateMarkedPrice(fieldName: string):ValidationChain{
-        return body(fieldName).notEmpty()
-            .withMessage('Marked Price field is required')
-            .trim()
-            .escape()
-            .custom((value) =>{
-                return Number(value) > 1
-            })
-            .withMessage('Marked price must be greater that 1')
-    }
-
-    public validateAvailabeUnits(fieldName: string):ValidationChain{
-        return body(fieldName).notEmpty()
-            .withMessage('Available units field is required')
-            .trim()
-            .escape()
-            .custom((value) =>{
-                return Number(value) >= 1
-            })
-            .withMessage('Availabe units must be greater or equal to one')
+            .withMessage(`${formattedName} must be greater than 1`)
     }
 
     public validateSpecifications(fieldName: string): ValidationChain{
@@ -74,8 +54,8 @@ export const productValidators = [
     validator.validateName('manufacturer'),
     validator.validateName('model'),
     validator.validateName('category'),
-    validator.validateSellingPrice('selling_price'),
-    validator.validateMarkedPrice('marked_price'),
-    validator.validateAvailabeUnits('available_units'),
+    validator.validateNumberField('selling_price'),
+    validator.validateNumberField('marked_price'),
+    validator.validateNumberField('available_units'),
     validator.validateSpecifications('specifications'),
 ]
