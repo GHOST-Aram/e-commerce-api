@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
-import { productValidators, validator } from "../utils/validator"
 export class ProductsController{
     private dal
 
