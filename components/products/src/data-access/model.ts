@@ -11,7 +11,7 @@ export interface IProduct{
     category: string
     selling_price: number
     marked_price: number
-    availabile_units: number 
+    available_units: number 
     specifications: string[]
     ratings?: number[]
     createdAt?: Date
@@ -79,7 +79,7 @@ IProduct, ProductModel,{}, {}, ProductVirtuals>({
         type: Number,
         min: 1,
     },
-    availabile_units: {
+    available_units: {
         type: Number,
         min: 0,
         required: true
