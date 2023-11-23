@@ -3,6 +3,7 @@ import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
+import { formatter } from "../utils/formatter"
 export class ProductsController{
     private dal
 
@@ -102,7 +103,7 @@ export class ProductsController{
        
         const paginator = this.paginate(req)
            
-        if(!this.isValidName(brandName)){
+        if(!formatter.isValidNameFormat(brandName)){
             res.status(400).json({ message: 'Invalid brand name'})
         }
 
@@ -127,10 +128,9 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
     ) =>{
         const manufacturerName = req.params.manufacturerName
-       
         const paginator = this.paginate(req)
            
-        if(!this.isValidName(manufacturerName)){
+        if(!formatter.isValidNameFormat(manufacturerName)){
             res.status(400).json({ message: 'Invalid manufacturer name'})
         }
 
@@ -149,9 +149,5 @@ export class ProductsController{
         } catch (error) {
             next(error)
         } 
-    }
-
-    private isValidName = (brandName: string) =>{
-        return /^[a-zA-Z\s]{2,100}$/.test(brandName)
     }
 }
