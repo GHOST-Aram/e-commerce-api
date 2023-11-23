@@ -1,15 +1,6 @@
-import { app } from "../config/config";
-import { routesWrapper } from "../routes/urls";
-import { ProductsController } from "../controller/controller";
-import { ProductsDAL } from "./mocks/data-access";
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-
-
-const dal = new ProductsDAL()
-const controller = new ProductsController(dal)
-
-app.use('/products', routesWrapper(controller))
+import { app } from "./app.test.config"
 
 describe('POST PRODUCTS ROUTE', () =>{
     test('Responds with status 201 and \'created\' message', 
