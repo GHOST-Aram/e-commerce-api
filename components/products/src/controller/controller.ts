@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express"
 import { Paginator, ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
-import { isValidObjectId } from "mongoose"
 import { PriceRange, formatter } from "../utils/formatter"
+import { validator } from "../utils/validator"
 
 export class ProductsController{
     private dal
@@ -45,7 +45,7 @@ export class ProductsController{
     ) => {
         const productId  = req.params.id
 
-        if(!isValidObjectId(productId)){
+        if(!validator.isValidId(productId)){
             res.status(400).json(
                 { message: 'Invalid Product ID'})
         } else {
@@ -111,7 +111,7 @@ export class ProductsController{
         const brandName = req.params.brandName
         const paginator = this.paginate(req)
            
-        if(!formatter.isValidNameFormat(brandName)){
+        if(!validator.isValidNameFormat(brandName)){
             res.status(400).json({ message: 'Invalid brand name'})
         }
 
@@ -139,7 +139,7 @@ export class ProductsController{
         const manufacturerName = req.params.manufacturerName
         const paginator = this.paginate(req)
            
-        if(!formatter.isValidNameFormat(manufacturerName)){
+        if(!validator.isValidNameFormat(manufacturerName)){
             res.status(400).json({ message: 'Invalid manufacturer name'})
         }
 
@@ -167,7 +167,7 @@ export class ProductsController{
         const modelName = req.params.modelName
         const paginator = this.paginate(req)
            
-        if(!formatter.isValidModelName(modelName)){
+        if(!validator.isValidModelName(modelName)){
             res.status(400).json({ message: 'Invalid model name'})
         }
 
@@ -223,7 +223,7 @@ export class ProductsController{
         const category = req.params.categoryName
         const paginator = this.paginate(req)
 
-        if(!formatter.isValidNameFormat(category)){
+        if(!validator.isValidNameFormat(category)){
             res.status(400).json({ 
                 message: 'Invalid category name' })
         }

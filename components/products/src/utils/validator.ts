@@ -1,7 +1,20 @@
 import { ValidationChain, body } from "express-validator"
 import { formatter } from "./formatter"
+import { isValidObjectId } from "mongoose"
 
 export class Validator{
+    public isValidNameFormat = (name: string) =>{
+        return /^[a-zA-Z\s]{2,100}$/.test(name)
+    }
+
+    public isValidModelName = (modelName: string) => {
+        return /^\w{2,100}/.test(modelName) 
+    }
+
+    public isValidId = (id: string): boolean =>{
+        return isValidObjectId(id)
+    }
+    
     public validateName(fieldName: string): ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
 
