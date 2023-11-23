@@ -1,5 +1,6 @@
 import { ValidationChain, body } from "express-validator"
 import { formatter } from "./formatter"
+
 export class Validator{
     public validateName(fieldName: string): ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
@@ -43,18 +44,4 @@ export class Validator{
             .escape()
     }
 }
-const validator = new Validator()
-
-export const productValidators = [
-    validator.validateName('name'),
-    validator.validateUrl('image_url'),
-    validator.validateFileField('image_file'),
-    validator.validateName('brand'),
-    validator.validateName('manufacturer'),
-    validator.validateName('model'),
-    validator.validateName('category'),
-    validator.validateNumberField('selling_price'),
-    validator.validateNumberField('marked_price'),
-    validator.validateNumberField('available_units'),
-    validator.validateSpecifications('specifications'),
-]
+export const validator = new Validator()
