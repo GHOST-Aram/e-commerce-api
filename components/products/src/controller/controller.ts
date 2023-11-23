@@ -4,6 +4,7 @@ import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
 import { PriceRange, formatter } from "../utils/formatter"
+
 export class ProductsController{
     private dal
 
@@ -86,7 +87,7 @@ export class ProductsController{
     private paginate = (req?: Request): Paginator =>{
         const pagestr = req?.query.page
         const limitstr = req?.query.limit
-        
+
         let page:number = 1
         let limit: number = 10
 
@@ -102,13 +103,12 @@ export class ProductsController{
         return ({ skipDocs, limit })
     }
 
-    public getProductsByBrandName = async(
+    public getProductsByBrand = async(
         req: Request, 
         res: Response, 
         next: NextFunction
     ) =>{
         const brandName = req.params.brandName
-       
         const paginator = this.paginate(req)
            
         if(!formatter.isValidNameFormat(brandName)){
@@ -116,9 +116,8 @@ export class ProductsController{
         }
 
         try {
-            const products = await this.dal.findProductsByBrandName(
-                brandName, paginator
-            )
+            const products = await this.dal.findProductsByBrand(
+                brandName, paginator)
             
             if(products.length < 1){
                 res.status(404).json({
@@ -132,7 +131,7 @@ export class ProductsController{
         } 
     }
 
-    public getProductsByManufacturerName = async(
+    public getProductsByManufacturer = async(
         req: Request, 
         res: Response, 
         next: NextFunction
@@ -145,9 +144,8 @@ export class ProductsController{
         }
 
         try {
-            const products = await this.dal.findProductsBymanufacturerName(
-                manufacturerName, paginator
-            )
+            const products = await this.dal.findProductsBymanufacturer(
+                manufacturerName, paginator)
             
             if(products.length < 1){
                 res.status(404).json({
@@ -161,7 +159,7 @@ export class ProductsController{
         } 
     }
 
-    public getProductsByModelName = async(
+    public getProductsByModel = async(
         req: Request, 
         res: Response, 
         next: NextFunction
@@ -174,9 +172,8 @@ export class ProductsController{
         }
 
         try {
-            const products = await this.dal.findProductsByModelName(
-                modelName, paginator
-            )
+            const products = await this.dal.findProductsByModel(
+                modelName, paginator)
             
             if(products.length < 1){
                 res.status(404).json({

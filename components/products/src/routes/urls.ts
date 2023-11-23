@@ -9,13 +9,13 @@ const routesWrapper = (controller: ProductsController) =>{
     router.get('/', controller.getProducts)
     router.get('/:id', controller.getOneProduct)
     router.get('/brands/:brandName', 
-        controller.getProductsByBrandName
+        controller.getProductsByBrand
     )
     router.get('/manufacturer/:manufacturerName', 
-        controller.getProductsByManufacturerName
+        controller.getProductsByManufacturer
     )
     router.get('/models/:modelName', 
-        controller.getProductsByModelName
+        controller.getProductsByModel
     )
 
     router.get('/selling-price/:range', 
