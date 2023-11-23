@@ -60,7 +60,7 @@ describe('GET Products by brand', () =>{
     })
 
     test('Responds with status 400 if brand name is empty',async() =>{
-        const response = await request(app).get('/products/brands')
+        const response = await request(app).get('/products/brands/4a')
 
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.status).toEqual(400)

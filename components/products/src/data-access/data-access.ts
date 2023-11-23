@@ -21,11 +21,20 @@ export class ProductsDAL{
         return (await product.save()).id
     }
 
-    public findProducts= async(
+    public findProducts = async(
         skipDocs: number, limit: number
     ): Promise<HydratedProductDoc[]> =>{
         const products = await Product.find().skip(skipDocs).limit(limit)
         
+        return products
+    }
+
+    findProductsByBrandName =async (
+        brandName: string, paginator:{skipDocs: number, limit: number}
+    ): Promise<HydratedProductDoc[]> => {
+        const products = await Product.find({ brand: brandName})
+            .skip(paginator.skipDocs).limit(paginator.limit)
+
         return products
     }
 
