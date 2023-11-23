@@ -209,7 +209,30 @@ export class ProductsController{
         } catch (error) {
             next(error)
         }
+    }
 
+    public getProductsByCategory = async(
+        req: Request, res: Response, next: NextFunction
+    ) =>{
+        const category = req.params.categoryName
+        const paginator = this.paginate(req)
 
+        if(!formatter.isValidNameFormat(category)){
+            res.status(400).json({ message: 'Invalid category name' })
+        }
+
+        try {
+            const products = await this.dal.findProductsByCategory(
+                category, paginator
+            )
+
+            if(!products || products.length < 1){
+                res.status(404).json({ message: 'Not found'})
+            } else {
+                res.status(200).json({ products })
+            }
+        } catch (error) {
+            next(error)
+        }
     }
 }
