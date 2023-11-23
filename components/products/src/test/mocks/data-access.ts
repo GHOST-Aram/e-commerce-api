@@ -2,14 +2,15 @@ import { jest } from "@jest/globals";
 import { HydratedProductDoc, IProduct, Product } from "../../data-access/model";
 
 export class ProductsDAL {
-    createNewProduct = jest.fn(async(productData : IProduct) =>{
+    public createNewProduct = jest.fn(async(productData : IProduct) =>{
         const product = new Product(productData)
 
         return product.id
     })
 
-    findProductsByBrandName =jest.fn(async (
-        brandName: string, paginator:{skipDocs: number, limit: number}
+    public findProductsByBrandName =jest.fn(async (
+        brandName: string, 
+        paginator:{skipDocs: number, limit: number}
     ): Promise<HydratedProductDoc[]> => {
         let products: HydratedProductDoc[] = []
 
@@ -23,12 +24,11 @@ export class ProductsDAL {
 
                 productCount ++
             }
-
         }
         return products
     })
 
-    findProductById = jest.fn(
+    public findProductById = jest.fn(
         async(productId: string): Promise<HydratedProductDoc|null> =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4'){
                 return new Product({
@@ -42,7 +42,7 @@ export class ProductsDAL {
                 
     })
 
-    findProducts = jest.fn(async( 
+    public findProducts = jest.fn(async( 
         {skipDocs, limit}:{skipDocs: number, limit: number}
         ): Promise<HydratedProductDoc[]> =>{
         
@@ -58,5 +58,26 @@ export class ProductsDAL {
             }
             
             return products
+    })
+
+    public findProductsBymanufacturerName = jest.fn(async (
+        manufacturerName: string, 
+        paginator:{skipDocs: number, limit: number}
+    ): Promise<HydratedProductDoc[]> => {
+        let products: HydratedProductDoc[] = []
+
+        if(manufacturerName === 'samsung'){
+            let productCount = 0
+            while(productCount < paginator.limit){
+                products.push(new Product({
+                    name: 'Product 10',
+                    brand: 'Samsung',
+                }))
+
+                productCount ++
+            }
+
+        }
+        return products
     })
 }

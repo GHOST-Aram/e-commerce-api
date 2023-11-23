@@ -102,7 +102,7 @@ export class ProductsController{
        
         const paginator = this.paginate(req)
            
-        if(!this.isValidBrandName(brandName)){
+        if(!this.isValidName(brandName)){
             res.status(400).json({ message: 'Invalid brand name'})
         }
 
@@ -123,7 +123,35 @@ export class ProductsController{
         } 
     }
 
-    private isValidBrandName = (brandName: string) =>{
+    public getProductsByManufacturerName = async(
+        req: Request, res: Response, next: NextFunction
+    ) =>{
+        const manufacturerName = req.params.manufacturerName
+       
+        const paginator = this.paginate(req)
+           
+        if(!this.isValidName(manufacturerName)){
+            res.status(400).json({ message: 'Invalid manufacturer name'})
+        }
+
+        try {
+            const products = await this.dal.findProductsBymanufacturerName(
+                manufacturerName, paginator
+            )
+            
+            if(products.length < 1){
+                res.status(404).json({
+                    message: 'Brand products not found'
+                })
+            }
+
+            res.status(200).json({ products })
+        } catch (error) {
+            next(error)
+        } 
+    }
+
+    private isValidName = (brandName: string) =>{
         return /^[a-zA-Z\s]{2,100}$/.test(brandName)
     }
 }
