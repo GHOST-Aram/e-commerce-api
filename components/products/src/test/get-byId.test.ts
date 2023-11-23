@@ -10,26 +10,7 @@ const dal = new ProductsDAL()
 const controller = new ProductsController(dal)
 
 app.use('/products', routesWrapper(controller))
-
-describe('GET PRODUCTS', () => { 
-    test('Respond with JSON content-type', async() =>{
-        const response = await request(app).get('/products')
-    
-        expect(response.headers['content-type']).toMatch(/json/)
-    })
-
-    test('Responds with an array of all products', async()=>{
-        const response = await request(app).get('/products')
-
-        expect(Array.isArray(response.body.products)).toBeTruthy()
-    })
-
-    test('Responds with 200 status if products found', async() =>{
-        const response = await request(app).get('/products')
-
-        expect(response.status).toEqual(200)
-    })
-
+describe('GET Products By Id', () =>{
     test('Responds with single product given ID', async() =>{
         const response = await request(app).get(
             '/products/64c9e4f2df7cc072af2ac9e4'
@@ -59,15 +40,5 @@ describe('GET PRODUCTS', () => {
 
         expect(response.status).toEqual(404)
         expect(response.body.message).toMatch(/not found/ig)
-    })
-    
-    test('Responds with paginated data', async() =>{
-        const response = await request(app).get(
-            '/products?page=1&limit=4'
-        )
-        const products = response.body.products
-        expect(products).toHaveProperty('length')
-        expect(products.length).toBeGreaterThan(0)
-        expect(products.length).toBeLessThanOrEqual(4)
     })
  })
