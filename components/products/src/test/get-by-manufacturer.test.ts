@@ -59,7 +59,7 @@ describe('GET Products by manufacturer', () =>{
         expect(response.body.message).toMatch(/not found/ig)
     })
 
-    test('Responds with status 400 if manufacturer name is empty',async() =>{
+    test('Responds with status 400 if manufacturer name is invalid',async() =>{
         const response = await request(app).get('/products/manufacturer/4a')
 
         expect(response.headers['content-type']).toMatch(/json/)
