@@ -8,7 +8,8 @@ describe('Formatter Class', () =>{
     })
 
     test('Replaces underscore with whitespace', () =>{
-        const formattedName = formatter.formatFieldName('hello_world')
+        const formattedName = formatter.formatFieldName(
+            'hello_world')
         expect(formattedName).toStrictEqual('Hello world')
     })
 
@@ -26,7 +27,8 @@ describe('Formatter Class', () =>{
         expect(range.end).toBe(null)
     })
 
-    test('Returns correct price range for reversed ranges', () =>{
+    test('Returns correct price range for reversed ranges', 
+    () =>{
         const range = formatter.extractPriceRange('8900-200')
 
         if(range.start && range.end){
