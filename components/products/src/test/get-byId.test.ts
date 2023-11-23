@@ -1,15 +1,9 @@
-import { app } from "../config/config";
-import { routesWrapper } from "../routes/urls";
-import { ProductsController } from "../controller/controller";
-import { ProductsDAL } from "./mocks/data-access";
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
+import { app } from "./app.test.config"
 
 
-const dal = new ProductsDAL()
-const controller = new ProductsController(dal)
 
-app.use('/products', routesWrapper(controller))
 describe('GET Products By Id', () =>{
     test('Responds with single product given ID', async() =>{
         const response = await request(app).get(
