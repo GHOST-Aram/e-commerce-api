@@ -1,4 +1,10 @@
+import { PriceRange } from "../utils/formatter"
 import { HydratedProductDoc, IProduct, Product } from "./model"
+
+export interface Paginator{
+    skipDocs: number, 
+    limit: number
+}
 
 export class ProductsDAL{
     
@@ -22,7 +28,7 @@ export class ProductsDAL{
     }
 
     public findProducts = async(
-        {skipDocs, limit}:{skipDocs: number, limit: number}
+        {skipDocs, limit}: Paginator
     ): Promise<HydratedProductDoc[]> =>{
         const products = await Product.find().skip(skipDocs).limit(limit)
         
@@ -30,7 +36,8 @@ export class ProductsDAL{
     }
 
     findProductsByBrandName = async (
-        brandName: string, paginator:{skipDocs: number, limit: number}
+        brandName: string, 
+        paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ brand: brandName})
             .skip(paginator.skipDocs).limit(paginator.limit)
@@ -39,12 +46,14 @@ export class ProductsDAL{
     }
 
     public findProductById = async(
-        productId: string): Promise<HydratedProductDoc | null > =>{
+        productId: string
+    ): Promise<HydratedProductDoc | null > =>{
         return await Product.findById(productId)
     }
     
     public findProductsBymanufacturerName = async (
-        manufacturerName: string, paginator:{skipDocs: number, limit: number}
+        manufacturerName: string, 
+        paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ brand: manufacturerName})
             .skip(paginator.skipDocs).limit(paginator.limit)
@@ -53,11 +62,28 @@ export class ProductsDAL{
     }
 
     public findProductsByModelName = async (
-        modelName: string, paginator:{skipDocs: number, limit: number}
+        modelName: string, 
+        paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ brand: modelName})
             .skip(paginator.skipDocs).limit(paginator.limit)
-            
+
+        return products
+    }
+
+    public findProductsByPriceRange = async(
+        priceRange: PriceRange, 
+        paginator: Paginator
+    ): Promise<HydratedProductDoc[]> =>{
+        const products = Product.find({
+            'selling_price': {
+                $gte: priceRange.start, 
+                $lte: priceRange.end
+            }
+        })
+        .skip(paginator.skipDocs)
+        .limit(paginator.limit)
+
         return products
     }
 }

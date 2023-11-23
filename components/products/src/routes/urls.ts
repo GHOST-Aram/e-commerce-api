@@ -17,6 +17,11 @@ const routesWrapper = (controller: ProductsController) =>{
     router.get('/models/:modelName', 
         controller.getProductsByModelName
     )
+
+    router.get('/selling-price/:range', 
+        controller.getProductsByPriceRange
+    )
+    
     return router
 
 }
