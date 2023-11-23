@@ -57,7 +57,7 @@ export class ProductsDAL{
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ brand: modelName})
             .skip(paginator.skipDocs).limit(paginator.limit)
-
+            
         return products
     }
 }
