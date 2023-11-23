@@ -24,7 +24,7 @@ describe('POST PRODUCTS ROUTE', () =>{
         const response =  await request(app).post('/products')
             .send(productData)
         expect(response.headers['location']).toMatch(
-            /\/products\//)
+            /^\/products\/[0-9a-fA-F]{24}$/)
     })
     
     test('Responds with status 400 Bad request and errors'+
