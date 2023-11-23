@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpendHandles --watch",
+    "test": "jest --watch",
     "build": "tsc --watch",
     "dev": "nodemon src/app.ts",
     "start": "build/app.js"
