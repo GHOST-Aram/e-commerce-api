@@ -30,17 +30,20 @@ export class ProductsDAL{
     public findProducts = async(
         {skipDocs, limit}: Paginator
     ): Promise<HydratedProductDoc[]> =>{
-        const products = await Product.find().skip(skipDocs).limit(limit)
+        const products = await Product.find()
+            .skip(skipDocs)
+            .limit(limit)
         
         return products
     }
 
-    findProductsByBrand = async (
+    public findProductsByBrand = async (
         brandName: string, 
         paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ brand: brandName})
-            .skip(paginator.skipDocs).limit(paginator.limit)
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
 
         return products
     }
@@ -56,9 +59,9 @@ export class ProductsDAL{
         paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find(
-            { manufacturer: manufacturerName}
-            )
-            .skip(paginator.skipDocs).limit(paginator.limit)
+            { manufacturer: manufacturerName})
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
 
         return products
     }
@@ -68,7 +71,8 @@ export class ProductsDAL{
         paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
         const products = await Product.find({ model: modelName})
-            .skip(paginator.skipDocs).limit(paginator.limit)
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
 
         return products
     }
@@ -77,8 +81,10 @@ export class ProductsDAL{
         categoryName: string, 
         paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ category: categoryName })
-            .skip(paginator.skipDocs).limit(paginator.limit)
+        const products = await Product.find(
+            { category: categoryName })
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
 
         return products
     }

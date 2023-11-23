@@ -8,23 +8,21 @@ const routesWrapper = (controller: ProductsController) =>{
     router.post('/',validator.productValidators, controller.AddNewProduct)
     router.get('/', controller.getProducts)
     router.get('/:id', controller.getOneProduct)
+
     router.get('/brands/:brandName', 
-        controller.getProductsByBrand
-    )
+        controller.getProductsByBrand)
+
     router.get('/manufacturer/:manufacturerName', 
-        controller.getProductsByManufacturer
-    )
+        controller.getProductsByManufacturer)
+
     router.get('/models/:modelName', 
-        controller.getProductsByModel
-    )
+        controller.getProductsByModel)
 
     router.get('/selling-price/:range', 
-        controller.getProductsByPriceRange
-    )
+        controller.getProductsByPriceRange)
 
     router.get('/categories/:categoryName',
-        controller.getProductsByCategory
-    )
+        controller.getProductsByCategory)
 
     return router
 
