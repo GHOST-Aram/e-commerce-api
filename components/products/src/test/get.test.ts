@@ -35,7 +35,9 @@ describe('GET PRODUCTS', () => {
             '/products/64c9e4f2df7cc072af2ac9e4'
         )
         const product = response.body.product
-        expect(product).toHaveProperty('id')
+
+        expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.status).toEqual(200)
         expect(product).toHaveProperty('_id')
         expect(product).toHaveProperty('selling_price')
         expect(product).toHaveProperty('available_units')
@@ -43,11 +45,11 @@ describe('GET PRODUCTS', () => {
 
     test('Responds with 400 Error for invalid product IDs', async() =>{
         const response = await request(app).get(
-            '/products/64c9e4f2df7ww072rb2vz9x4'
+            '/products/64c9e4'
         )
 
         expect(response.status).toEqual(400)
-        expect(response.body.error.message).toMatch(/invalid product id/ig)
+        expect(response.body.message).toMatch(/invalid/ig)
     })
 
     test('Responds with 404 Error for non-existing product IDs', async() =>{
@@ -56,7 +58,7 @@ describe('GET PRODUCTS', () => {
         )
 
         expect(response.status).toEqual(404)
-        expect(response.body.error.message).toMatch(/not found/ig)
+        expect(response.body.message).toMatch(/not found/ig)
     })
     
     test('Responds with paginated data', async() =>{

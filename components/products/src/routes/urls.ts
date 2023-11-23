@@ -6,6 +6,8 @@ const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
     router.post('/',validator.productValidators, controller.AddNewProduct)
+    router.get('/', controller.getProducts)
+    router.get('/:id', controller.getOneProduct)
 
     return router
 

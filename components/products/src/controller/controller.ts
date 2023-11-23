@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
+import { isValidObjectId } from "mongoose"
 export class ProductsController{
     private dal
 
@@ -34,5 +35,65 @@ export class ProductsController{
                 errors: errors.array()
             })
         }
+    }
+
+    public getOneProduct =async (
+        req:Request, res: Response, next: NextFunction
+    ) => {
+        const productId  = req.params.id
+
+        if(!isValidObjectId(productId)){
+            res.status(400).json({ message: 'Invalid Product ID'})
+        }
+
+        try {
+            const product = await this.dal.findProductById(productId)
+
+            if(product === null){
+                res.status(404).json({ 
+                        message : 'not found'
+                    })
+            } else {
+                res.status(200).json({ product })
+            }
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getProducts= async(
+        req: Request, res: Response, next: NextFunction
+    )=>{
+        try {
+            const pagination = this.paginate(req)
+            const skipDocs = (pagination.page - 1)
+             * pagination.limit
+
+            const products = await this.dal.findProducts(
+                skipDocs,pagination.limit
+            )
+
+            res.status(200).json({ products })
+        } catch (error) {
+            next(error)
+        }
+        
+    } 
+    
+    private paginate = (req: Request) =>{
+        let page:number = 1
+        let limit: number = 10
+
+        if(typeof req.query.page === 'string'){
+            page = parseInt(req.query.page)
+        }
+
+        if(typeof req.query.limit === 'string'){
+            limit = parseInt(req.query.limit)
+        }
+
+        return ({
+            page, limit
+        })
     }
 }

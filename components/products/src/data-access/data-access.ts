@@ -1,4 +1,4 @@
-import { IProduct, Product } from "./model"
+import { HydratedProductDoc, IProduct, Product } from "./model"
 
 export class ProductsDAL{
     
@@ -14,10 +14,23 @@ export class ProductsDAL{
             category: productData.category,
             selling_price: productData.selling_price,
             marked_price: productData.marked_price,
-            availabile_units: productData.availabile_units,
+            available_units: productData.available_units,
             specifications: productData.specifications,
         })
 
         return (await product.save()).id
+    }
+
+    public findProducts= async(
+        skipDocs: number, limit: number
+    ): Promise<HydratedProductDoc[]> =>{
+        const products = await Product.find().skip(skipDocs).limit(limit)
+        
+        return products
+    }
+
+    public findProductById = async(
+        productId: string): Promise<HydratedProductDoc | null > =>{
+        return await Product.findById(productId)
     }
 }
