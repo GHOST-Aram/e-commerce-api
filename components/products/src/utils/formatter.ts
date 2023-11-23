@@ -5,6 +5,9 @@ class Formatter{
         
             return formattedName
     }
+    public isValidNameFormat = (name: string) =>{
+        return /^[a-zA-Z\s]{2,100}$/.test(name)
+    }
 }
 
 export const formatter = new Formatter()
