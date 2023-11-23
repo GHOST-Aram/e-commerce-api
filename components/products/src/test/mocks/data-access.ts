@@ -36,7 +36,7 @@ export class ProductsDAL {
         return products
     })
 
-    public findProductsByBrandName =jest.fn(async (
+    public findProductsByBrand =jest.fn(async (
         brandName: string, 
         paginator:{skipDocs: number, limit: number}
     ): Promise<HydratedProductDoc[]> => {
@@ -88,7 +88,7 @@ export class ProductsDAL {
             return products
     })
 
-    public findProductsBymanufacturerName = jest.fn(async (
+    public findProductsBymanufacturer = jest.fn(async (
         manufacturerName: string, 
         paginator:{skipDocs: number, limit: number}
     ): Promise<HydratedProductDoc[]> => {
@@ -109,7 +109,7 @@ export class ProductsDAL {
         return products
     })
 
-    public findProductsByModelName = jest.fn(async (
+    public findProductsByModel = jest.fn(async (
         modelName: string, 
         paginator:{skipDocs: number, limit: number}
     ): Promise<HydratedProductDoc[]> => {

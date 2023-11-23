@@ -35,7 +35,7 @@ export class ProductsDAL{
         return products
     }
 
-    findProductsByBrandName = async (
+    findProductsByBrand = async (
         brandName: string, 
         paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
@@ -51,7 +51,7 @@ export class ProductsDAL{
         return await Product.findById(productId)
     }
     
-    public findProductsBymanufacturerName = async (
+    public findProductsBymanufacturer = async (
         manufacturerName: string, 
         paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
@@ -63,7 +63,7 @@ export class ProductsDAL{
         return products
     }
 
-    public findProductsByModelName = async (
+    public findProductsByModel = async (
         modelName: string, 
         paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
