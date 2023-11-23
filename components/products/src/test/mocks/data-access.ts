@@ -8,9 +8,10 @@ import { PriceRange } from "../../utils/formatter";
 import { Paginator } from "../../data-access/data-access";
 
 export class ProductsDAL {
-    public createNewProduct = jest.fn(async(productData : IProduct) =>{
+    public createNewProduct = jest.fn(async(
+        productData : IProduct
+    ) =>{
         const product = new Product(productData)
-
         return product.id
     })
 
@@ -38,7 +39,7 @@ export class ProductsDAL {
 
     public findProductsByBrand =jest.fn(async (
         brandName: string, 
-        paginator:{skipDocs: number, limit: number}
+        paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
         let products: HydratedProductDoc[] = []
 
@@ -56,8 +57,9 @@ export class ProductsDAL {
         return products
     })
 
-    public findProductById = jest.fn(
-        async(productId: string): Promise<HydratedProductDoc|null> =>{
+    public findProductById = jest.fn(async(
+        productId: string
+    ): Promise<HydratedProductDoc|null> =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4'){
                 return new Product({
                     name: 'New Product',
@@ -71,26 +73,26 @@ export class ProductsDAL {
     )
 
     public findProducts = jest.fn(async( 
-        {skipDocs, limit}:{skipDocs: number, limit: number}
-        ): Promise<HydratedProductDoc[]> =>{
-        
-            let products:HydratedProductDoc[] = []
-            const product = new Product({
-                name: 'Product Name'
-            })
+        {skipDocs, limit}:Paginator
+    ): Promise<HydratedProductDoc[]> =>{
+    
+        let products:HydratedProductDoc[] = []
+        const product = new Product({
+            name: 'Product Name'
+        })
 
-            let count = 0
-            while(count < limit){
-                products.push(product)
-                count++
-            }
-            
-            return products
+        let count = 0
+        while(count < limit){
+            products.push(product)
+            count++
+        }
+        
+        return products
     })
 
     public findProductsBymanufacturer = jest.fn(async (
         manufacturerName: string, 
-        paginator:{skipDocs: number, limit: number}
+        paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
         let products: HydratedProductDoc[] = []
 
@@ -111,7 +113,7 @@ export class ProductsDAL {
 
     public findProductsByModel = jest.fn(async (
         modelName: string, 
-        paginator:{skipDocs: number, limit: number}
+        paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
         let products: HydratedProductDoc[] = []
 
@@ -130,17 +132,15 @@ export class ProductsDAL {
         return products
     })
 
-    public findProductsByPriceRange = jest.fn(
-        async( 
-            priceRange: PriceRange, 
-            paginator: Paginator
+    public findProductsByPriceRange = jest.fn(async( 
+        priceRange: PriceRange, 
+        paginator: Paginator
     ): Promise<HydratedProductDoc[]> =>{
-
         let products: HydratedProductDoc[] = []
 
-        let productCount = 0
         if(priceRange.start ===200 && priceRange.end ===800){
 
+            let productCount = 0
             while(productCount < paginator.limit){
                 products.push(new Product({
                     name: 'Product 10',
