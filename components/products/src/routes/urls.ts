@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { ProductsController } from "../controller/controller";
-import * as validator from "../utils/validator";
+import { productValidators } from "../utils/middlewears";
 
 const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
-    router.post('/',validator.productValidators, controller.AddNewProduct)
+    router.post('/',productValidators, controller.AddNewProduct)
     router.get('/', controller.getProducts)
     router.get('/:id', controller.getOneProduct)
 
