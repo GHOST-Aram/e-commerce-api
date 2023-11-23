@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { ProductsDAL } from "../data-access/data-access"
+import { Paginator, ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
@@ -12,20 +12,19 @@ export class ProductsController{
     }
 
     public AddNewProduct = async(
-            req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     ) =>{
         const productData: IProduct = req.body
         const errors = validationResult(req)
 
         if(errors.isEmpty()){
-
             try {
-            
                 const productId = await this.dal.createNewProduct(productData)
 
                 res.location(`/products/${productId}`)
                 res.status(201).json({ message: 'Created'})
-
             } catch (error) {
                 console.log(error)
                 next(error)
@@ -39,37 +38,43 @@ export class ProductsController{
     }
 
     public getOneProduct =async (
-        req:Request, res: Response, next: NextFunction
+        req:Request, 
+        res: Response, 
+        next: NextFunction
     ) => {
         const productId  = req.params.id
 
         if(!isValidObjectId(productId)){
-            res.status(400).json({ message: 'Invalid Product ID'})
-        }
+            res.status(400).json(
+                { message: 'Invalid Product ID'})
+        } else {
 
-        try {
-            const product = await this.dal.findProductById(productId)
-
-            if(product === null){
-                res.status(404).json({ 
-                        message : 'not found'
-                    })
-            } else {
-                res.status(200).json({ product })
+            try {
+                const product = await this.dal.findProductById(
+                    productId)
+    
+                if(product === null){
+                    res.status(404).json({ 
+                            message : 'not found'
+                        })
+                } else {
+                    res.status(200).json({ product })
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
         }
     }
 
     public getProducts= async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     )=>{
         try {
             const paginator = this.paginate(req)
-           
-
-            const products = await this.dal.findProducts(paginator)
+            const products = await this.dal.findProducts(
+                paginator)
 
             res.status(200).json({ products })
         } catch (error) {
@@ -78,29 +83,29 @@ export class ProductsController{
         
     } 
     
-    private paginate = (req?: Request) =>{
+    private paginate = (req?: Request): Paginator =>{
+        const pagestr = req?.query.page
+        const limitstr = req?.query.limit
+        
         let page:number = 1
         let limit: number = 10
 
         if(req){
-            if(typeof req.query.page === 'string'){
-                page = Math.abs(parseInt(req.query.page))
+            if(typeof limitstr === 'string'
+                && typeof pagestr === 'string'){
+                page = Math.abs(parseInt(pagestr))
+                limit = Math.abs(parseInt(limitstr))
             }
-    
-            if(typeof req.query.limit === 'string'){
-                limit = Math.abs(parseInt(req.query.limit))
-            }
-    
         }
         const skipDocs = (page - 1) * limit
 
-        return ({
-            skipDocs, limit
-        })
+        return ({ skipDocs, limit })
     }
 
     public getProductsByBrandName = async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     ) =>{
         const brandName = req.params.brandName
        
@@ -128,7 +133,9 @@ export class ProductsController{
     }
 
     public getProductsByManufacturerName = async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     ) =>{
         const manufacturerName = req.params.manufacturerName
         const paginator = this.paginate(req)
@@ -155,7 +162,9 @@ export class ProductsController{
     }
 
     public getProductsByModelName = async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     ) =>{
         const modelName = req.params.modelName
         const paginator = this.paginate(req)
@@ -182,7 +191,9 @@ export class ProductsController{
     }
 
     public getProductsByPriceRange = async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
     ) =>{
         const rangeString = req.params.range
         const priceRange: PriceRange = formatter.extractPriceRange(
@@ -195,13 +206,11 @@ export class ProductsController{
 
         try {
             const products = await this.dal.findProductsByPriceRange(
-                priceRange, pagination
-            )
+                priceRange, pagination)
     
             if(products.length < 1){
-                res.status(404).json(
-                    { message: 'Products in range not found'}
-                )
+                res.status(404).json({ 
+                    message: 'Products in range not found'})
             }
 
             res.status(200).json({ products })
@@ -218,13 +227,13 @@ export class ProductsController{
         const paginator = this.paginate(req)
 
         if(!formatter.isValidNameFormat(category)){
-            res.status(400).json({ message: 'Invalid category name' })
+            res.status(400).json({ 
+                message: 'Invalid category name' })
         }
 
         try {
             const products = await this.dal.findProductsByCategory(
-                category, paginator
-            )
+                category, paginator)
 
             if(!products || products.length < 1){
                 res.status(404).json({ message: 'Not found'})
