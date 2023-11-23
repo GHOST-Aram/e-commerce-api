@@ -5,10 +5,10 @@ import { app } from "./app.test.config"
 
 
 describe('GET Products By Id', () =>{
+
     test('Responds with single product given ID', async() =>{
         const response = await request(app).get(
-            '/products/64c9e4f2df7cc072af2ac9e4'
-        )
+            '/products/64c9e4f2df7cc072af2ac9e4')
         const product = response.body.product
 
         expect(response.headers['content-type']).toMatch(/json/)
@@ -20,8 +20,7 @@ describe('GET Products By Id', () =>{
 
     test('Responds with 400 Error for invalid product IDs', async() =>{
         const response = await request(app).get(
-            '/products/64c9e4'
-        )
+            '/products/64c9e4')
 
         expect(response.status).toEqual(400)
         expect(response.body.message).toMatch(/invalid/ig)
@@ -29,8 +28,7 @@ describe('GET Products By Id', () =>{
 
     test('Responds with 404 Error for non-existing product IDs', async() =>{
         const response = await request(app).get(
-            '/products/64c9e4f2df7cc072af2ac9d4'
-        )
+            '/products/64c9e4f2df7cc072af2ac9d4')
 
         expect(response.status).toEqual(404)
         expect(response.body.message).toMatch(/not found/ig)
