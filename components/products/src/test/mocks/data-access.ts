@@ -42,7 +42,8 @@ export class ProductsDAL {
                 
     })
 
-    findProducts = jest.fn(async(skipDocs:  number, limit: number
+    findProducts = jest.fn(async( 
+        {skipDocs, limit}:{skipDocs: number, limit: number}
         ): Promise<HydratedProductDoc[]> =>{
         
             let products:HydratedProductDoc[] = []

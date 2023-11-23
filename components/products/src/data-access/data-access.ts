@@ -22,7 +22,7 @@ export class ProductsDAL{
     }
 
     public findProducts = async(
-        skipDocs: number, limit: number
+        {skipDocs, limit}:{skipDocs: number, limit: number}
     ): Promise<HydratedProductDoc[]> =>{
         const products = await Product.find().skip(skipDocs).limit(limit)
         

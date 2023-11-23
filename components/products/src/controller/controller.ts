@@ -65,13 +65,10 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
     )=>{
         try {
-            const pagination = this.paginate(req)
-            const skipDocs = (pagination.page - 1)
-             * pagination.limit
+            const paginator = this.paginate(req)
+           
 
-            const products = await this.dal.findProducts(
-                skipDocs,pagination.limit
-            )
+            const products = await this.dal.findProducts(paginator)
 
             res.status(200).json({ products })
         } catch (error) {
@@ -92,8 +89,9 @@ export class ProductsController{
             limit = parseInt(req.query.limit)
         }
 
+        const skipDocs = (page - 1) * limit
         return ({
-            page, limit
+            skipDocs, limit
         })
     }
 
@@ -102,32 +100,30 @@ export class ProductsController{
     ) =>{
         const brandName = req.params.brandName
        
-        const pagination = this.paginate(req)
-            const skipDocs = (pagination.page - 1)
-             * pagination.limit
-
-
-        if(!/^[a-zA-Z\s]{2,100}$/.test(brandName)){
+        const paginator = this.paginate(req)
+           
+        if(!this.isValidBrandName(brandName)){
             res.status(400).json({ message: 'Invalid brand name'})
         }
 
         try {
             const products = await this.dal.findProductsByBrandName(
-                brandName, { skipDocs, limit: pagination.limit}
+                brandName, paginator
             )
             
             if(products.length < 1){
                 res.status(404).json({
                     message: 'Brand products not found'
                 })
-            } else {
-                res.status(200).json({ products })
             }
 
+            res.status(200).json({ products })
         } catch (error) {
             next(error)
-        }
+        } 
+    }
 
-        
+    private isValidBrandName = (brandName: string) =>{
+        return /^[a-zA-Z\s]{2,100}$/.test(brandName)
     }
 }
