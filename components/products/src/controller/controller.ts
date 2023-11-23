@@ -82,11 +82,11 @@ export class ProductsController{
         let limit: number = 10
 
         if(typeof req.query.page === 'string'){
-            page = parseInt(req.query.page)
+            page = Math.abs(parseInt(req.query.page))
         }
 
         if(typeof req.query.limit === 'string'){
-            limit = parseInt(req.query.limit)
+            limit = Math.abs(parseInt(req.query.limit))
         }
 
         const skipDocs = (page - 1) * limit
