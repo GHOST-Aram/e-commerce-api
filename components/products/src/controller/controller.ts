@@ -141,7 +141,34 @@ export class ProductsController{
             
             if(products.length < 1){
                 res.status(404).json({
-                    message: 'Brand products not found'
+                    message: 'Maufacuturer not found'
+                })
+            }
+
+            res.status(200).json({ products })
+        } catch (error) {
+            next(error)
+        } 
+    }
+
+    public getProductsByModelName = async(
+        req: Request, res: Response, next: NextFunction
+    ) =>{
+        const modelName = req.params.modelName
+        const paginator = this.paginate(req)
+           
+        if(!formatter.isValidModelName(modelName)){
+            res.status(400).json({ message: 'Invalid model name'})
+        }
+
+        try {
+            const products = await this.dal.findProductsByModelName(
+                modelName, paginator
+            )
+            
+            if(products.length < 1){
+                res.status(404).json({
+                    message: 'Model not found'
                 })
             }
 

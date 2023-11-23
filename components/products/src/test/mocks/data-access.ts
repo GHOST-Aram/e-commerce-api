@@ -72,11 +72,32 @@ export class ProductsDAL {
                 products.push(new Product({
                     name: 'Product 10',
                     brand: 'Samsung',
+                    manufacturer: 'Samsung'
                 }))
 
                 productCount ++
             }
+        }
+        return products
+    })
 
+    public findProductsByModelName = jest.fn(async (
+        modelName: string, 
+        paginator:{skipDocs: number, limit: number}
+    ): Promise<HydratedProductDoc[]> => {
+        let products: HydratedProductDoc[] = []
+
+        if(modelName === 'A10S'){
+            let productCount = 0
+            while(productCount < paginator.limit){
+                products.push(new Product({
+                    name: 'Product 10',
+                    brand: 'Samsung',
+                    model: 'A10S'
+                }))
+
+                productCount ++
+            }
         }
         return products
     })
