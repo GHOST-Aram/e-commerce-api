@@ -8,6 +8,26 @@ export class ProductsDAL {
         return product.id
     })
 
+    findProductsByBrandName =jest.fn(async (
+        brandName: string, paginator:{skipDocs: number, limit: number}
+    ): Promise<HydratedProductDoc[]> => {
+        let products: HydratedProductDoc[] = []
+
+        if(brandName === 'samsung'){
+            let productCount = 0
+            while(productCount < paginator.limit){
+                products.push(new Product({
+                    name: 'Product 10',
+                    brand: 'Samsung',
+                }))
+
+                productCount ++
+            }
+
+        }
+        return products
+    })
+
     findProductById = jest.fn(
         async(productId: string): Promise<HydratedProductDoc|null> =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4'){

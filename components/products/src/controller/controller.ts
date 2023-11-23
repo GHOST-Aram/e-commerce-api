@@ -96,4 +96,38 @@ export class ProductsController{
             page, limit
         })
     }
+
+    public getProductsByBrandName = async(
+        req: Request, res: Response, next: NextFunction
+    ) =>{
+        const brandName = req.params.brandName
+       
+        const pagination = this.paginate(req)
+            const skipDocs = (pagination.page - 1)
+             * pagination.limit
+
+
+        if(!/^[a-zA-Z\s]{2,100}$/.test(brandName)){
+            res.status(400).json({ message: 'Invalid brand name'})
+        }
+
+        try {
+            const products = await this.dal.findProductsByBrandName(
+                brandName, { skipDocs, limit: pagination.limit}
+            )
+            
+            if(products.length < 1){
+                res.status(404).json({
+                    message: 'Brand products not found'
+                })
+            } else {
+                res.status(200).json({ products })
+            }
+
+        } catch (error) {
+            next(error)
+        }
+
+        
+    }
 }
