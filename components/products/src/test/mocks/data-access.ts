@@ -14,6 +14,28 @@ export class ProductsDAL {
         return product.id
     })
 
+    public findProductsByCategory = jest.fn(async (
+        categoryName: string, 
+        paginator:{skipDocs: number, limit: number}
+    ): Promise<HydratedProductDoc[]> => {
+        let products: HydratedProductDoc[] = []
+
+        if(categoryName === 'phones'){
+            let productCount = 0
+            while(productCount < paginator.limit){
+                products.push(new Product({
+                    name: 'Product 10',
+                    brand: 'Samsung',
+                    manufacturer: 'Samsung',
+                    category: 'phones'
+                }))
+
+                productCount ++
+            }
+        }
+        return products
+    })
+
     public findProductsByBrandName =jest.fn(async (
         brandName: string, 
         paginator:{skipDocs: number, limit: number}
@@ -44,9 +66,9 @@ export class ProductsDAL {
                 })
             } else {
                 return null
-            }
-                
-    })
+            }      
+        }
+    )
 
     public findProducts = jest.fn(async( 
         {skipDocs, limit}:{skipDocs: number, limit: number}
@@ -118,7 +140,7 @@ export class ProductsDAL {
 
         let productCount = 0
         if(priceRange.start ===200 && priceRange.end ===800){
-            
+
             while(productCount < paginator.limit){
                 products.push(new Product({
                     name: 'Product 10',
