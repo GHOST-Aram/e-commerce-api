@@ -55,7 +55,9 @@ export class ProductsDAL{
         manufacturerName: string, 
         paginator:Paginator
     ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ brand: manufacturerName})
+        const products = await Product.find(
+            { manufacturer: manufacturerName}
+            )
             .skip(paginator.skipDocs).limit(paginator.limit)
 
         return products
@@ -65,7 +67,17 @@ export class ProductsDAL{
         modelName: string, 
         paginator: Paginator
     ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ brand: modelName})
+        const products = await Product.find({ model: modelName})
+            .skip(paginator.skipDocs).limit(paginator.limit)
+
+        return products
+    }
+
+    public findProductsByCategory = async (
+        categoryName: string, 
+        paginator:Paginator
+    ): Promise<HydratedProductDoc[]> => {
+        const products = await Product.find({ category: categoryName })
             .skip(paginator.skipDocs).limit(paginator.limit)
 
         return products
