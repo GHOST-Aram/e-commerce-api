@@ -3,7 +3,7 @@ import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
-import { formatter } from "../utils/formatter"
+import { PriceRange, formatter } from "../utils/formatter"
 export class ProductsController{
     private dal
 
@@ -78,19 +78,22 @@ export class ProductsController{
         
     } 
     
-    private paginate = (req: Request) =>{
+    private paginate = (req?: Request) =>{
         let page:number = 1
         let limit: number = 10
 
-        if(typeof req.query.page === 'string'){
-            page = Math.abs(parseInt(req.query.page))
+        if(req){
+            if(typeof req.query.page === 'string'){
+                page = Math.abs(parseInt(req.query.page))
+            }
+    
+            if(typeof req.query.limit === 'string'){
+                limit = Math.abs(parseInt(req.query.limit))
+            }
+    
         }
-
-        if(typeof req.query.limit === 'string'){
-            limit = Math.abs(parseInt(req.query.limit))
-        }
-
         const skipDocs = (page - 1) * limit
+
         return ({
             skipDocs, limit
         })
@@ -176,5 +179,37 @@ export class ProductsController{
         } catch (error) {
             next(error)
         } 
+    }
+
+    public getProductsByPriceRange = async(
+        req: Request, res: Response, next: NextFunction
+    ) =>{
+        const rangeString = req.params.range
+        const priceRange: PriceRange = formatter.extractPriceRange(
+            rangeString)
+        const pagination = this.paginate()
+
+        if(priceRange.start === null || priceRange.start === null){
+            res.status(400).json({ message: 'Invalid range'})
+        }
+
+        try {
+            const products = await this.dal.findProductsByPriceRange(
+                priceRange, pagination
+            )
+    
+            if(products.length < 1){
+                res.status(404).json(
+                    { message: 'Products in range not found'}
+                )
+            }
+
+            res.status(200).json({ products })
+            
+        } catch (error) {
+            next(error)
+        }
+
+
     }
 }

@@ -1,5 +1,11 @@
 import { jest } from "@jest/globals";
-import { HydratedProductDoc, IProduct, Product } from "../../data-access/model";
+import { 
+    HydratedProductDoc, 
+    IProduct, 
+    Product 
+} from "../../data-access/model";
+import { PriceRange } from "../../utils/formatter";
+import { Paginator } from "../../data-access/data-access";
 
 export class ProductsDAL {
     public createNewProduct = jest.fn(async(productData : IProduct) =>{
@@ -99,6 +105,31 @@ export class ProductsDAL {
                 productCount ++
             }
         }
+        return products
+    })
+
+    public findProductsByPriceRange = jest.fn(
+        async( 
+            priceRange: PriceRange, 
+            paginator: Paginator
+    ): Promise<HydratedProductDoc[]> =>{
+
+        let products: HydratedProductDoc[] = []
+
+        let productCount = 0
+        if(priceRange.start ===200 && priceRange.end ===800){
+            
+            while(productCount < paginator.limit){
+                products.push(new Product({
+                    name: 'Product 10',
+                    brand: 'Samsung',
+                    selling_price: 600
+                }))
+
+                productCount ++
+            }
+        }
+
         return products
     })
 }

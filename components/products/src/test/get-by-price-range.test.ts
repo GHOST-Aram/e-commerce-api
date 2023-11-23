@@ -5,7 +5,7 @@ import { app } from "./app.test.config"
 describe('GET products by Price Range', () =>{
     test('Responds with status code 200 if successful', async() =>{
         const response = await request(app).get(
-            'products/selling-price/200-800'
+            '/products/selling-price/200-800'
         )
 
         expect(response.status).toEqual(200)
@@ -13,7 +13,7 @@ describe('GET products by Price Range', () =>{
 
     test('Resonds with json content-type', async() =>{
         const response = await request(app).get(
-            'products/selling-price/200-800'
+            '/products/selling-price/200-800'
         )
         
         expect(response.headers['content-type']).toMatch(/json/)
