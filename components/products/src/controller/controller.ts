@@ -16,32 +16,32 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        this.handleValidationErrors(req, res)
+        ) =>{
+            this.handleValidationErrors(req, res)
 
-        const productData: IProduct = req.body
-        try {
-            const productId = await this.dal.createNewProduct(
-                productData)
-            this.respondWithCreatedResource(res, productId)
-        } catch (error) {
-            next(error)
+            const productData: IProduct = req.body
+            try {
+                const productId = await this.dal.createNewProduct(
+                    productData)
+                this.respondWithCreatedResource(res, productId)
+            } catch (error) {
+                next(error)
+            }
         }
-    }
 
     private handleValidationErrors = (
         req: Request,
         res: Response 
-    ) =>{
-        const errors = validationResult(req)
+        ) =>{
+            const errors = validationResult(req)
 
-        if(!errors.isEmpty()){
-            res.status(400).json({
-                message: 'Invalid input',
-                errors: errors.array()
-            })
-        } 
-    }
+            if(!errors.isEmpty()){
+                res.status(400).json({
+                    message: 'Invalid input',
+                    errors: errors.array()
+                })
+            } 
+        }
 
     private respondWithCreatedResource = (
         res: Response, 
@@ -49,14 +49,16 @@ export class ProductsController{
         ) =>{
             res.location(`/products/${productId}`)
             res.status(201).json({ message: 'Created'})
-    }
+        }
 
     public deleteAll = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed' })
     }
 
     public deleteOneProduct = async(
-        req: Request, res: Response, next: NextFunction
+        req: Request, 
+        res: Response, 
+        next: NextFunction
         ) =>{
             const productId = req.params.id
             this.handleInvalidId(productId, res)
@@ -65,16 +67,14 @@ export class ProductsController{
                 const deletedProduct = await this.dal.findProductByIdAndDelete(
                     productId)
                 
-                if(deletedProduct === null){
-                    this.respondWith404Error(res)
-                } else{
-                    this.respondWithDeletedResource(
-                        deletedProduct, res)
-                }
+                if(deletedProduct)
+                    this.respondWithDeletedResource(deletedProduct, res)
+                
+                this.respondWith404Error(res)
             } catch (error) {
                 next(error)
             }
-    }
+        }
 
     private handleInvalidId = (productId: string, res: Response) =>{
         if(!validator.isValidId(productId)){
@@ -106,11 +106,10 @@ export class ProductsController{
                 const product = await this.dal.findProductById(
                     productId)
 
-                if(product === null){
-                    this.respondWith404Error(res)
-                } else {
+                if(product)
                     this.respondWithFoundResource(product, res)
-                }
+                
+                this.respondWith404Error(res)
             } catch (error) {
                 next(error)
             }
@@ -165,133 +164,127 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const brandName = req.params.brandName
-        const paginator = this.paginate(req)
-           
-        if(!validator.isValidNameFormat(brandName)){
-            res.status(400).json({ message: 'Invalid brand name'})
-        }
-
-        try {
-            const products = await this.dal.findProductsByBrand(
-                brandName, paginator)
+        ) =>{
+            const brandName = req.params.brandName
+            const paginator = this.paginate(req)
             
-            if(products.length < 1){
-                this.respondWith404Error(res)
+            if(!validator.isValidNameFormat(brandName)){
+                res.status(400).json({ message: 'Invalid brand name'})
             }
 
-            this.respondWithFoundResource(products, res)
-        } catch (error) {
-            next(error)
-        } 
-    }
+            try {
+                const products = await this.dal.findProductsByBrand(
+                    brandName, paginator)
+                
+                if(products.length > 0)
+                    this.respondWithFoundResource(products, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            } 
+        }
 
     public getProductsByManufacturer = async(
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const manufacturerName = req.params.manufacturerName
-        const paginator = this.paginate(req)
-           
-        if(!validator.isValidNameFormat(manufacturerName)){
-            res.status(400).json({ message: 'Invalid manufacturer name'})
-        }
-
-        try {
-            const products = await this.dal.findProductsBymanufacturer(
-                manufacturerName, paginator)
+        ) =>{
+            const manufacturerName = req.params.manufacturerName
+            const paginator = this.paginate(req)
             
-            if(products.length < 1){
-               this.respondWith404Error(res)
+            if(!validator.isValidNameFormat(manufacturerName)){
+                res.status(400).json({ message: 'Invalid manufacturer name'})
             }
 
-            this.respondWithFoundResource(products, res)
-        } catch (error) {
-            next(error)
-        } 
-    }
+            try {
+                const products = await this.dal.findProductsBymanufacturer(
+                    manufacturerName, paginator)
+                
+                if(products.length > 0)
+                    this.respondWithFoundResource(products, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            } 
+        }
 
     public getProductsByModel = async(
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const modelName = req.params.modelName
-        const paginator = this.paginate(req)
-           
-        if(!validator.isValidModelName(modelName)){
-            res.status(400).json({ message: 'Invalid model name'})
-        }
-
-        try {
-            const products = await this.dal.findProductsByModel(
-                modelName, paginator)
+        ) =>{
+            const modelName = req.params.modelName
+            const paginator = this.paginate(req)
             
-            if(products.length < 1){
-               this.respondWith404Error(res)
+            if(!validator.isValidModelName(modelName)){
+                res.status(400).json({ message: 'Invalid model name'})
             }
 
-            this.respondWithFoundResource(products, res)
-        } catch (error) {
-            next(error)
-        } 
-    }
+            try {
+                const products = await this.dal.findProductsByModel(
+                    modelName, paginator)
+                
+                if(products.length > 0)
+                    this.respondWithFoundResource(products, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            } 
+        }
 
     public getProductsByPriceRange = async(
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const rangeString = req.params.range
-        const priceRange: PriceRange = formatter.extractPriceRange(
-            rangeString)
-        const pagination = this.paginate()
+        ) =>{
+            const rangeString = req.params.range
+            const priceRange: PriceRange = formatter.extractPriceRange(
+                rangeString)
+            const pagination = this.paginate()
 
-        if(priceRange.start === null || priceRange.start === null){
-            res.status(400).json({ message: 'Invalid range'})
-        }
-
-        try {
-            const products = await this.dal.findProductsByPriceRange(
-                priceRange, pagination)
-    
-            if(products.length < 1){
-                this.respondWith404Error(res)
+            if(priceRange.start === null || priceRange.start === null){
+                res.status(400).json({ message: 'Invalid range'})
             }
 
-            this.respondWithFoundResource(products, res)
-            
-        } catch (error) {
-            next(error)
+            try {
+                const products = await this.dal.findProductsByPriceRange(
+                    priceRange, pagination)
+        
+                if(products.length > 0)
+                    this.respondWithFoundResource(products, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
         }
-    }
 
     public getProductsByCategory = async(
         req: Request, res: Response, next: NextFunction
-    ) =>{
-        const category = req.params.categoryName
-        const paginator = this.paginate(req)
+        ) =>{
+            const category = req.params.categoryName
+            const paginator = this.paginate(req)
 
-        if(!validator.isValidNameFormat(category)){
-            res.status(400).json({ 
-                message: 'Invalid category name' })
-        }
-
-        try {
-            const products = await this.dal.findProductsByCategory(
-                category, paginator)
-
-            if(!products || products.length < 1){
-               this.respondWith404Error(res)
-            } else {
-                this.respondWithFoundResource(products, res)
+            if(!validator.isValidNameFormat(category)){
+                res.status(400).json({ 
+                    message: 'Invalid category name' })
             }
-        } catch (error) {
-            next(error)
+
+            try {
+                const products = await this.dal.findProductsByCategory(
+                    category, paginator)
+
+                if(products.length > 0)
+                    this.respondWithFoundResource(products, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
         }
-    }
 
     public modifyAllProducts = (req: Request, res: Response) =>{
         this.handleValidationErrors(req, res)
@@ -302,35 +295,33 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        this.handleValidationErrors(req, res)
+        ) =>{
+            this.handleValidationErrors(req, res)
 
-        const productId = req.params.id
-        const patchData = req.body
+            const productId = req.params.id
+            const patchData = req.body
 
-        this.handleInvalidId(productId, res)
+            this.handleInvalidId(productId, res)
 
-        try {
-            const id = await this.dal.findProductByIdAndUpdate(
-                productId, patchData)
+            try {
+                const id = await this.dal.findProductByIdAndUpdate(
+                    productId, patchData)
 
-            if(id){
-                this.respondWithChangedResource(
-                    id, 'Modified', res)
-            } 
-           this.respondWith404Error(res)
-        } catch (error) {
-            next(error)
+                if(id)
+                    this.respondWithChangedResource(id, 'Modified', res)
+                
+            this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
         }
-    }
 
     private respondWithChangedResource = (
-        productId: string, 
-        change: string, res: 
-        Response) =>{
+        productId: string, change: string, res: Response
+        ) =>{
             res.location(`/products/${productId}`)
             res.status(200).json({ message: change })
-    }
+        }
 
     public updateAllProducts = (req: Request, res: Response) =>{
         this.handleValidationErrors(req, res)
@@ -338,32 +329,27 @@ export class ProductsController{
     }
 
     public updateOneProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
-    ) =>{
-        this.handleValidationErrors(req, res)
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            this.handleValidationErrors(req, res)
 
-        const productId = req.params.id
-        this.handleInvalidId(productId, res)
-        
-        const productData: IProduct = req.body
-        try { 
-            const id = await this.dal.findProductByIdAndUpdate(
-                productId, productData)
-
-            if(id){
-                this.respondWithChangedResource(
-                    id, 'Updated', res
-                )
-            } 
-
-            const newProductId = await this.dal.createNewProduct(
-                productData)
-            this.respondWithCreatedResource(res, newProductId)
+            const productId = req.params.id
+            this.handleInvalidId(productId, res)
             
-        } catch (error) {
-            next(error)
-        }   
-    }
+            const productData: IProduct = req.body
+            try { 
+                const id = await this.dal.findProductByIdAndUpdate(
+                    productId, productData)
+
+                if(id){
+                    this.respondWithChangedResource(id, 'Updated', res)
+                } else {
+                    const newProductId = await this.dal.createNewProduct(
+                        productData)
+                    this.respondWithCreatedResource(res, newProductId)
+                }                 
+            } catch (error) {
+                next(error)
+            }   
+        }
 }
