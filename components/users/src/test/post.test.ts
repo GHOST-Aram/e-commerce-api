@@ -35,10 +35,12 @@ describe('POST users', () =>{
             .send(data.validUserData)
 
         expect(response.status).toEqual(201)
-        expect(response.body.message).toMatch(/created/)
+        expect(response.body.message).toMatch(/created/i)
+        expect(response.body).toHaveProperty('user')
+        expect(response.body.user).toHaveProperty('_id')
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.header.location).toMatch(
-            /\/users\/^[a-zA-Z0-9]{24}$/)
+            /^\/users\/[a-zA-Z0-9]{24}$/)
     })  
 
 

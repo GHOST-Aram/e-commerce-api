@@ -4,4 +4,4 @@ import { usersDAL } from "./data-access/data-access";
 import { UsersController } from "./controller/controller";
 
 const controller = new UsersController(usersDAL)
-app.use(routesWrapper(controller))
+app.use('/users',routesWrapper(controller))
