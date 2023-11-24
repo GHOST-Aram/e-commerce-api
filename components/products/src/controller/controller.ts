@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { Paginator, ProductsDAL } from "../data-access/data-access"
-import { IProduct } from "../data-access/model"
+import { HydratedProductDoc, IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
@@ -21,7 +21,8 @@ export class ProductsController{
 
         const productData: IProduct = req.body
         try {
-            const productId = await this.dal.createNewProduct(productData)
+            const productId = await this.dal.createNewProduct(
+                productData)
             this.respondWithCreatedResource(res, productId)
         } catch (error) {
             next(error)
@@ -45,9 +46,9 @@ export class ProductsController{
     private respondWithCreatedResource = (
         res: Response, 
         productId: string
-    ) =>{
-        res.location(`/products/${productId}`)
-        res.status(201).json({ message: 'Created'})
+        ) =>{
+            res.location(`/products/${productId}`)
+            res.status(201).json({ message: 'Created'})
     }
 
     public deleteAll = (req: Request, res: Response) =>{
@@ -58,28 +59,25 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const productId = req.params.id
+        ) =>{
+            const productId = req.params.id
+            this.handleInvalidId(productId, res)
 
-        this.handleInvalidId(productId, res)
+            try {
+                const deletedProduct = await this.dal.findProductByIdAndDelete(
+                    productId)
+                
+                if(deletedProduct === null){
+                    res.status(404).json(
+                        { message: 'Product not found' })
+                } else{
+                    this.respondWithDeletedResource(
+                        deletedProduct, res)
+                }
 
-        try {
-            const deletedProduct = await this.dal.findProductByIdAndDelete(
-                productId)
-            
-                console.log(deletedProduct)
-            if(deletedProduct === null){
-                res.status(404).json(
-                    { message: 'Product not found' })
+            } catch (error) {
+                next(error)
             }
-
-            res.status(200).json({
-                message: 'Deleted',
-                product: deletedProduct
-            })
-        } catch (error) {
-            next(error)
-        }
     }
 
     private handleInvalidId = (productId: string, res: Response) =>{
@@ -87,6 +85,15 @@ export class ProductsController{
             res.status(400).json({ message: 'Invalid id'})
         }
     }
+
+    private respondWithDeletedResource = (
+        deletedProduct: HydratedProductDoc, res: Response
+        ) =>{
+            res.status(200).json({
+                message: 'Deleted',
+                product: deletedProduct
+            })
+        }
     
     public getOneProduct =async (
         req:Request, res: Response, next: NextFunction
