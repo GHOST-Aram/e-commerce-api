@@ -4,7 +4,6 @@ import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
-import { partialData } from "../test/mocks/raw-document"
 
 export class ProductsController{
     private dal
@@ -39,6 +38,41 @@ export class ProductsController{
         }
     }
 
+    public deleteAll = (
+        req: Request, 
+        res: Response, 
+    ) =>{
+        res.status(405).json({ message: 'Method not allowed' })
+    }
+
+    public deleteOneProduct = async(
+        req: Request, 
+        res: Response, 
+    ) =>{
+        const productId = req.params.id
+
+        if(!validator.isValidId(productId)){
+            res.status(400).json({ message: 'Invalid id'})
+        }
+
+        try {
+            const deletedProduct = await this.dal.findProductByIdAndDelete(
+                productId)
+            
+                console.log(deletedProduct)
+            if(deletedProduct === null){
+                res.status(404).json(
+                    { message: 'Product not found' })
+            }
+
+            res.status(200).json({
+                message: 'Deleted',
+                product: deletedProduct
+            })
+        } catch (error) {
+            
+        }
+    }
     public getOneProduct =async (
         req:Request, 
         res: Response, 

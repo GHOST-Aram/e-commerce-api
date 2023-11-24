@@ -54,6 +54,13 @@ export class ProductsDAL{
         return await Product.findById(productId)
     }
     
+    public findProductByIdAndDelete = async(
+        productId: string
+    ): Promise<HydratedProductDoc | null > =>{
+        const deleted = await Product.findByIdAndDelete(productId)
+
+        return deleted
+    }
     public findProductByIdAndUpdate = async(
         productId: string, 
         updateData: IProduct
@@ -63,7 +70,7 @@ export class ProductsDAL{
         if(product === null){
             return undefined
         }
-        
+
         return product.id
     }
 

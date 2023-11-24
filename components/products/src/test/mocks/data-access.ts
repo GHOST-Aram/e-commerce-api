@@ -72,6 +72,20 @@ export class ProductsDAL {
         }
     )
 
+    public findProductByIdAndDelete = jest.fn(async(
+        productId: string
+    ): Promise<HydratedProductDoc | null> =>{
+        if(productId === '64c9e4f2df7cc072af2ac9e4'){
+            const product = new Product({
+                name: 'Deleted product'
+            })
+
+            return product
+        }
+
+        return null
+    })
+
     public findProductByIdAndUpdate = jest.fn(
         async(productId: string, updateData: IProduct) =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4')

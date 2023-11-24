@@ -1,11 +1,16 @@
 import { Router } from "express";
 import { ProductsController } from "../controller/controller";
-import { patchValidators, productValidators } from "../utils/middlewears";
+import { 
+    patchValidators, 
+    productValidators 
+} from "../utils/middlewears";
 
 const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
-    router.post('/',productValidators, controller.AddNewProduct)
+    router.post('/',productValidators, 
+        controller.AddNewProduct)
+
     router.get('/', controller.getProducts)
     router.get('/:id', controller.getOneProduct)
 
@@ -32,9 +37,12 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.patch('/', patchValidators, 
         controller.modifyAllProducts)
-        
+
     router.patch('/:id', patchValidators,
         controller.modifyOneProduct)
+
+    router.delete('/', controller.deleteAll)
+    router.delete('/:id', controller.deleteOneProduct)
 
     return router
 
