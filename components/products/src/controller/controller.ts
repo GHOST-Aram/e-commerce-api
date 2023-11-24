@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { Paginator, ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
-import { validationResult } from "express-validator"
+import { Result, ValidationError, validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
 
@@ -16,24 +16,33 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        const productData: IProduct = req.body
-        const errors = validationResult(req)
-
-        if(errors.isEmpty()){
+        ) =>{
+            this.handleValidationErrors(req, res)
+            const productData: IProduct = req.body
+            
             try {
                 const productId = await this.dal.createNewProduct(productData)
                 this.respondWithCreatedResource(res, productId)
             } catch (error) {
                 next(error)
             }
-        } else {
-            res.status(400).json({
-                message: 'Invalid input',
-                errors: errors.array()
-            })
         }
-    }
+
+
+    private handleValidationErrors = (
+        req: Request,
+        res: Response 
+        ) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json({
+                    message: 'Invalid input',
+                    errors: errors.array()
+                })
+            } 
+        }
+
     private respondWithCreatedResource = (
         res: Response, 
         productId: string
@@ -289,19 +298,13 @@ export class ProductsController{
         res: Response, 
         next: NextFunction
     ) =>{
+        this.handleValidationErrors(req, res)
+
         const productId = req.params.id
         const patchData = req.body
-        const errors = validationResult(req)
 
         if(!validator.isValidId(productId)){
             res.status(400).json({ message: 'Invalid product id'})
-        }
-
-        if(!errors.isEmpty()){
-            res.status(400).json({
-                message: 'Invalid input',
-                errors: errors.array()
-            })
         }
 
         try {
@@ -319,6 +322,8 @@ export class ProductsController{
         }
     }
 
+    
+
     public updateAllProducts = (req: Request, res: Response) =>{
         res.status(405).json({message: 'Method not allowed'})
     }
@@ -328,20 +333,15 @@ export class ProductsController{
         res: Response, 
         next: NextFunction
     ) =>{
+        this.handleValidationErrors(req, res)
+
         const productId = req.params.id
         const productData: IProduct = req.body
-        const errors = validationResult(req)
 
         if(!validator.isValidId(productId)){
-            res.status(400).json({ message: 'Invalid product id' })
+            res.status(400).json({ message: 'Invalid id' })
         }
 
-        if(!errors.isEmpty()){
-            res.status(400).json({ 
-                message : 'Invalid input ',
-                errors: errors.array()
-            })
-        }
 
         try { 
             const id = await this.dal.findProductByIdAndUpdate(
