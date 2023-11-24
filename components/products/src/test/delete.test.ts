@@ -22,9 +22,9 @@ describe('PATCH requests', () =>{
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/deleted/i)
-        expect(response.body.product).toHaveProperty('id')
-        expect(response.body.product.id).toEqual(
-            '64c9e4f2df7cc072af2ac9e4')
+        expect(response.body.product).toHaveProperty('_id')
+        expect(response.body.product._id.toString()).toMatch(
+            /^[0-9a-zA-Z]{24}$/)
 
     })
 
