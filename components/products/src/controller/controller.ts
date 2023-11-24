@@ -4,7 +4,6 @@ import { HydratedProductDoc, IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
-import { model } from "mongoose"
 
 export class ProductsController{
     private dal
@@ -238,17 +237,15 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const rangeString = req.params.range
-            const priceRange: PriceRange = formatter.extractPriceRange(
-                rangeString)
+            const priceRange: PriceRange = formatter
+                .extractPriceRange(rangeString)
+            this.handleInvalidPriceRange(priceRange, res)    
+                
             const pagination = this.paginate()
-
-            if(priceRange.start === null || priceRange.start === null){
-                res.status(400).json({ message: 'Invalid range'})
-            }
-
             try {
-                const products = await this.dal.findProductsByPriceRange(
-                    priceRange, pagination)
+                const products = await this.dal
+                    .findProductsByPriceRange(priceRange, 
+                        pagination)
         
                 if(products.length > 0)
                     this.respondWithFoundResource(products, res)
@@ -258,7 +255,14 @@ export class ProductsController{
                 next(error)
             }
         }
-
+    
+    private handleInvalidPriceRange = (
+        priceRange: PriceRange, res: Response
+        ) =>{
+        if(priceRange.start === null || priceRange.start === null){
+            res.status(400).json({ message: 'Invalid range'})
+        }
+    }
     public getProductsByCategory = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
@@ -290,10 +294,9 @@ export class ProductsController{
             this.handleValidationErrors(req, res)
 
             const productId = req.params.id
-            const patchData = req.body
-
             this.handleInvalidId(productId, res)
-
+            
+            const patchData = req.body
             try {
                 const id = await this.dal.findProductByIdAndUpdate(
                     productId, patchData)
