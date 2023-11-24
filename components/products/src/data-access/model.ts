@@ -1,18 +1,18 @@
 import { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose"
 
 export interface IProduct{
-    name: string
+    name?: string
     image_url?: string
     image_file?: Buffer
-    description: string
-    brand: string
-    manufacturer: string
-    model: string
-    category: string
-    selling_price: number
-    marked_price: number
-    available_units: number 
-    specifications: string[]
+    description?: string
+    brand?: string
+    manufacturer?: string
+    model?: string
+    category?: string
+    selling_price?: number
+    marked_price?: number
+    available_units?: number 
+    specifications?: string[]
     ratings?: number[]
     createdAt?: Date
 }

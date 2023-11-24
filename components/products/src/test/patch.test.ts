@@ -57,11 +57,11 @@ describe('PATCH requests', () =>{
     test('Responds with status 400 if Invalid input', 
     async() =>{
         const response = await request(app).patch(
-            '/products/64c9e4f2df7cc072af2ac8d4')
+            '/products/64c9e4f2df7cc072af2ac9e4')
             .send(badPartialData)
 
         expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid/i)
+        expect(response.body.message).toMatch(/invalid input/i)
         expect(Array.isArray(response.body.errors)).toBeTruthy()
         expect(response.headers['content-type']).toMatch(/json/)
 

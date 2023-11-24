@@ -14,12 +14,11 @@ export class Validator{
     public isValidId = (id: string): boolean =>{
         return isValidObjectId(id)
     }
-    
+
     public validateName(fieldName: string): ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
 
-        return body(fieldName).notEmpty()
-            .withMessage(`${formattedName} field is required`)
+        return body(fieldName)
             .matches(/^.{2,100}$/)
             .withMessage(`${formattedName} must be a 2-50 characters long`)
             .trim()
@@ -27,8 +26,7 @@ export class Validator{
     }
 
     public validateUrl(fieldName: string): ValidationChain{
-        return  body(fieldName).notEmpty()
-                .withMessage('Image url is required')
+        return  body(fieldName)
     }
 
     public validateFileField(fieldName: string): ValidationChain{
@@ -39,8 +37,7 @@ export class Validator{
     public validateNumberField(fieldName: string):ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
 
-        return body(fieldName).notEmpty()
-            .withMessage(`${formattedName} field is required`)
+        return body(fieldName)
             .trim()
             .escape()
             .custom((value) =>{
@@ -50,8 +47,7 @@ export class Validator{
     }
 
     public validateSpecifications(fieldName: string): ValidationChain{
-        return  body(fieldName).notEmpty()
-            .withMessage('Specifications field is required')
+        return  body(fieldName)
             .isArray()
             .withMessage('Specifications field must be an array')
             .escape()

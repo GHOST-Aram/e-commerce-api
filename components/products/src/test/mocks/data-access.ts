@@ -73,8 +73,10 @@ export class ProductsDAL {
     )
 
     public findProductByIdAndUpdate = jest.fn(
-        async(productId: string) =>{
-            return productId
+        async(productId: string, updateData: IProduct) =>{
+            if(productId === '64c9e4f2df7cc072af2ac9e4')
+                return productId
+        return undefined
     })
 
     public findProducts = jest.fn(async( 

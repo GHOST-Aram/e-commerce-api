@@ -55,9 +55,16 @@ export class ProductsDAL{
     }
     
     public findProductByIdAndUpdate = async(
-        productId: string
+        productId: string, 
+        updateData: IProduct
     ): Promise<string | undefined> =>{
-        return (await Product.findByIdAndUpdate(productId))?.id
+        const product = await Product.findByIdAndUpdate(
+            productId, updateData)
+        if(product === null){
+            return undefined
+        }
+        
+        return product.id
     }
 
     public findProductsBymanufacturer = async (
