@@ -4,6 +4,7 @@ import { HydratedProductDoc, IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
+import { model } from "mongoose"
 
 export class ProductsController{
     private dal
@@ -13,9 +14,7 @@ export class ProductsController{
     }
 
     public AddNewProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             this.handleValidationErrors(req, res)
 
@@ -56,9 +55,7 @@ export class ProductsController{
     }
 
     public deleteOneProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             const productId = req.params.id
             this.handleInvalidId(productId, res)
@@ -161,17 +158,12 @@ export class ProductsController{
         }
 
     public getProductsByBrand = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             const brandName = req.params.brandName
-            const paginator = this.paginate(req)
-            
-            if(!validator.isValidNameFormat(brandName)){
-                res.status(400).json({ message: 'Invalid brand name'})
-            }
+            this.handleInvalidName('brand', brandName, res)
 
+            const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsByBrand(
                     brandName, paginator)
@@ -184,22 +176,27 @@ export class ProductsController{
                 next(error)
             } 
         }
+    
+    private handleInvalidName = (
+        property: string, value: string, res: Response
+        ) =>{
+            if(!validator.isValidNameFormat(value)){
+                res.status(400).json(
+                    { message: `Invalid ${property} name`})
+            }
+        }
 
     public getProductsByManufacturer = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
-            const manufacturerName = req.params.manufacturerName
-            const paginator = this.paginate(req)
-            
-            if(!validator.isValidNameFormat(manufacturerName)){
-                res.status(400).json({ message: 'Invalid manufacturer name'})
-            }
+            const manufName = req.params.manufacturerName
+            this.handleInvalidName('manufacturer', 
+                manufName, res)
 
+            const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsBymanufacturer(
-                    manufacturerName, paginator)
+                    manufName, paginator)
                 
                 if(products.length > 0)
                     this.respondWithFoundResource(products, res)
@@ -211,17 +208,12 @@ export class ProductsController{
         }
 
     public getProductsByModel = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             const modelName = req.params.modelName
-            const paginator = this.paginate(req)
+            this.handleInvalidModel(modelName, res)
             
-            if(!validator.isValidModelName(modelName)){
-                res.status(400).json({ message: 'Invalid model name'})
-            }
-
+            const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsByModel(
                     modelName, paginator)
@@ -235,10 +227,15 @@ export class ProductsController{
             } 
         }
 
+    private handleInvalidModel = (
+        model: string, res: Response) =>{
+        if(!validator.isValidModelName(model)){
+            res.status(400).json({ message: 'Invalid model name'})
+        }
+    }
+
     public getProductsByPriceRange = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             const rangeString = req.params.range
             const priceRange: PriceRange = formatter.extractPriceRange(
@@ -266,13 +263,9 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const category = req.params.categoryName
+            this.handleInvalidName('category', category, res)        
+            
             const paginator = this.paginate(req)
-
-            if(!validator.isValidNameFormat(category)){
-                res.status(400).json({ 
-                    message: 'Invalid category name' })
-            }
-
             try {
                 const products = await this.dal.findProductsByCategory(
                     category, paginator)
@@ -292,9 +285,7 @@ export class ProductsController{
     }
 
     public modifyOneProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             this.handleValidationErrors(req, res)
 
