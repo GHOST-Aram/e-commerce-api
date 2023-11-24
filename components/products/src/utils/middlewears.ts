@@ -47,35 +47,33 @@ export const productValidators = [
 export const patchValidators = [
     validator.validateName('name')
         .optional(),
-        
+
     validator.validateUrl('image_url')
         .optional(),
-        
-    validator.validateFileField('image_file')
-        .optional(),
-        
+
+    validator.validateFileField('image_file'),
     validator.validateName('brand')
         .optional(),
-        
+
     validator.validateName('manufacturer')
         .optional(),
-        
+
     validator.validateName('model')
         .optional(),
-        
+
     validator.validateName('category')
         .optional(),
-        
+
     validator.validateNumberField('selling_price')
         .optional(),
-        
+
     validator.validateNumberField('marked_price')
         .optional(),
-        
+
     validator.validateNumberField('available_units')
         .optional(),
-        
+
     validator.validateSpecifications('specifications')
         .optional(),
-        
+
 ]
