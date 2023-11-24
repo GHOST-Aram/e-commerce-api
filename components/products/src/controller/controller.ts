@@ -272,7 +272,7 @@ export class ProductsController{
         try {
             const productExists = await this.dal.productExists(
                 productId) 
-                const id = await this.dal.findProductByIdAndUpdate(productId)
+            const id = await this.dal.findProductByIdAndUpdate(productId)
 
             if(productExists){
 
