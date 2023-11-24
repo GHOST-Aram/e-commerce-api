@@ -18,11 +18,11 @@ export class ProductsController{
         next: NextFunction
         ) =>{
             this.handleValidationErrors(req, res)
+
             const productData: IProduct = req.body
-            
             try {
                 const productId = await this.dal.createNewProduct(productData)
-                this.respondWithCreatedResource(res, productId)
+                this.respondWithCreatedResourceURI(res, productId)
             } catch (error) {
                 next(error)
             }
@@ -43,48 +43,45 @@ export class ProductsController{
             } 
         }
 
-    private respondWithCreatedResource = (
+    private respondWithCreatedResourceURI = (
         res: Response, 
         productId: string
-    ) =>{
-        res.location(`/products/${productId}`)
-        res.status(201).json({ message: 'Created'})
-    }
-    public deleteAll = (
-        req: Request, 
-        res: Response, 
-    ) =>{
+        ) =>{
+            res.location(`/products/${productId}`)
+            res.status(201).json({ message: 'Created'})
+        }
+
+    public deleteAll = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed' })
     }
 
     public deleteOneProduct = async(
-        req: Request, 
-        res: Response, 
-    ) =>{
-        const productId = req.params.id
+        req: Request, res: Response, 
+        ) =>{
+            const productId = req.params.id
 
-        if(!validator.isValidId(productId)){
-            res.status(400).json({ message: 'Invalid id'})
-        }
-
-        try {
-            const deletedProduct = await this.dal.findProductByIdAndDelete(
-                productId)
-            
-                console.log(deletedProduct)
-            if(deletedProduct === null){
-                res.status(404).json(
-                    { message: 'Product not found' })
+            if(!validator.isValidId(productId)){
+                res.status(400).json({ message: 'Invalid id'})
             }
 
-            res.status(200).json({
-                message: 'Deleted',
-                product: deletedProduct
-            })
-        } catch (error) {
-            
+            try {
+                const deletedProduct = await this.dal.findProductByIdAndDelete(
+                    productId)
+                
+                    console.log(deletedProduct)
+                if(deletedProduct === null){
+                    res.status(404).json(
+                        { message: 'Product not found' })
+                }
+
+                res.status(200).json({
+                    message: 'Deleted',
+                    product: deletedProduct
+                })
+            } catch (error) {
+                
+            }
         }
-    }
     public getOneProduct =async (
         req:Request, 
         res: Response, 
@@ -290,6 +287,7 @@ export class ProductsController{
     }
 
     public modifyAllProducts = (req: Request, res: Response) =>{
+        this.handleValidationErrors(req, res)
         res.status(405).json({ message: 'Method not allowed'})
     }
 
@@ -297,66 +295,65 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-    ) =>{
-        this.handleValidationErrors(req, res)
+        ) =>{
+            this.handleValidationErrors(req, res)
 
-        const productId = req.params.id
-        const patchData = req.body
+            const productId = req.params.id
+            const patchData = req.body
 
-        if(!validator.isValidId(productId)){
-            res.status(400).json({ message: 'Invalid product id'})
+            if(!validator.isValidId(productId)){
+                res.status(400).json({ message: 'Invalid product id'})
+            }
+
+            try {
+                const id = await this.dal.findProductByIdAndUpdate(
+                    productId, patchData)
+
+                if(!Boolean(id)){
+                    res.status(404).json({ message: 'product not found'})
+                } 
+
+                res.location(`/products/${id}`)
+                res.status(200).json({ message: 'Modified' })
+            } catch (error) {
+                next(error)
+            }
         }
-
-        try {
-            const id = await this.dal.findProductByIdAndUpdate(
-                productId, patchData)
-
-            if(!Boolean(id)){
-                res.status(404).json({ message: 'product not found'})
-            } 
-
-            res.location(`/products/${id}`)
-            res.status(200).json({ message: 'Modified' })
-        } catch (error) {
-            next(error)
-        }
-    }
-
-    
 
     public updateAllProducts = (req: Request, res: Response) =>{
+        this.handleValidationErrors(req, res)
         res.status(405).json({message: 'Method not allowed'})
     }
 
     public updateOneProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
-    ) =>{
-        this.handleValidationErrors(req, res)
+            req: Request, 
+            res: Response, 
+            next: NextFunction
+        ) =>{
+            this.handleValidationErrors(req, res)
 
-        const productId = req.params.id
-        const productData: IProduct = req.body
+            const productId = req.params.id
+            const productData: IProduct = req.body
 
-        if(!validator.isValidId(productId)){
-            res.status(400).json({ message: 'Invalid id' })
-        }
-
-
-        try { 
-            const id = await this.dal.findProductByIdAndUpdate(
-                productId, productData)
-
-            if(Boolean(id)){
-                res.location(`/products/${id}`)
-                res.status(200).json({ message: 'Product updated' })
-            } else{
-                const productId = await this.dal.createNewProduct(
-                    productData)
-                this.respondWithCreatedResource(res, productId)
+            if(!validator.isValidId(productId)){
+                res.status(400).json({ message: 'Invalid id' })
             }
-        } catch (error) {
-            next(error)
-        }   
-    }
+
+
+            try { 
+                const id = await this.dal.findProductByIdAndUpdate(
+                    productId, productData)
+
+                if(Boolean(id)){
+                    res.location(`/products/${id}`)
+                    res.status(200).json({ message: 'Product updated' })
+                } else{
+                    const productId = await this.dal.createNewProduct(
+                        productData)
+                    this.respondWithCreatedResourceURI(res, productId)
+                }
+            } catch (error) {
+                next(error)
+            }   
+        }
 }
