@@ -3,7 +3,7 @@ import request from "supertest"
 import { badData, productData } from "./mocks/raw-document"
 import { app } from "./app.test.config"
 
-describe('POST PRODUCTS ROUTE', () =>{
+describe('POST Products route', () =>{
     test('Responds with status 201 and \'created\' message', 
     async() =>{
         const response =  await request(app).post('/products')
