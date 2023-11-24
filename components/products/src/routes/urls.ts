@@ -24,6 +24,9 @@ const routesWrapper = (controller: ProductsController) =>{
     router.get('/categories/:categoryName',
         controller.getProductsByCategory)
 
+    router.put('/', productValidators, controller.updateAllProducts)
+    router.put('/:id',productValidators, controller.updateOneProduct )
+
     return router
 
 }

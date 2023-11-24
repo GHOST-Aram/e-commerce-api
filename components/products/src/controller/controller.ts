@@ -241,4 +241,54 @@ export class ProductsController{
             next(error)
         }
     }
+
+    public updateAllProducts = (
+        req: Request, 
+        res: Response, 
+        next: NextFunction) =>{
+            res.status(405).json({message: 'Method not allowed'})
+    }
+
+    public updateOneProduct = async(
+        req: Request, 
+        res: Response, 
+        next: NextFunction
+    ) =>{
+        const productId = req.params.id
+        const productData: IProduct = req.body
+        const errors = validationResult(req)
+
+        if(!validator.isValidId(productId)){
+            res.status(400).json({ message: 'Invalid product id' })
+        }
+
+        if(!errors.isEmpty()){
+            res.status(400).json({ 
+                message : 'Invalid input ',
+                errors: errors.array()
+            })
+        }
+
+        try {
+            const productExists = await this.dal.productExists(
+                productId) 
+                const id = await this.dal.findProductByIdAndUpdate(productId)
+
+            if(productExists){
+
+                res.location(`/products/${id}`)
+                res.status(200).json({ message: 'Product updated' })
+            } else{
+                const productId = await this.dal.createNewProduct(
+                    productData)
+
+                res.location(`/products/${productId}`)
+                res.status(201).json({ message: 'Product Created'})
+            }
+        } catch (error) {
+            next(error)
+        }
+
+            
+    }
 }

@@ -14,16 +14,19 @@ describe('PUT requests', () =>{
         expect(response.body.message).toMatch(/not allowed/i)
         expect(response.headers['content-type']).toMatch(/json/)
     })
-    
-    test('Responds with 204 status for successfull update', 
+
+    test('Responds with 200 status for successfull update', 
     async() =>{
         const response = await request(app).put(
             '/products/64c9e4f2df7cc072af2ac9e4')
             .send(productData)
 
-        expect(response.status).toEqual(204)
+        expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/updated/i)
+        expect(response.header.location).toMatch(
+            /^\/products\/[0-9a-fA-F]{24}$/i)
+
     })
 
     test('Responds with 201 if new document was created', 
@@ -33,9 +36,10 @@ describe('PUT requests', () =>{
             .send(productData)
         
         expect(response.status).toEqual(201)
-        expect(response.header.location).toMatch(/^\/products\/[0-9a-fA-F]{24}$/i)
         expect(response.body.message).toMatch(/created/i)
         expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.header.location).toMatch(
+            /^\/products\/[0-9a-fA-F]{24}$/i)
     })
 
     test('Responds with 400 if product ID is invalid', 
@@ -57,6 +61,8 @@ describe('PUT requests', () =>{
 
         expect(response.status).toEqual(400)
         expect(response.body.message).toMatch(/invalid/i)
+        expect(Array.isArray(response.body.errors)).toBeTruthy()
         expect(response.headers['content-type']).toMatch(/json/)
+
     })
 })
