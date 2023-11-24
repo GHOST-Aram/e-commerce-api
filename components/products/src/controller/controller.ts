@@ -56,29 +56,31 @@ export class ProductsController{
     }
 
     public deleteOneProduct = async(
-        req: Request, res: Response, 
-        ) =>{
-            const productId = req.params.id
+        req: Request, 
+        res: Response, 
+        next: NextFunction
+    ) =>{
+        const productId = req.params.id
 
-            this.handleInvalidId(productId, res)
+        this.handleInvalidId(productId, res)
 
-            try {
-                const deletedProduct = await this.dal.findProductByIdAndDelete(
-                    productId)
-                
-                    console.log(deletedProduct)
-                if(deletedProduct === null){
-                    res.status(404).json(
-                        { message: 'Product not found' })
-                }
-
-                res.status(200).json({
-                    message: 'Deleted',
-                    product: deletedProduct
-                })
-            } catch (error) {
-                
+        try {
+            const deletedProduct = await this.dal.findProductByIdAndDelete(
+                productId)
+            
+                console.log(deletedProduct)
+            if(deletedProduct === null){
+                res.status(404).json(
+                    { message: 'Product not found' })
             }
+
+            res.status(200).json({
+                message: 'Deleted',
+                product: deletedProduct
+            })
+        } catch (error) {
+            next(error)
+        }
     }
 
     private handleInvalidId = (productId: string, res: Response) =>{
