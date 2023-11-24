@@ -8,11 +8,16 @@ export interface Paginator{
 
 export class ProductsDAL{
     
-    public createNewProduct = async( productData: IProduct): Promise<string> =>{
+    public createNewProduct = async( 
+        productData: IProduct): Promise<string> =>{
         const product =  new Product({
             name: productData.name,
-            image_file: productData.image_file ? productData.image_file : null,
-            image_url: productData.image_url ? productData.image_url : undefined,
+            image_file: productData.image_file 
+                ? productData.image_file : null,
+                
+            image_url: productData.image_url 
+                ? productData.image_url : undefined,
+
             description: productData.description,
             brand: productData.brand,
             manufacturer: productData.manufacturer,
@@ -29,106 +34,107 @@ export class ProductsDAL{
 
     public findProducts = async(
         {skipDocs, limit}: Paginator
-    ): Promise<HydratedProductDoc[]> =>{
-        const products = await Product.find()
-            .skip(skipDocs)
-            .limit(limit)
-        
-        return products
-    }
+        ): Promise<HydratedProductDoc[]> =>{
+            const products = await Product.find()
+                .skip(skipDocs)
+                .limit(limit)
+            
+            return products
+        }
 
     public findProductsByBrand = async (
-        brandName: string, 
-        paginator: Paginator
-    ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ brand: brandName})
-            .skip(paginator.skipDocs)
-            .limit(paginator.limit)
+        brandName: string, paginator: Paginator
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { brand: brandName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
 
-        return products
-    }
+            return products
+        }
 
     public findProductById = async(
         productId: string
-    ): Promise<HydratedProductDoc | null > =>{
-        return await Product.findById(productId)
-    }
+        ): Promise<HydratedProductDoc | null > =>{
+            return await Product.findById(productId)
+        }
     
     public findProductByIdAndDelete = async(
         productId: string
-    ): Promise<HydratedProductDoc | null > =>{
-        const deleted = await Product.findByIdAndDelete(productId)
+        ): Promise<HydratedProductDoc | null > =>{
+            const deleted = await Product.findByIdAndDelete(
+                productId)
 
-        return deleted
-    }
-    public findProductByIdAndUpdate = async(
-        productId: string, 
-        updateData: IProduct
-    ): Promise<string | undefined> =>{
-        const product = await Product.findByIdAndUpdate(
-            productId, updateData)
-        if(product === null){
-            return undefined
+            return deleted
         }
+    public findProductByIdAndUpdate = async(
+        productId: string, updateData: IProduct
+        ): Promise<string | undefined> =>{
+            const product = await Product.findByIdAndUpdate(
+                productId, updateData)
 
-        return product.id
-    }
+            if(product === null)
+                return undefined
+
+            return product.id
+        }
 
     public findProductsBymanufacturer = async (
         manufacturerName: string, 
         paginator:Paginator
-    ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find(
-            { manufacturer: manufacturerName})
-            .skip(paginator.skipDocs)
-            .limit(paginator.limit)
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { manufacturer: manufacturerName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
 
-        return products
-    }
+            return products
+        }
 
     public findProductsByModel = async (
         modelName: string, 
         paginator: Paginator
-    ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ model: modelName})
-            .skip(paginator.skipDocs)
-            .limit(paginator.limit)
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { model: modelName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
 
-        return products
-    }
+            return products
+        }
 
     public findProductsByCategory = async (
         categoryName: string, 
         paginator:Paginator
-    ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find(
-            { category: categoryName })
-            .skip(paginator.skipDocs)
-            .limit(paginator.limit)
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { category: categoryName })
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
 
-        return products
-    }
+            return products
+        }
 
     public findProductsByPriceRange = async(
         priceRange: PriceRange, 
         paginator: Paginator
-    ): Promise<HydratedProductDoc[]> =>{
-        const products = Product.find({
-            'selling_price': {
-                $gte: priceRange.start, 
-                $lte: priceRange.end
-            }
-        })
-        .skip(paginator.skipDocs)
-        .limit(paginator.limit)
+        ): Promise<HydratedProductDoc[]> =>{
+            const products = Product.find({
+                'selling_price': {
+                    $gte: priceRange.start, 
+                    $lte: priceRange.end
+                }
+            })
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
 
-        return products
-    }
+            return products
+        }
 
     public productExists = async(
         productId: string
-    ): Promise<boolean> =>{
-        const product = await this.findProductById(productId)
-        return Boolean(product)
-    }
+        ): Promise<boolean> =>{
+            const product = await this.findProductById(productId)
+            return Boolean(product)
+        }
 }
