@@ -22,18 +22,26 @@ const userSchema = new Schema<IUser, UserModel,
 UserMethods,{}, UserVirtuals>({
     first_name: {
         type: String,
+        minlength: 2,
+        maxlength: 100,
         required: true
     },
     last_name:{
         type: String,
+        minlength: 2,
+        maxlength: 100,
         required: true
     },
     email: {
         type: String,
+        minlength: 5,
+        maxlength: 200,
         required: true
     },
     password: {
         type: String,
+        minlength: 8,
+        maxlength: 24,
         required: true
     }
 })
