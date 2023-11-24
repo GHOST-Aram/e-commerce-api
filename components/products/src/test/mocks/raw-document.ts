@@ -37,3 +37,17 @@ export const badData = {
             'bluetooth'
     ],
 }
+
+export const partialData = {
+    model: 'a10s',
+    category: 'smartphone',
+    selling_price: 10000,
+    marked_price: 10299,
+}
+
+export const badPartialData = {
+    model: 'a10s',
+    category: '',
+    selling_price: -12,
+    marked_price: 0,
+}
