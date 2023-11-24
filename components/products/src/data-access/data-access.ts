@@ -14,7 +14,7 @@ export class ProductsDAL{
             name: productData.name,
             image_file: productData.image_file 
                 ? productData.image_file : null,
-                
+
             image_url: productData.image_url 
                 ? productData.image_url : undefined,
 
@@ -131,10 +131,4 @@ export class ProductsDAL{
             return products
         }
 
-    public productExists = async(
-        productId: string
-        ): Promise<boolean> =>{
-            const product = await this.findProductById(productId)
-            return Boolean(product)
-        }
 }
