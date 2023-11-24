@@ -1,30 +1,52 @@
-export interface PriceRange{
-    start: number | null
-    end: number | null
-}
 class Formatter{
-    public extractPriceRange = (rangeString: string): PriceRange =>{
+    public extractPriceRange = (
+        rangeString: string): PriceRange =>{
+        const { start, end } = this.convertToNumbers(rangeString)
 
-        let priceRange: PriceRange = {
-            start: null,
-            end: null
+        if(typeof start === 'number' && typeof end === 'number'){
+            if(start < end)
+                return this.assignValues(start, end)
+            else if( end < start)
+                return this.swapValues(start, end)
+            else 
+                return { start: null, end: null}
         }
+
+        return { start: null, end: null}
+    }
+
+    private convertToNumbers = (rangeString: string) =>{
         const stringArr = rangeString.trim().split('-')
         
         const start = Number(stringArr[0])
         const end = Number(stringArr[1])
 
-        if(typeof start === 'number' && typeof end === 'number'){
-            if(start < end){
-                priceRange.start = start 
-                priceRange.end = end
-            } else if( end < start){
-                priceRange.start = end
-                priceRange.end = start
-            }
-        }
+        return { start, end }
+    }
 
-        return priceRange
+    private assignValues = (
+        start: number, end: number): PriceRange =>{
+            let priceRange:PriceRange = {
+                start: null,
+                end: null
+            }
+
+            priceRange.start = start
+            priceRange.end = end
+
+            return priceRange
+    }
+
+    private swapValues = (
+        start: number, end: number): PriceRange =>{
+            let priceRange:PriceRange = {
+                start: null,
+                end: null
+            }
+            priceRange.start = end
+            priceRange.end = start
+
+            return priceRange
     }
 
     public formatFieldName(fieldName: string): string{
@@ -38,3 +60,7 @@ class Formatter{
 }
 
 export const formatter = new Formatter()
+export interface PriceRange{
+    start: number | null
+    end: number | null
+}
