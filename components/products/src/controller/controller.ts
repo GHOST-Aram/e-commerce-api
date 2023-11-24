@@ -4,6 +4,7 @@ import { IProduct } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
+import { partialData } from "../test/mocks/raw-document"
 
 export class ProductsController{
     private dal
@@ -242,11 +243,47 @@ export class ProductsController{
         }
     }
 
-    public updateAllProducts = (
+    public modifyAllProducts = (req: Request, res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed'})
+    }
+
+    public modifyOneProduct = async(
         req: Request, 
         res: Response, 
-        next: NextFunction) =>{
-            res.status(405).json({message: 'Method not allowed'})
+        next: NextFunction
+    ) =>{
+        const productId = req.params.id
+        const patchData = req.body
+        const errors = validationResult(req)
+
+        if(!validator.isValidId(productId)){
+            res.status(400).json({ message: 'Invalid product id'})
+        }
+
+        if(!errors.isEmpty()){
+            res.status(400).json({
+                message: 'Invalid input',
+                errors: errors.array()
+            })
+        }
+
+        try {
+            const id = await this.dal.findProductByIdAndUpdate(
+                productId, patchData)
+
+            if(!Boolean(id)){
+                res.status(404).json({ message: 'product not found'})
+            } 
+
+            res.location(`/products/${id}`)
+            res.status(200).json({ message: 'Modified' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public updateAllProducts = (req: Request, res: Response) =>{
+        res.status(405).json({message: 'Method not allowed'})
     }
 
     public updateOneProduct = async(
@@ -269,13 +306,11 @@ export class ProductsController{
             })
         }
 
-        try {
-            const productExists = await this.dal.productExists(
-                productId) 
-            const id = await this.dal.findProductByIdAndUpdate(productId)
+        try { 
+            const id = await this.dal.findProductByIdAndUpdate(
+                productId, productData)
 
-            if(productExists){
-
+            if(Boolean(id)){
                 res.location(`/products/${id}`)
                 res.status(200).json({ message: 'Product updated' })
             } else{
@@ -287,8 +322,6 @@ export class ProductsController{
             }
         } catch (error) {
             next(error)
-        }
-
-            
+        }   
     }
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ProductsController } from "../controller/controller";
-import { productValidators } from "../utils/middlewears";
+import { patchValidators, productValidators } from "../utils/middlewears";
 
 const router = Router()
 
@@ -24,8 +24,17 @@ const routesWrapper = (controller: ProductsController) =>{
     router.get('/categories/:categoryName',
         controller.getProductsByCategory)
 
-    router.put('/', productValidators, controller.updateAllProducts)
-    router.put('/:id',productValidators, controller.updateOneProduct )
+    router.put('/', productValidators, 
+        controller.updateAllProducts)
+
+    router.put('/:id',productValidators, 
+        controller.updateOneProduct )
+
+    router.patch('/', patchValidators, 
+        controller.modifyAllProducts)
+        
+    router.patch('/:id', patchValidators,
+        controller.modifyOneProduct)
 
     return router
 
