@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { Paginator, ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
-import { Result, ValidationError, validationResult } from "express-validator"
+import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
 import { validator } from "../utils/validator"
 
@@ -22,7 +22,7 @@ export class ProductsController{
         const productData: IProduct = req.body
         try {
             const productId = await this.dal.createNewProduct(productData)
-            this.respondWithCreatedResourceURI(res, productId)
+            this.respondWithCreatedResource(res, productId)
         } catch (error) {
             next(error)
         }
@@ -42,7 +42,7 @@ export class ProductsController{
         } 
     }
 
-    private respondWithCreatedResourceURI = (
+    private respondWithCreatedResource = (
         res: Response, 
         productId: string
     ) =>{
@@ -89,12 +89,9 @@ export class ProductsController{
     }
     
     public getOneProduct =async (
-        req:Request, 
-        res: Response, 
-        next: NextFunction
+        req:Request, res: Response, next: NextFunction
         ) => {
             const productId  = req.params.id
-
             this.handleInvalidId(productId, res)
 
             try {
@@ -357,7 +354,7 @@ export class ProductsController{
 
             const newProductId = await this.dal.createNewProduct(
                 productData)
-            this.respondWithCreatedResourceURI(res, newProductId)
+            this.respondWithCreatedResource(res, newProductId)
             
         } catch (error) {
             next(error)
