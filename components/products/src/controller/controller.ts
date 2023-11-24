@@ -56,9 +56,7 @@ export class ProductsController{
     }
 
     public deleteOneProduct = async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
+        req: Request, res: Response, next: NextFunction
         ) =>{
             const productId = req.params.id
             this.handleInvalidId(productId, res)
@@ -68,13 +66,11 @@ export class ProductsController{
                     productId)
                 
                 if(deletedProduct === null){
-                    res.status(404).json(
-                        { message: 'Product not found' })
+                    this.respondWith404Error(res)
                 } else{
                     this.respondWithDeletedResource(
                         deletedProduct, res)
                 }
-
             } catch (error) {
                 next(error)
             }
@@ -94,6 +90,11 @@ export class ProductsController{
                 product: deletedProduct
             })
         }
+
+    private respondWith404Error = (res: Response) =>{
+        res.status(404).json(
+            { message: 'Product not found' })
+    }
     
     public getOneProduct =async (
         req:Request, res: Response, next: NextFunction
@@ -106,9 +107,7 @@ export class ProductsController{
                     productId)
 
                 if(product === null){
-                    res.status(404).json({ 
-                            message : 'not found'
-                        })
+                    this.respondWith404Error(res)
                 } else {
                     res.status(200).json({ product })
                 }
@@ -171,9 +170,7 @@ export class ProductsController{
                 brandName, paginator)
             
             if(products.length < 1){
-                res.status(404).json({
-                    message: 'Brand products not found'
-                })
+                this.respondWith404Error(res)
             }
 
             res.status(200).json({ products })
@@ -199,9 +196,7 @@ export class ProductsController{
                 manufacturerName, paginator)
             
             if(products.length < 1){
-                res.status(404).json({
-                    message: 'Maufacuturer not found'
-                })
+               this.respondWith404Error(res)
             }
 
             res.status(200).json({ products })
@@ -227,9 +222,7 @@ export class ProductsController{
                 modelName, paginator)
             
             if(products.length < 1){
-                res.status(404).json({
-                    message: 'Model not found'
-                })
+               this.respondWith404Error(res)
             }
 
             res.status(200).json({ products })
@@ -257,8 +250,7 @@ export class ProductsController{
                 priceRange, pagination)
     
             if(products.length < 1){
-                res.status(404).json({ 
-                    message: 'Products in range not found'})
+                this.respondWith404Error(res)
             }
 
             res.status(200).json({ products })
@@ -284,7 +276,7 @@ export class ProductsController{
                 category, paginator)
 
             if(!products || products.length < 1){
-                res.status(404).json({ message: 'Not found'})
+               this.respondWith404Error(res)
             } else {
                 res.status(200).json({ products })
             }
@@ -318,8 +310,7 @@ export class ProductsController{
                 this.respondWithChangedResource(
                     id, 'Modified', res)
             } 
-            res.status(404).json(
-                { message: 'product not found'})
+           this.respondWith404Error(res)
         } catch (error) {
             next(error)
         }
