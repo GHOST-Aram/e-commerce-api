@@ -109,30 +109,26 @@ export class ProductsController{
                 if(product === null){
                     this.respondWith404Error(res)
                 } else {
-                    res.status(200).json({ product })
+                    this.respondWithFoundResource(product, res)
                 }
             } catch (error) {
                 next(error)
             }
-        
-    }
+        }
 
     public getProducts= async(
-        req: Request, 
-        res: Response, 
-        next: NextFunction
-    )=>{
-        try {
-            const paginator = this.paginate(req)
-            const products = await this.dal.findProducts(
-                paginator)
+        req: Request, res: Response, next: NextFunction
+        )=>{
+            try {
+                const paginator = this.paginate(req)
+                const products = await this.dal.findProducts(
+                    paginator)
 
-            res.status(200).json({ products })
-        } catch (error) {
-            next(error)
-        }
-        
-    } 
+                this.respondWithFoundResource(products, res)
+            } catch (error) {
+                next(error)
+            } 
+        } 
     
     private paginate = (req?: Request): Paginator =>{
         const pagestr = req?.query.page
@@ -152,6 +148,18 @@ export class ProductsController{
 
         return ({ skipDocs, limit })
     }
+
+    private respondWithFoundResource = (
+        resource: HydratedProductDoc[] | HydratedProductDoc, 
+        res: Response
+        ) =>{
+            if(Array.isArray(resource)){
+                res.status(200).json({ products: resource })
+            }
+            else{
+                res.status(200).json({ product: resource })
+            }
+        }
 
     public getProductsByBrand = async(
         req: Request, 
@@ -173,7 +181,7 @@ export class ProductsController{
                 this.respondWith404Error(res)
             }
 
-            res.status(200).json({ products })
+            this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
         } 
@@ -199,7 +207,7 @@ export class ProductsController{
                this.respondWith404Error(res)
             }
 
-            res.status(200).json({ products })
+            this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
         } 
@@ -225,7 +233,7 @@ export class ProductsController{
                this.respondWith404Error(res)
             }
 
-            res.status(200).json({ products })
+            this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
         } 
@@ -253,7 +261,7 @@ export class ProductsController{
                 this.respondWith404Error(res)
             }
 
-            res.status(200).json({ products })
+            this.respondWithFoundResource(products, res)
             
         } catch (error) {
             next(error)
@@ -278,7 +286,7 @@ export class ProductsController{
             if(!products || products.length < 1){
                this.respondWith404Error(res)
             } else {
-                res.status(200).json({ products })
+                this.respondWithFoundResource(products, res)
             }
         } catch (error) {
             next(error)
