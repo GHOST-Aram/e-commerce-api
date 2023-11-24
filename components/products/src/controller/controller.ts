@@ -16,40 +16,39 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-        ) =>{
-            this.handleValidationErrors(req, res)
+    ) =>{
+        this.handleValidationErrors(req, res)
 
-            const productData: IProduct = req.body
-            try {
-                const productId = await this.dal.createNewProduct(productData)
-                this.respondWithCreatedResourceURI(res, productId)
-            } catch (error) {
-                next(error)
-            }
+        const productData: IProduct = req.body
+        try {
+            const productId = await this.dal.createNewProduct(productData)
+            this.respondWithCreatedResourceURI(res, productId)
+        } catch (error) {
+            next(error)
         }
-
+    }
 
     private handleValidationErrors = (
         req: Request,
         res: Response 
-        ) =>{
-            const errors = validationResult(req)
+    ) =>{
+        const errors = validationResult(req)
 
-            if(!errors.isEmpty()){
-                res.status(400).json({
-                    message: 'Invalid input',
-                    errors: errors.array()
-                })
-            } 
-        }
+        if(!errors.isEmpty()){
+            res.status(400).json({
+                message: 'Invalid input',
+                errors: errors.array()
+            })
+        } 
+    }
 
     private respondWithCreatedResourceURI = (
         res: Response, 
         productId: string
-        ) =>{
-            res.location(`/products/${productId}`)
-            res.status(201).json({ message: 'Created'})
-        }
+    ) =>{
+        res.location(`/products/${productId}`)
+        res.status(201).json({ message: 'Created'})
+    }
 
     public deleteAll = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed' })
@@ -93,25 +92,25 @@ export class ProductsController{
         req:Request, 
         res: Response, 
         next: NextFunction
-    ) => {
-        const productId  = req.params.id
+        ) => {
+            const productId  = req.params.id
 
-        this.handleInvalidId(productId, res)
+            this.handleInvalidId(productId, res)
 
-        try {
-            const product = await this.dal.findProductById(
-                productId)
+            try {
+                const product = await this.dal.findProductById(
+                    productId)
 
-            if(product === null){
-                res.status(404).json({ 
-                        message : 'not found'
-                    })
-            } else {
-                res.status(200).json({ product })
+                if(product === null){
+                    res.status(404).json({ 
+                            message : 'not found'
+                        })
+                } else {
+                    res.status(200).json({ product })
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
-        }
         
     }
 
@@ -299,28 +298,36 @@ export class ProductsController{
         req: Request, 
         res: Response, 
         next: NextFunction
-        ) =>{
-            this.handleValidationErrors(req, res)
+    ) =>{
+        this.handleValidationErrors(req, res)
 
-            const productId = req.params.id
-            const patchData = req.body
+        const productId = req.params.id
+        const patchData = req.body
 
-            this.handleInvalidId(productId, res)
+        this.handleInvalidId(productId, res)
 
-            try {
-                const id = await this.dal.findProductByIdAndUpdate(
-                    productId, patchData)
+        try {
+            const id = await this.dal.findProductByIdAndUpdate(
+                productId, patchData)
 
-                if(!Boolean(id)){
-                    res.status(404).json({ message: 'product not found'})
-                } 
-
-                res.location(`/products/${id}`)
-                res.status(200).json({ message: 'Modified' })
-            } catch (error) {
-                next(error)
-            }
+            if(id){
+                this.respondWithChangedResource(
+                    id, 'Modified', res)
+            } 
+            res.status(404).json(
+                { message: 'product not found'})
+        } catch (error) {
+            next(error)
         }
+    }
+
+    private respondWithChangedResource = (
+        productId: string, 
+        change: string, res: 
+        Response) =>{
+            res.location(`/products/${productId}`)
+            res.status(200).json({ message: change })
+    }
 
     public updateAllProducts = (req: Request, res: Response) =>{
         this.handleValidationErrors(req, res)
@@ -328,32 +335,32 @@ export class ProductsController{
     }
 
     public updateOneProduct = async(
-            req: Request, 
-            res: Response, 
-            next: NextFunction
-        ) =>{
-            this.handleValidationErrors(req, res)
+        req: Request, 
+        res: Response, 
+        next: NextFunction
+    ) =>{
+        this.handleValidationErrors(req, res)
 
-            const productId = req.params.id
-            const productData: IProduct = req.body
+        const productId = req.params.id
+        this.handleInvalidId(productId, res)
+        
+        const productData: IProduct = req.body
+        try { 
+            const id = await this.dal.findProductByIdAndUpdate(
+                productId, productData)
 
-            this.handleInvalidId(productId, res)
+            if(id){
+                this.respondWithChangedResource(
+                    id, 'Updated', res
+                )
+            } 
 
-
-            try { 
-                const id = await this.dal.findProductByIdAndUpdate(
-                    productId, productData)
-
-                if(Boolean(id)){
-                    res.location(`/products/${id}`)
-                    res.status(200).json({ message: 'Product updated' })
-                } else{
-                    const productId = await this.dal.createNewProduct(
-                        productData)
-                    this.respondWithCreatedResourceURI(res, productId)
-                }
-            } catch (error) {
-                next(error)
-            }   
-        }
+            const newProductId = await this.dal.createNewProduct(
+                productData)
+            this.respondWithCreatedResourceURI(res, newProductId)
+            
+        } catch (error) {
+            next(error)
+        }   
+    }
 }
