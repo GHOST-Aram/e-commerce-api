@@ -6,6 +6,8 @@ const router = Router()
 
 export const routesWrapper = (controller: UsersController) =>{
     router.post('/', userValidators ,controller.AddNewUser)
+    router.get('/', controller.getMultipleUsers)
+    router.get('/:id', controller.getOneUser)
 
     return router
 }

@@ -3,6 +3,7 @@ import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { validationResult } from "express-validator";
 import { HydratedUserDoc } from "../data-access/model";
+import { isValidObjectId } from "mongoose";
 
 export class UsersController{
     private dal: UsersDAL
@@ -56,4 +57,58 @@ export class UsersController{
                 user: resource
             })
     }
+
+    public getMultipleUsers = async(
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            const pagination = this.paginate(req)
+
+            try {
+                const users = await this.dal.findMultipleUsers(
+                    pagination)
+                res.status(200).json({ users  })
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private paginate = (req: Request): Paginator =>{
+        const page = Number(req.query.page)
+        const limit = Number(req.query.limit)
+        const skipDocs = (page - 1) * limit
+
+        if(!page || !limit){
+            return { skipDocs: 0, limit: 10 }
+        }
+
+        return { skipDocs, limit }
+    }
+
+    public getOneUser = async(
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            const userId = req.params.id
+            this.handleInvalidId(userId, res)
+
+            try {
+                const user = await this.dal.findUserById(userId)
+                if(!user)
+                    res.status(404).json(
+                        { message: 'User not found'})
+                        
+                res.status(200).json({ user })
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private handleInvalidId = (id: string, res: Response) =>{
+        if(!isValidObjectId(id))
+            res.status(400).json({ message: 'Invalid user id'})
+    }
+}
+
+export interface Paginator{
+    skipDocs: number,
+    limit: number
 }
