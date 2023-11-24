@@ -23,11 +23,8 @@ export class ProductsController{
         if(errors.isEmpty()){
             try {
                 const productId = await this.dal.createNewProduct(productData)
-
-                res.location(`/products/${productId}`)
-                res.status(201).json({ message: 'Created'})
+                this.respondWithCreatedResource(res, productId)
             } catch (error) {
-                console.log(error)
                 next(error)
             }
         } else {
@@ -37,7 +34,13 @@ export class ProductsController{
             })
         }
     }
-
+    private respondWithCreatedResource = (
+        res: Response, 
+        productId: string
+    ) =>{
+        res.location(`/products/${productId}`)
+        res.status(201).json({ message: 'Created'})
+    }
     public deleteAll = (
         req: Request, 
         res: Response, 
@@ -350,9 +353,7 @@ export class ProductsController{
             } else{
                 const productId = await this.dal.createNewProduct(
                     productData)
-
-                res.location(`/products/${productId}`)
-                res.status(201).json({ message: 'Product Created'})
+                this.respondWithCreatedResource(res, productId)
             }
         } catch (error) {
             next(error)
