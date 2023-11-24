@@ -54,6 +54,12 @@ export class ProductsDAL{
         return await Product.findById(productId)
     }
     
+    public findProductByIdAndUpdate = async(
+        productId: string
+    ): Promise<string | undefined> =>{
+        return (await Product.findByIdAndUpdate(productId))?.id
+    }
+
     public findProductsBymanufacturer = async (
         manufacturerName: string, 
         paginator:Paginator
@@ -103,5 +109,12 @@ export class ProductsDAL{
         .limit(paginator.limit)
 
         return products
+    }
+
+    public productExists = async(
+        productId: string
+    ): Promise<boolean> =>{
+        const product = await this.findProductById(productId)
+        return Boolean(product)
     }
 }

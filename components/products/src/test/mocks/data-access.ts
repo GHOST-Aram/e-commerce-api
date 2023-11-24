@@ -72,6 +72,11 @@ export class ProductsDAL {
         }
     )
 
+    public findProductByIdAndUpdate = jest.fn(
+        async(productId: string) =>{
+            return productId
+    })
+
     public findProducts = jest.fn(async( 
         {skipDocs, limit}:Paginator
     ): Promise<HydratedProductDoc[]> =>{
@@ -153,5 +158,9 @@ export class ProductsDAL {
         }
 
         return products
+    })
+
+    public productExists = jest.fn(async(productId: string) =>{
+        return productId === '64c9e4f2df7cc072af2ac9e4'
     })
 }
