@@ -60,9 +60,7 @@ export class ProductsController{
         ) =>{
             const productId = req.params.id
 
-            if(!validator.isValidId(productId)){
-                res.status(400).json({ message: 'Invalid id'})
-            }
+            this.handleInvalidId(productId, res)
 
             try {
                 const deletedProduct = await this.dal.findProductByIdAndDelete(
@@ -81,7 +79,14 @@ export class ProductsController{
             } catch (error) {
                 
             }
+    }
+
+    private handleInvalidId = (productId: string, res: Response) =>{
+        if(!validator.isValidId(productId)){
+            res.status(400).json({ message: 'Invalid id'})
         }
+    }
+    
     public getOneProduct =async (
         req:Request, 
         res: Response, 
@@ -89,26 +94,23 @@ export class ProductsController{
     ) => {
         const productId  = req.params.id
 
-        if(!validator.isValidId(productId)){
-            res.status(400).json(
-                { message: 'Invalid Product ID'})
-        } else {
+        this.handleInvalidId(productId, res)
 
-            try {
-                const product = await this.dal.findProductById(
-                    productId)
-    
-                if(product === null){
-                    res.status(404).json({ 
-                            message : 'not found'
-                        })
-                } else {
-                    res.status(200).json({ product })
-                }
-            } catch (error) {
-                next(error)
+        try {
+            const product = await this.dal.findProductById(
+                productId)
+
+            if(product === null){
+                res.status(404).json({ 
+                        message : 'not found'
+                    })
+            } else {
+                res.status(200).json({ product })
             }
+        } catch (error) {
+            next(error)
         }
+        
     }
 
     public getProducts= async(
@@ -301,9 +303,7 @@ export class ProductsController{
             const productId = req.params.id
             const patchData = req.body
 
-            if(!validator.isValidId(productId)){
-                res.status(400).json({ message: 'Invalid product id'})
-            }
+            this.handleInvalidId(productId, res)
 
             try {
                 const id = await this.dal.findProductByIdAndUpdate(
@@ -335,9 +335,7 @@ export class ProductsController{
             const productId = req.params.id
             const productData: IProduct = req.body
 
-            if(!validator.isValidId(productId)){
-                res.status(400).json({ message: 'Invalid id' })
-            }
+            this.handleInvalidId(productId, res)
 
 
             try { 
