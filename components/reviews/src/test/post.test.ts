@@ -1,4 +1,4 @@
-import { app } from "../config/config";
+import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import * as data from "./mocks/raw-data"
 import request from "supertest"
@@ -21,7 +21,7 @@ describe('POST Reviews route', () =>{
          .send(data.badData)
       
       expect(response.status).toEqual(400)
-      expect(response.body.message).toMatch(/invalid/)
+      expect(response.body.message).toMatch(/invalid/i)
       expect(response.headers['content-type']).toMatch(/json/)
       expect(response.body).toHaveProperty('errors')
       expect(Array.isArray(response.body.errors)).toBeTruthy()
@@ -32,7 +32,10 @@ describe('POST Reviews route', () =>{
       const response = await request(app).post('/reviews')
          .send(data.reviewData)
 
-      expect(response.status).toEqual(204)
+      expect(response.status).toEqual(201)
       expect(response.headers['content-type']).toMatch(/json/)
+      expect(response.body.message).toMatch(/created/i)
+      expect(response.header.location).toMatch(
+         /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
    })
 })
