@@ -31,6 +31,10 @@ export class UsersDAL{
             return user
     }
 
+    public findUserByIdAndDelete = async(userId: string
+        ): Promise<HydratedUserDoc | null> =>{
+            return await User.findByIdAndDelete(userId)
+    }
     public findUserByIdAndUpdate = async(
         userID: string, updateData: IUser
         ): Promise<HydratedUserDoc | null> =>{

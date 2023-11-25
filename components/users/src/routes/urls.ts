@@ -16,5 +16,8 @@ export const routesWrapper = (controller: UsersController) =>{
     router.patch('/', controller.modifyAllUsers)
     router.patch('/:id', patchValidators, controller.modifyOneUser)
 
+    router.delete('/', controller.removeAllUsers)
+    router.delete('/:id', controller.removeOneUser)
+
     return router
 }

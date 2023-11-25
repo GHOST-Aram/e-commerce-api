@@ -57,7 +57,35 @@ export class UsersController{
                 user: resource
             })
     }
+    public removeAllUsers = async(req: Request, res: Response) =>{
+        this.respondWithMethodNotAllowed(res)
+    }
+    public removeOneUser = async(
+        req: Request, res: Response,next: NextFunction) =>{
+            const userId = req.params.id
+            this.handleInvalidId(userId, res )
 
+            try {
+                const deletedUser = await this.dal.findUserByIdAndDelete(
+                    userId)
+                if(deletedUser)
+                    this.respondWithDeletedResource(
+                    deletedUser, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
+ 
+    }
+
+    private respondWithDeletedResource = (
+        resource: HydratedUserDoc, res: Response) =>{
+            res.status(200).json({
+                message: 'deleted',
+                user: resource
+            })
+    }
     public getMultipleUsers = async(
         req: Request, res: Response, next: NextFunction
         ) =>{

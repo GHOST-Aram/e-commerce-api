@@ -25,6 +25,7 @@ export class UsersDAL{
             return null
     
     })
+
     public findMultipleUsers = jest.fn(async(
         pagination: Paginator): Promise<HydratedUserDoc[]> =>{
             return this.createFakeUsersArray(pagination.limit)
@@ -57,7 +58,18 @@ export class UsersDAL{
 
         return null
     })
+    public findUserByIdAndDelete = jest.fn(
+        async(userId: string): Promise<HydratedUserDoc | null> =>{
+            if(userId === '64c9e4f2df7cc072af2ac9e4'){
+                return new User({
+                    first_name: 'John', 
+                    last_name: 'Doe',
+                    email: 'johndoe@gmail.com'
+                })
+            }
 
+            return null
+    })
     public findUserByIdAndUpdate = jest.fn(
         async(userId: string): Promise<HydratedUserDoc | null> =>{
             if(userId === '64c9e4f2df7cc072af2ac9e4'){
