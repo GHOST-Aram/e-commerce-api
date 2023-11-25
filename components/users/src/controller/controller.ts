@@ -127,7 +127,8 @@ export class UsersController{
                 if(user)
                     this.respondWithUpdatedResource(user.id, res)
                 
-                this.respondWith404Error(res)
+                const newUser = await this.dal.createNewUser(userData)
+                this.respondWithCreatedResource(newUser, res)
             } catch (error) {
                 next(error)
             }

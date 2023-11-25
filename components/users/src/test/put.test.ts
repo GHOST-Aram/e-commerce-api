@@ -37,16 +37,19 @@ describe('PUT users route', () =>{
         expect(Array.isArray(response.body.errors)).toBeTruthy()
     })  
 
-    test('Responds with 404 error if userID is valid but does not '+
-        'exits', 
+    test('Creates new user and responds with status 201 if userID'+
+        ' is valid but does not exits', 
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac8a4')
             .send(validUserData)
         
-        expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/)
+        expect(response.status).toEqual(201)
+        expect(response.body.message).toMatch(/created/i)
         expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.header.location).toMatch(
+            /\/users\/[a-fA-F0-9]{24}/)
+        
     })
 
     test('Responds with 200 and location URI if user update '+
