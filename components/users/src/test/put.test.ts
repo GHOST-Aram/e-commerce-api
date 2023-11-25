@@ -1,26 +1,21 @@
-import { app } from "./test.config";
-import { describe, test, expect } from "@jest/globals";
+import { app } from "./lib/test.config";
+import { describe, test } from "@jest/globals";
 import request from "supertest"
-import { invalidUserData, validUserData } from "./mocks/raw-data";
+import * as rawData from "./mocks/raw-data";
+import { expectations } from "./lib/response-expectations";
 
 describe('PUT users route', () =>{
     test('Does not allow batch updates on users (405)', async() =>{
         const response = await request(app).put('/users')
-            .send(validUserData)
-
-        expect(response.status).toEqual(405)
-        expect(response.body.message).toMatch(/not allowed/i)
-        expect(response.headers['content-type']).toMatch(/json/i)
+            .send(rawData.validUserData)
+        expectations.expectMethodNotAllowedResponse(response)
     })
 
     test('Rejects invalid users IDs with status 400',async () => {
         const response = await request(app).put(
             '/users/invalidId')
-            .send(validUserData)
-
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.headers['content-type']).toMatch(/json/)
+            .send(rawData.validUserData)
+        expectations.expectBadRequestResponse(response)
     })
 
     test('Responds with validation errors and status 400 if '+
@@ -28,13 +23,10 @@ describe('PUT users route', () =>{
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac9e4')
-            .send(invalidUserData)
+            .send(rawData.invalidUserData)
 
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.body).toHaveProperty('errors')
-        expect(Array.isArray(response.body.errors)).toBeTruthy()
+        expectations.expectBadRequestResponse(response)
+        expectations.expectErrorResponseWithArray(response)
     })  
 
     test('Creates new user and responds with status 201 if userID'+
@@ -42,14 +34,8 @@ describe('PUT users route', () =>{
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac8a4')
-            .send(validUserData)
-        
-        expect(response.status).toEqual(201)
-        expect(response.body.message).toMatch(/created/i)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.header.location).toMatch(
-            /\/users\/[a-fA-F0-9]{24}/)
-        
+            .send(rawData.validUserData)
+        expectations.expectCreatedResponse(response)
     })
 
     test('Responds with 200 and location URI if user update '+
@@ -57,12 +43,7 @@ describe('PUT users route', () =>{
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac9e4')
-            .send(validUserData)
-        
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.header.location).toMatch(
-            /^\/users\/[a-fA-F0-9]{24}$/)
-        expect(response.body.message).toMatch(/updated/i)
+            .send(rawData.validUserData)
+        expectations.expectUpdatedResponse(response)
     })
 })

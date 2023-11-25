@@ -1,6 +1,7 @@
-import { app } from "./test.config";
+import { app } from "./lib/test.config";
 import { describe, test, expect } from "@jest/globals";
 import request from 'supertest'
+import { expectations } from "./lib/response-expectations";
 
 describe('GET Users Route', () =>{
 
@@ -9,10 +10,9 @@ describe('GET Users Route', () =>{
         const response = await request(app).get('/users')
         const users = response.body.users
         
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body).toHaveProperty('users')
-        expect(Array.isArray(users)).toBeTruthy()
+        expectations.expectSuccessfulResponse(response)
+        expectations.expectResponseWithPaginatedUsersArray(
+            response, 10)
         expect(users[0]).not.toHaveProperty('password')
     })
 
@@ -21,10 +21,9 @@ describe('GET Users Route', () =>{
         const response = await request(app).get('/users')
         const users = response.body.users
 
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(Array.isArray(users)).toBeTruthy()
-        expect(users.length).toEqual(10)
+        expectations.expectSuccessfulResponse(response)
+        expectations.expectResponseWithPaginatedUsersArray(
+            response, 10)
         expect(users[0]).not.toHaveProperty('password')
     })
 
@@ -32,23 +31,17 @@ describe('GET Users Route', () =>{
     async() =>{
         const response = await request(app).get(
             '/users?page=1&limit=23')
-        const users = response.body.users
 
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(Array.isArray(users)).toBeTruthy()
-        expect(users.length).toEqual(23)
-        expect(users[0]).not.toHaveProperty('password')
+        expectations.expectSuccessfulResponse(response)
+        expectations.expectResponseWithPaginatedUsersArray(
+            response, 23)
     } )
 
     test('Responds with status 400 if user ID is invalid',  
     async() =>{
         const response = await request(app).get(
             '/users/9jdiks9sk0xx34')
-
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid/i)
+        expectations.expectBadRequestResponse(response)
     })
 
     test('Responds with status 404 if user with a valid id '+
@@ -56,10 +49,7 @@ describe('GET Users Route', () =>{
     async() =>{
         const response = await request(app).get(
             '/users/64c9e4f2df7cc072af2ac8a4')
-
-        expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/)
-        expect(response.headers['content-type']).toMatch(/json/)
+        expectations.expectNotFoundResponse(response)
     })
 
     test('Responds with 200 if user exists with a valid ID', 
@@ -67,10 +57,7 @@ describe('GET Users Route', () =>{
         const response = await request(app).get(
             '/users/64c9e4f2df7cc072af2ac9e4')
         
-        expect(response.status).toEqual(200)
-        expect(response.body).toHaveProperty('user')
-        expect(response.body.user).toHaveProperty('_id')
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.user).not.toHaveProperty('password')
+        expectations.expectSuccessfulResponse(response)
+        expectations.expectResponseWithUserDocument(response)
     })
 })
