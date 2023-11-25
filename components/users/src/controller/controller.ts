@@ -106,6 +106,42 @@ export class UsersController{
         if(!isValidObjectId(id))
             res.status(400).json({ message: 'Invalid user id'})
     }
+
+    public updateAllUsers = (req: Request, res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed'})
+    }
+
+    public updateOneUser = async(
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            const userId = req.params.id
+            this.handleInvalidId(userId, res)
+
+            this.handleValidationErrors(req, res)
+
+            const userData = req.body
+            try {
+                const user = await this.dal.findUserByIdAndUpdate(
+                    userId, userData)
+                
+                if(user)
+                    this.respondWithUpdatedResource(user.id, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
+    }   
+
+    private respondWithUpdatedResource = (
+        userId: string, res: Response) => {
+            res.location(`/users/${userId}`)
+            res.status(200).json({ message: 'Updated'})
+    }
+
+    private respondWith404Error = (res: Response) =>{
+        res.status(404).json({ message: 'User ID not found'})
+    }
 }
 
 export interface Paginator{

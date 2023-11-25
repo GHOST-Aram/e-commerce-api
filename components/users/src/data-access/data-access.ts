@@ -19,16 +19,22 @@ export class UsersDAL{
             return users
     }
 
-    public findUserById = async(userId: string
-        ): Promise<HydratedUserDoc | null> =>{
-            const user = await User.findById(userId)
-            return user
-    }
     
     public findUserByEmail = async(email: string
         ): Promise<HydratedUserDoc | null> =>{
         return await User.findOne({ email })
     }
-}
 
+    public findUserById = async(userId: string
+        ): Promise<HydratedUserDoc | null> =>{
+            const user = await User.findById(userId)
+            return user
+    }
+
+    public findUserByIdAndUpdate = async(
+        userID: string, updateData: IUser
+        ): Promise<HydratedUserDoc | null> =>{
+            return User.findByIdAndUpdate(userID, updateData)    
+    }
+}
 export const usersDAL = new UsersDAL()
