@@ -19,3 +19,13 @@ export const invalidUserData = {
     email: 'johndoe@gmail.com',
     password: 'password'
 }
+
+export const validPartialData = {
+    last_name: 'Doe',
+    email: 'johndoe@gmail.com',
+    password: 'password'
+}
+
+export const invalidPartialData = {//password is required
+    email: 'johndoe@gmail.com'
+}

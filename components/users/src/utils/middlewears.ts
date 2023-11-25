@@ -6,3 +6,10 @@ export const userValidators = [
     validator.validateRequiredField('password'),
     validator.validateRequiredField('email')
 ]
+
+export const patchValidators = [
+    validator.validateOptionalField('first_name'),
+    validator.validateOptionalField('last_name'),
+    validator.validateOptionalField('email'),
+    validator.validateRequiredField('password')
+]

@@ -8,6 +8,10 @@ export class Validator {
             .withMessage(`${fieldName} field is required`)
     }
 
+    public validateOptionalField = (fieldName: string): ValidationChain =>{
+        return body(fieldName).trim()
+            .escape().optional()
+    }
 
 }
 

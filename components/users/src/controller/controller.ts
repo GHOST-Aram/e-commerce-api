@@ -1,8 +1,8 @@
 import { Response, Request } from "express";
-import { UsersDAL } from "../data-access/data-access";
+import { PatchData, UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { validationResult } from "express-validator";
-import { HydratedUserDoc } from "../data-access/model";
+import { HydratedUserDoc, IUser } from "../data-access/model";
 import { isValidObjectId } from "mongoose";
 
 export class UsersController{
@@ -93,8 +93,7 @@ export class UsersController{
             try {
                 const user = await this.dal.findUserById(userId)
                 if(!user)
-                    res.status(404).json(
-                        { message: 'User not found'})
+                    this.respondWith404Error(res)
                         
                 res.status(200).json({ user })
             } catch (error) {
@@ -107,7 +106,37 @@ export class UsersController{
             res.status(400).json({ message: 'Invalid user id'})
     }
 
+    public modifyAllUsers = (req: Request, res: Response) =>{
+        this.respondWithMethodNotAllowed(res)
+    }
+
+    public modifyOneUser = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const userId = req.params.id
+
+            this.handleInvalidId(userId, res)
+            this.handleValidationErrors(req, res)
+
+            const patchData: IUser = req.body
+            try {
+                const user = await this.dal.findUserByIdAndUpdate(
+                    userId, patchData)
+                
+                if(user)
+                    this.respondWithChangedResource(
+                        user.id,'Modified', res)
+
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            } 
+
+    }
     public updateAllUsers = (req: Request, res: Response) =>{
+        this.respondWithMethodNotAllowed(res)
+    }
+
+    private respondWithMethodNotAllowed = (res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
 
@@ -125,7 +154,8 @@ export class UsersController{
                     userId, userData)
                 
                 if(user)
-                    this.respondWithUpdatedResource(user.id, res)
+                    this.respondWithChangedResource(
+                        user.id, 'Updated', res)
                 
                 const newUser = await this.dal.createNewUser(userData)
                 this.respondWithCreatedResource(newUser, res)
@@ -134,10 +164,10 @@ export class UsersController{
             }
     }   
 
-    private respondWithUpdatedResource = (
-        userId: string, res: Response) => {
+    private respondWithChangedResource = (
+        userId: string, change:string, res: Response) => {
             res.location(`/users/${userId}`)
-            res.status(200).json({ message: 'Updated'})
+            res.status(200).json({ message: change})
     }
 
     private respondWith404Error = (res: Response) =>{

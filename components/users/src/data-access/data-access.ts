@@ -38,3 +38,10 @@ export class UsersDAL{
     }
 }
 export const usersDAL = new UsersDAL()
+
+export interface PatchData{
+    first_name?: string
+    last_name?: string
+    email?: string
+    password: string
+}
