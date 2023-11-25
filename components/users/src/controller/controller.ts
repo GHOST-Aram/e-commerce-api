@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { PatchData, UsersDAL } from "../data-access/data-access";
+import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { validationResult } from "express-validator";
 import { HydratedUserDoc, IUser } from "../data-access/model";
@@ -18,7 +18,9 @@ export class UsersController{
             
             const userData = req.body
             try {
-                const user = await this.dal.findUserByEmail(userData.email)
+                const user = await this.dal.findUserByEmail(
+                    userData.email)
+
                 if(user)
                     this.respondWithConflict(res)
                 else {
@@ -76,7 +78,6 @@ export class UsersController{
             } catch (error) {
                 next(error)
             }
- 
     }
 
     private respondWithDeletedResource = (
@@ -94,7 +95,7 @@ export class UsersController{
             try {
                 const users = await this.dal.findMultipleUsers(
                     pagination)
-                res.status(200).json({ users  })
+                this.respondWithFoundResource(users, res)
             } catch (error) {
                 next(error)
             }
@@ -112,6 +113,15 @@ export class UsersController{
         return { skipDocs, limit }
     }
 
+    private respondWithFoundResource = (
+        resoure: HydratedUserDoc[] | HydratedUserDoc, 
+        res: Response) =>{
+            if(Array.isArray(resoure))
+                res.status(200).json({ users: resoure  })
+            else
+                res.status(200).json({ user: resoure })
+    }
+
     public getOneUser = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
@@ -120,10 +130,11 @@ export class UsersController{
 
             try {
                 const user = await this.dal.findUserById(userId)
-                if(!user)
+                
+                if(user === null)
                     this.respondWith404Error(res)
-                        
-                res.status(200).json({ user })
+                else     
+                    this.respondWithFoundResource(user, res)
             } catch (error) {
                 next(error)
             }
