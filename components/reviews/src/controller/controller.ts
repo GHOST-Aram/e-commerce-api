@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { validationResult } from "express-validator"
+import { isValidObjectId } from "mongoose"
 export class Controller{
 
     private dal: DataAccess
@@ -36,10 +37,61 @@ export class Controller{
             next()
         }
     }
+
     public handleNotAllowedRequest = (
         req: Request, res: Response) =>{
         if(req.params.id){
             res.status(405).json({ message: 'Method not allowed'})
         }
+    }
+
+    public getRandomReviews = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const paginator = this.paginate(req)
+
+            try {
+                const reviews = await this.dal.findReviews(paginator)
+                res.status(200).json({ reviews })
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private paginate = (req: Request) =>{
+        const paginator = {
+            skipDocs: 0,
+            limit: 10
+        }
+
+        const page = Math.abs(Number(req.query.page))
+        const limit = Math.abs(Number(req.query.limit))
+
+        if(page && limit){
+            paginator.skipDocs = (page - 1) * limit
+            paginator.limit = limit
+        }
+
+        return paginator
+    }
+
+    public getReviewsByProductId = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const productId = req.params.productId
+            this.handleInvalidProductId(productId, res)
+
+            const paginator = this.paginate(req)
+            try {
+                const reviews = await this.dal.findReviewsByProductId(
+                    productId, paginator)
+                res.status(200).json({ reviews })
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private handleInvalidProductId = (
+        productId: string, res: Response) =>{
+            if(!isValidObjectId(productId))
+                res.status(400).json({ message: 'Invalid Id'})
     }
 }

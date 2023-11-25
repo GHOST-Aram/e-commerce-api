@@ -11,5 +11,8 @@ export const routesWrapper = (controller: Controller) =>{
 
     router.post('/:id', controller.handleNotAllowedRequest)
 
+    router.get('/', controller.getRandomReviews)
+    router.get('/:productId', controller.getReviewsByProductId)
+
     return router
 }
