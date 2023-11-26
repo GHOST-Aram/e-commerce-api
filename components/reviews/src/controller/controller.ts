@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
+import { HydratedReviewDoc } from "../data-access/model"
 export class Controller{
 
     private dal: DataAccess
@@ -45,18 +46,29 @@ export class Controller{
                 const deletedReview = await this.dal
                     .findReviewByIdAndDelete(reviewId)
     
-                if(deletedReview === null)
-                    res.status(404).json({ message: 'Not found' })
-    
-                res.status(200).json({ 
-                    message: 'Deleted',
-                    review: deletedReview 
-                })
+                if(deletedReview)
+                    this.respondWithChangedResource(
+                    deletedReview, 'Deleted', res)
+            
+                this.respondWithResourceNotFound(res)
             } catch (error) {
                 next(error)
-            }
-            
+            }    
     }
+
+    private respondWithResourceNotFound = (res: Response) =>{
+        res.status(404).json({ message: 'Not found' })
+    }
+
+    private respondWithChangedResource = (
+        resource: HydratedReviewDoc,change: string, res: Response
+        ) =>{
+            res.status(200).json({ 
+                message: change,
+                review: resource 
+            })
+    }
+
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
         const errors = validationResult(req)
@@ -113,10 +125,15 @@ export class Controller{
             try {
                 const reviews = await this.dal.findReviewsByProductId(
                     productId, paginator)
-                res.status(200).json({ reviews })
+                this.respondWithFoundResource(reviews, res)
             } catch (error) {
                 next(error)
             }
+    }
+
+    private respondWithFoundResource = (
+        resource: HydratedReviewDoc[], res: Response) =>{
+            res.status(200).json({ reviews: resource })
     }
 
     private handleInvalidId = (id: string, res: Response) =>{
@@ -137,13 +154,11 @@ export class Controller{
             const updatedReview = await this.dal
                 .findReviewByIdAndUpdate(reviewId)
 
-            if(updatedReview === null)
-                res.status(404).json({ message: 'Not found' })
+            if(updatedReview)
+                this.respondWithChangedResource(updatedReview, 
+                'Updated', res)
 
-            res.status(200).json({ 
-                message: 'Modified',
-                review: updatedReview 
-            })
+            this.respondWithResourceNotFound(res)
         } catch (error) {
             next(error)
         }
@@ -162,13 +177,11 @@ export class Controller{
                 const updatedReview = await this.dal
                     .findReviewByIdAndUpdate(reviewId)
 
-                if(updatedReview === null)
-                    res.status(404).json({ message: 'Not found' })
-
-                res.status(200).json({ 
-                    message: 'Updated',
-                    review: updatedReview 
-                })
+                if(updatedReview)
+                    this.respondWithChangedResource(updatedReview,
+                    'Updated', res)
+                
+                this.respondWithResourceNotFound(res)
             } catch (error) {
                 next(error)
             }
