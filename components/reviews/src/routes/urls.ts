@@ -17,14 +17,12 @@ export const routesWrapper = (controller: Controller) =>{
     router.put('/', controller.updateAllReviews)
     router.put('/:reviewId', newReviewInputValidators,
         controller.handleValidationErrors,
-        controller.updateReview
-    )
+        controller.updateReview)
 
     router.patch('/', controller.modifyAllReviews)
     router.patch('/:reviewId', patchInputValidators,
         controller.handleValidationErrors,
-        controller.modifyReview
-    )
+        controller.modifyReview)
 
     router.delete('/', controller.deleteAllReviews )
     router.delete('/:reviewId', controller.deleteReview)
