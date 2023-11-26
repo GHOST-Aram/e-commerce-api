@@ -11,5 +11,8 @@ export const routesWrapper = (controller: Controller) =>{
 
     router.post('/:id', controller.handleMethodNotAllowed)
 
+    router.get('/', controller.getManyCarts)
+    router.get('/:customerId', controller.getOneCart)
+
     return router
 }
