@@ -24,6 +24,10 @@ export class Controller{
             }
     }
 
+    public addNewReviewWithId = async(req: Request, res: Response) =>{
+        this.responseWithMethodNotAllowed(res)
+    }
+
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
         const errors = validationResult(req)
@@ -38,11 +42,8 @@ export class Controller{
         }
     }
 
-    public handleNotAllowedRequest = (
-        req: Request, res: Response) =>{
-        if(req.params.id){
-            res.status(405).json({ message: 'Method not allowed'})
-        }
+    private responseWithMethodNotAllowed = (res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed'})
     }
 
     public getRandomReviews = async(
@@ -77,7 +78,7 @@ export class Controller{
     public getReviewsByProductId = async(
         req: Request, res: Response, next: NextFunction) =>{
             const productId = req.params.productId
-            this.handleInvalidProductId(productId, res)
+            this.handleInvalidId(productId, res)
 
             const paginator = this.paginate(req)
             try {
@@ -89,9 +90,33 @@ export class Controller{
             }
     }
 
-    private handleInvalidProductId = (
-        productId: string, res: Response) =>{
-            if(!isValidObjectId(productId))
-                res.status(400).json({ message: 'Invalid Id'})
+    private handleInvalidId = (id: string, res: Response) =>{
+        if(!isValidObjectId(id))
+            res.status(400).json({ message: 'Invalid Id'})
+    }
+
+    public updateAllReviews = async(req: Request, res: Response) =>{
+        this.responseWithMethodNotAllowed(res)
+    }
+
+    public updateReview = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const reviewId = req.params.reviewId
+            this.handleInvalidId(reviewId, res)
+
+            try {
+                const updatedReview = await this.dal
+                    .findReviewByIdAndUpdate(reviewId)
+
+                if(updatedReview === null)
+                    res.status(404).json({ message: 'Not found' })
+
+                res.status(200).json({ 
+                    message: 'Updated',
+                    review: updatedReview 
+                })
+            } catch (error) {
+                next(error)
+            }
     }
 }

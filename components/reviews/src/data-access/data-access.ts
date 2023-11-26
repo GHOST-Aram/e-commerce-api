@@ -23,6 +23,11 @@ export class DataAccess{
             return await Review.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
     }
+
+    public findReviewByIdAndUpdate = async(id: string
+        ): Promise<HydratedReviewDoc | null> =>{
+            return await Review.findByIdAndUpdate(id, { new: true })
+    }
 }
 
 export const dataAccess  = new DataAccess()

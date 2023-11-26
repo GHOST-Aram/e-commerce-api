@@ -7,11 +7,19 @@ export class DataAccess{
         return new Review(input)
     })
 
+    public findReviewByIdAndUpdate = jest.fn(
+        async(id: string): Promise<HydratedReviewDoc | null> =>{
+            if(id === '64c9e4f2df7cc072af2ac9e4')
+                return new Review(reviewData)
+
+            return null
+    })
+
     public findReviews = jest.fn(async(
         paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
             return this.createReviewsArray(paginator.limit)
     })
-    
+
     public findReviewsByProductId = jest.fn(async(
         productId: string, 
         paginator: Paginator
