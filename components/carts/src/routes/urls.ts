@@ -14,5 +14,9 @@ export const routesWrapper = (controller: Controller) =>{
     router.get('/', controller.getManyCarts)
     router.get('/:customerId', controller.getOneCart)
 
+    router.put('/', controller.handleMethodNotAllowed)
+    router.put('/:id', controller.handleMethodNotAllowed)
+
+
     return router
 }
