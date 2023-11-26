@@ -16,12 +16,16 @@ export class Controller{
             try {
                 const reviewDoc = await this.dal.createNewReview(
                     reviewData)
-                    
-                res.location(`/reviews/${reviewDoc.id}`)
-                res.status(201).json({ message: 'Created'})
+                this.respondWithCreatedResource(reviewDoc.id, res)
             } catch (error) {
                 next(error)
             }
+    }
+
+    private respondWithCreatedResource = (
+        resourceId: string, res: Response) =>{
+            res.location(`/reviews/${resourceId}`)
+            res.status(201).json({ message: 'Created'})
     }
 
     public addNewReviewWithId = async(req: Request, res: Response) =>{
