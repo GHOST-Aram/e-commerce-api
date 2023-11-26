@@ -156,7 +156,7 @@ export class Controller{
 
             if(updatedReview)
                 this.respondWithChangedResource(updatedReview, 
-                'Updated', res)
+                'modified', res)
 
             this.respondWithResourceNotFound(res)
         } catch (error) {
