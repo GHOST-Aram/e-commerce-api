@@ -1,6 +1,6 @@
 import Router from 'express'
 import { Controller } from '../controller/controller'
-import { newReviewInputValidators } from '../utils/middlewear'
+import { newReviewInputValidators, patchInputValidators } from '../utils/middlewear'
 
 const router = Router()
 
@@ -18,6 +18,12 @@ export const routesWrapper = (controller: Controller) =>{
     router.put('/:reviewId', newReviewInputValidators,
         controller.handleValidationErrors,
         controller.updateReview
+    )
+
+    router.patch('/', controller.modifyAllReviews)
+    router.patch('/:reviewId', patchInputValidators,
+        controller.handleValidationErrors,
+        controller.modifyReview
     )
 
     return router

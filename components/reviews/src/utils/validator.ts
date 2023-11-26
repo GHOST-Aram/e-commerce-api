@@ -7,6 +7,11 @@ class Validator{
             .notEmpty()
             .withMessage(`${fieldName} field is required`)
     }
+
+    validateOptionalField = (fieldName: string) =>{
+        return body(fieldName).trim()
+            .escape()
+    }
 }
 
 export const validator = new Validator()

@@ -8,3 +8,8 @@ export const badData = {
 
 }
 
+export const patchData = {
+    product: '64c9e4f2df7cc072af2ac9e8',
+    content: 'Lorem inpum'
+}
+

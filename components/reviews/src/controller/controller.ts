@@ -25,7 +25,7 @@ export class Controller{
     }
 
     public addNewReviewWithId = async(req: Request, res: Response) =>{
-        this.responseWithMethodNotAllowed(res)
+        this.respondWithMethodNotAllowed(res)
     }
 
     public handleValidationErrors = (
@@ -42,7 +42,7 @@ export class Controller{
         }
     }
 
-    private responseWithMethodNotAllowed = (res: Response) =>{
+    private respondWithMethodNotAllowed = (res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
 
@@ -95,8 +95,33 @@ export class Controller{
             res.status(400).json({ message: 'Invalid Id'})
     }
 
+    public modifyAllReviews = (req: Request, res: Response) =>{
+        this.respondWithMethodNotAllowed(res)
+    }
+
+    public modifyReview = async(
+        req: Request, res: Response, next: NextFunction) =>{
+        const reviewId = req.params.reviewId
+        this.handleInvalidId(reviewId, res)
+
+        try {
+            const updatedReview = await this.dal
+                .findReviewByIdAndUpdate(reviewId)
+
+            if(updatedReview === null)
+                res.status(404).json({ message: 'Not found' })
+
+            res.status(200).json({ 
+                message: 'Modified',
+                review: updatedReview 
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     public updateAllReviews = async(req: Request, res: Response) =>{
-        this.responseWithMethodNotAllowed(res)
+        this.respondWithMethodNotAllowed(res)
     }
 
     public updateReview = async(
