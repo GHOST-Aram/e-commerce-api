@@ -1,7 +1,8 @@
-import { app } from "../config/config";
+import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import request from "supertest"
 import * as data from "./mocks/raw-data";
+
 describe('Cart POST routes', () =>{
 
 	test('Rejects creating cart with client custom IDs (status 405)', 

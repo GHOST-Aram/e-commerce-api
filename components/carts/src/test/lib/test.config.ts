@@ -5,6 +5,6 @@ import { app } from "../../config/config";
 
 const controller = new Controller(dataAccess)
 
-app.use('/app', routesWrapper(controller))
+app.use('/carts', routesWrapper(controller))
 
 export { app }
