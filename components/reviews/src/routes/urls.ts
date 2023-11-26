@@ -26,5 +26,8 @@ export const routesWrapper = (controller: Controller) =>{
         controller.modifyReview
     )
 
+    router.delete('/', controller.deleteAllReviews )
+    router.delete('/:reviewId', controller.deleteReview)
+
     return router
 }

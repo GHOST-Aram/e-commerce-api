@@ -28,6 +28,31 @@ export class Controller{
         this.respondWithMethodNotAllowed(res)
     }
 
+    public deleteAllReviews = async(req: Request, res: Response) =>{
+        this.respondWithMethodNotAllowed(res)
+    }
+
+    public deleteReview = async (
+        req: Request, res: Response, next: NextFunction) =>{
+            const reviewId = req.params.reviewId
+            this.handleInvalidId(reviewId, res)
+            
+            try {
+                const deletedReview = await this.dal
+                    .findReviewByIdAndDelete(reviewId)
+    
+                if(deletedReview === null)
+                    res.status(404).json({ message: 'Not found' })
+    
+                res.status(200).json({ 
+                    message: 'Deleted',
+                    review: deletedReview 
+                })
+            } catch (error) {
+                next(error)
+            }
+            
+    }
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
         const errors = validationResult(req)

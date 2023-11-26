@@ -24,6 +24,10 @@ export class DataAccess{
                 .limit(paginator.limit)
     }
 
+    public findReviewByIdAndDelete = async(id: string
+        ): Promise<HydratedReviewDoc | null> =>{
+            return await Review.findByIdAndDelete(id)
+    }
     public findReviewByIdAndUpdate = async(id: string
         ): Promise<HydratedReviewDoc | null> =>{
             return await Review.findByIdAndUpdate(id, { new: true })

@@ -6,7 +6,14 @@ export class DataAccess{
     public createNewReview = jest.fn(async(input: IReview) =>{
         return new Review(input)
     })
+    public findReviewByIdAndDelete = jest.fn(
+        async(id: string): Promise<HydratedReviewDoc | null> =>{
+            if(id === '64c9e4f2df7cc072af2ac9e4')
+                return new Review(reviewData)
 
+            return null
+        }
+    )
     public findReviewByIdAndUpdate = jest.fn(
         async(id: string): Promise<HydratedReviewDoc | null> =>{
             if(id === '64c9e4f2df7cc072af2ac9e4')
