@@ -1,8 +1,8 @@
-import { ObjectId, Model, Schema, HydratedDocument, model } from "mongoose";
+import { Model, Schema, HydratedDocument, model } from "mongoose";
 
-interface ICart{
-    customer: ObjectId,
-    items: ObjectId[],
+export interface ICart{
+    customer: string,
+    items: string[],
     createdAt: Date
 }
 
@@ -15,13 +15,11 @@ type CartModel = Model<ICart, {}, {}, CartVirtuals>
 const cartSchema: Schema = new Schema
 <ICart,CartModel,{},{}, CartVirtuals>({
     customer: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: true
     },
     items: {
-        type:[Schema.Types.ObjectId],
-        ref: 'Product',
+        type:[String],
         required: true
     },
     createdAt: {
