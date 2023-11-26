@@ -9,13 +9,13 @@ export const routesWrapper = (controller: Controller) =>{
         controller.handleValidationErrors, 
         controller.addNewCart)
 
-    router.post('/:id', controller.handleMethodNotAllowed)
+    router.post('/:id', controller.respondWithMethodNotAllowed)
 
     router.get('/', controller.getManyCarts)
     router.get('/:customerId', controller.getOneCart)
 
-    router.put('/', controller.handleMethodNotAllowed)
-    router.put('/:id', controller.handleMethodNotAllowed)
+    router.put('/', controller.respondWithMethodNotAllowed)
+    router.put('/:id', controller.respondWithMethodNotAllowed)
 
 
     return router

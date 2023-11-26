@@ -115,7 +115,7 @@ export class Controller{
         return paginator
     }
 
-    public handleMethodNotAllowed = (
+    public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{
             res.status(405).json({ message: 'Method not allowed' })
     }
