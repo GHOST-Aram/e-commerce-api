@@ -1,11 +1,11 @@
 import Router from 'express'
 import { Controller } from '../controller/controller'
-import { initialInputValidators } from '../utils/middlewear'
+import * as middlewear from '../utils/middlewear'
 
 const router = Router()
 
 export const routesWrapper = (controller: Controller) =>{
-    router.post('/', initialInputValidators, 
+    router.post('/', middlewear.initialInputValidators, 
         controller.handleValidationErrors, 
         controller.addNewCart)
 
@@ -15,7 +15,9 @@ export const routesWrapper = (controller: Controller) =>{
     router.get('/:customerId', controller.getOneCart)
 
     router.put('/', controller.respondWithMethodNotAllowed)
-    router.put('/:id', controller.respondWithMethodNotAllowed)
+    router.put('/:customerId',middlewear.validateUpdateData,
+        controller.handleValidationErrors,
+        controller.updateCartItems)
 
 
     return router

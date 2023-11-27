@@ -3,7 +3,7 @@ import { Model, Schema, HydratedDocument, model } from "mongoose";
 export interface ICart{
     customer: string,
     items: string[],
-    createdAt: Date
+    createdAt?: Date
 }
 
 interface CartVirtuals{
