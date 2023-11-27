@@ -19,6 +19,6 @@ export const routesWrapper = (controller: Controller) =>{
         controller.handleValidationErrors,
         controller.updateCartItems)
 
-
+    router.patch('/', controller.respondWithMethodNotAllowed)
     return router
 }
