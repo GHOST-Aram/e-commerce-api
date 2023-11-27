@@ -35,6 +35,11 @@ export class DataAccess{
             return await Cart.findOne({ customer: customerId })
     }
 
+    public findByCustomerIDAndDelete = async(customerId: string
+        ): Promise<HydratedCartDoc | null> =>{
+            return Cart.findOneAndDelete({ customer: customerId })
+    }
+    
     public findWithPagination = async(paginator: Paginator
         ): Promise<HydratedCartDoc[]> =>{
             return Cart.find().skip(paginator.skipDocs)

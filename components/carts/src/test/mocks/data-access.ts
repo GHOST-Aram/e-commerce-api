@@ -17,6 +17,16 @@ export class DataAccess{
             return null
     })
 
+    public findByCustomerIDAndDelete = jest.fn(async(
+        customerId: string): Promise<HydratedCartDoc | null> =>{
+            if(customerId === '64c9e4f2df7cc072af2ac9e5'){
+                return new Cart({
+                    customer: customerId,
+                })
+            }
+            return null
+    })
+
     public findByCustomerIdAndUpdate = jest.fn(
         async(customerId: string, updateDoc: {items:string[]}
             ): Promise<HydratedCartDoc | null> =>{
