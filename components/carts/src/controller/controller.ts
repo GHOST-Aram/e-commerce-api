@@ -11,6 +11,34 @@ export class Controller{
         this.dal = dataAccess
     }
 
+    public addItem = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const customerId = req.params.customerId
+            this.handleInvalidId(customerId, res)
+
+            const itemId: string = req.body.item
+            try {
+                const modifiedCart = await this.dal.findCartAndAddItemId(
+                    customerId, itemId
+                )
+                if(modifiedCart){
+                    this.respondWithModifiedResource(
+                        modifiedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }    
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithModifiedResource = (
+        resourceId: string, res: Response) =>{
+            res.location(`/carts/${resourceId}`)
+            res.status(200).json({ message: 'Modified' })
+    } 
+
+
     public addNewCart = async(
         req: Request, res: Response, next: NextFunction) =>{
             const cartInfo: ICart = req.body
