@@ -14,9 +14,19 @@ export const routesWrapper = (controller: Controller) =>{
     )
 
     router.get('/', controller.getOrders)
+
     router.get('/:orderId', validator.validateReferenceId('orderId'),
         controller.handleValidationErrors,
         controller.getOneOrder
     )
+
+    router.put('/', controller.respondWithMethodNotAllowed)
+
+    router.put('/:orderId', 
+        validator.validateReferenceId('orderId'),
+        middlewear.orderDataValidators,
+        controller.handleValidationErrors,
+        controller.updateOrder)
+        
     return router
 }

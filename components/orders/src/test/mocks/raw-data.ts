@@ -8,7 +8,12 @@ export const orderInput = {
     },
     placedBy: '87c9e4f2df7cc072af2ac9e8'
 }
-
+// items:Item[],
+// delivered: boolean
+// cancelled: boolean
+// pickupStation: string
+// ETA: Date
+// placedBy: string,
 export const invalidOrderInput = {
     item: {
         productId: '64c9e4f2df7',

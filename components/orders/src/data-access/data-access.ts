@@ -18,7 +18,13 @@ export class DataAccess{
         ): Promise<HydratedOrderDoc[]> =>{
             return await Order.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
-    }    
+    }  
+    
+    public findByIdAndUpdate = (
+        orderId: string, updateDoc: IOrder
+        ): Promise<HydratedOrderDoc | null> =>{
+            return Order.findByIdAndUpdate(orderId, updateDoc)
+    }
 }
 
 export const dataAccess  = new DataAccess()
