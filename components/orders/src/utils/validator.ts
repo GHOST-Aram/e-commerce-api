@@ -40,6 +40,20 @@ class Validator{
             .isDate()
             .withMessage(`${fieldName} must be a valid Date`)
     }
+
+    public validateBooleanField = (fieldName: string) =>{
+        return body(fieldName).escape()
+            .notEmpty().withMessage(`${fieldName} is required`)
+            .isBoolean()
+            .withMessage(`${fieldName} can only be true or false`)
+    }
+
+    public validateDateField = (fieldName: string) =>{
+        return body(fieldName).escape()
+            .notEmpty().withMessage(`${fieldName} is required`)
+            .isDate()
+            .withMessage(`${fieldName} must be a valid Date`)
+    }
 }
 
 
