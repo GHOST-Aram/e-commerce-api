@@ -10,7 +10,11 @@ export interface Item {
 export interface IOrder {
     placedBy: string,
     items:Item[],
-    createdAt?: Date
+    createdAt: Date,
+    delivered: boolean
+    cancelled: boolean
+    pickupStation: string
+    ETA: Date
 }
 
 interface OrderVirtuals {
@@ -34,10 +38,28 @@ const orderSchema: Schema = new Schema<IOrder,OrderModel,
         type: String,
         required: true
     },
+    
+    pickupStation: {
+        type: String,
+        required: true,
+        default: undefined
+    },
+    delivered: {
+        type: Boolean,
+        default: false
+    },
+    cancelled: {
+        type: Boolean,
+        default: false
+    },
+    ETA: {
+        type: Date,
+        default: undefined
+    },
     createdAt: {
         type: Date,
         default: new Date()
-    }
+    },
 })
 
 orderSchema.virtual('total').get(function(): number{
