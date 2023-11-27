@@ -27,3 +27,11 @@ export const invalidUpdateInput = {
         '4f2df7cc072af2ac9e6'
     ]
 }
+
+export const validPatchData = {
+    item: '64c9e4f2df7cc072af2ac9e6'
+}
+
+export const invalidPatchData = {
+    item: '64c9e4f2df7cc07'
+}
