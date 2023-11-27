@@ -8,13 +8,13 @@ export interface Item {
 }
 
 export interface IOrder {
-    placedBy: string,
     items:Item[],
-    createdAt: Date,
     delivered: boolean
     cancelled: boolean
     pickupStation: string
     ETA: Date
+    placedBy: string,
+    createdAt?: Date,
 }
 
 interface OrderVirtuals {

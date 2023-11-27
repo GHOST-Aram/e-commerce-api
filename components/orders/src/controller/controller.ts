@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { validationResult } from "express-validator"
-import { HydratedOrderDoc, IOrder } from "../data-access/model"
+import { HydratedOrderDoc, IOrder, Order } from "../data-access/model"
 export class Controller{
 
     private dal: DataAccess
@@ -94,6 +94,35 @@ export class Controller{
 
     private respondWithNotFoundError = (res: Response) => {
         res.status(404).json({ message: 'Resource not found.'})
+    }
+
+    public updateOrder = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const updateData: IOrder = req.body 
+            const orderId = req.params.orderId
+
+            console.log("Order Id: ", orderId)
+
+            try {
+                const updatedOrder = await this.dal.findByIdAndUpdate(
+                    orderId, updateData)
+
+                if(updatedOrder)
+                    this.respondWithUpdatedResource(
+                    orderId, res)
+                else {
+                    const newOrder = await this.dal.createNewOrder(
+                        updateData)
+                    this.respondWithCreatedResource(newOrder.id, res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithUpdatedResource = (id: string, res: Response) =>{
+        res.location(`/orders/${id}`)
+        res.status(200).json({ message: 'Updated'})
     }
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
