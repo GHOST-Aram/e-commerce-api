@@ -63,8 +63,9 @@ export class Controller{
     }
     
     private handleInvalidId = (id: string, res: Response) =>{
-        if(!isValidObjectId(id))
+        if(!isValidObjectId(id)){
             res.status(400).json({ message: 'Invalid id'})
+        }
     }
 
     private respondResourceWithNotFound = (res: Response) =>{
@@ -131,13 +132,47 @@ export class Controller{
                         errors: errors.array()
                     }
                 )
-            }
-            next()
+            } else
+                next()
     }
 
+    public updateCartItems = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const customerId = req.params.customerId
+            this.handleInvalidId(customerId, res)
+            
+            const updateDoc: {items: string[]} = req.body
+            try {
+                const updatedCart = await this.dal
+                    .findByCustomerIdAndUpdate(customerId, updateDoc)
+                if(updatedCart){
+                    this.respondWithUpdatedResource(updatedCart.customer,
+                         res)
+
+                } else {
+                    const newCart = await this.dal.createNew({
+                        customer: customerId,
+                        items: updateDoc.items,
+                    })
+
+                    this.respondWithCreatedResource(newCart.customer, 
+                        res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+    
+    private respondWithUpdatedResource = (
+        resourceId: string, res: Response
+        ) =>{
+            res.location(`/carts/${resourceId}`)
+            res.status(200).json({ message: 'Updated' })
+        }
 }
 
 export interface Paginator{
     skipDocs: number,
     limit: number
 }
+type Change = 'updated' | 'deleted' | 'modified'

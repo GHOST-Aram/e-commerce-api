@@ -19,6 +19,16 @@ export class DataAccess{
             return Cart.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
     }
+
+    public findByCustomerIdAndUpdate = async(
+        customerId: string, updateDoc: { items: string []}
+        ): Promise<HydratedCartDoc | null > =>{
+            const updatedDoc = await Cart.findOneAndUpdate(
+                { customer: customerId}, updateDoc)
+            
+            return updatedDoc 
+
+    }
 }
 
 export const dataAccess  = new DataAccess()
