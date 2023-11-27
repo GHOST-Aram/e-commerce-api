@@ -19,7 +19,7 @@ describe('PUT Orders routes', () =>{
         'status 400(Bad request) and validation errors', 
     async() =>{
         const response = await request(app).put(
-            '/orders/64c9e4f2df7cc072af2')
+            '/orders/64c9e4f2df7')
             .send(data.orderInput)
 
         expect(response.status).toEqual(400)
@@ -61,13 +61,13 @@ describe('PUT Orders routes', () =>{
         'update is successful', 
     async() =>{
         const response = await request(app).put(
-            '/orders/64c9e4f2df7cc072af2ac9e5')
+            '/orders/64c9e4f2df7dd072af2ac9e5')
             .send(data.orderInput)
 
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/updated/i)
         expect(response.header.location).toMatch(
-            /^\/orders\/[a-fA-F0-9]{24}$/)
+            /^\/orders\/64c9e4f2df7dd072af2ac9e5$/)
     })
 })

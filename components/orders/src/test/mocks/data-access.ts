@@ -31,6 +31,16 @@ export class DataAccess{
                 return new Order(orderInput)
             else return null
     })
+
+    public findByIdAndUpdate = jest.fn(
+        async(orderId: string, updateDoc: IOrder
+        ): Promise<HydratedOrderDoc | null>  =>{
+            if(orderId === '64c9e4f2df7dd072af2ac9e5'){
+                return new Order(updateDoc)
+                
+            }
+            else return null
+    })
 }
 
 export const dataAccess = new DataAccess()
