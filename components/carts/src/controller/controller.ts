@@ -3,6 +3,7 @@ import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
 import { validationResult } from "express-validator"
 import { isValidObjectId } from "mongoose"
+
 export class Controller{
 
     private dal: DataAccess
@@ -19,8 +20,8 @@ export class Controller{
             const itemId: string = req.body.item
             try {
                 const modifiedCart = await this.dal.findCartAndAddItemId(
-                    customerId, itemId
-                )
+                    customerId, itemId)
+                    
                 if(modifiedCart){
                     this.respondWithModifiedResource(
                         modifiedCart.customer, res)
