@@ -15,7 +15,8 @@ export const routesWrapper = (controller: Controller) =>{
 
     router.get('/', controller.getOrders)
 
-    router.get('/:orderId', validator.validateReferenceId('orderId'),
+    router.get('/:orderId', 
+        validator.validateReferenceId('orderId'),
         controller.handleValidationErrors,
         controller.getOneOrder
     )
@@ -23,10 +24,17 @@ export const routesWrapper = (controller: Controller) =>{
     router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:orderId', 
-        validator.validateReferenceId('orderId'),
-        middlewear.orderDataValidators,
+        middlewear.updateValidators,
         controller.handleValidationErrors,
         controller.updateOrder)
+
+    router.patch('/', controller.respondWithMethodNotAllowed)
+
+    router.patch('/:orderId',
+        middlewear.updateValidators,
+        controller.handleValidationErrors,
+        controller.modifyOrder
+    )
         
     return router
 }
