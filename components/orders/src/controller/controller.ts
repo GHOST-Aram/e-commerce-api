@@ -108,8 +108,8 @@ export class Controller{
                     orderId, updateData)
 
                 if(updatedOrder)
-                    this.respondWithUpdatedResource(
-                    orderId, res)
+                    this.respondWithChangedResource(
+                    orderId,'Updated', res)
                 else {
                     const newOrder = await this.dal.createNewOrder(
                         updateData)
@@ -120,9 +120,28 @@ export class Controller{
             }
     }
 
-    private respondWithUpdatedResource = (id: string, res: Response) =>{
+    private respondWithChangedResource = (id: string, change: string, res: Response) =>{
         res.location(`/orders/${id}`)
-        res.status(200).json({ message: 'Updated'})
+        res.status(200).json({ message: change})
+    }
+
+    public modifyOrder = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const orderId = req.params.orderId
+            const patchDoc = req.body
+
+            try {
+                const modifiedDoc = await this.dal.findByIdAndUpdate(
+                    orderId, patchDoc)
+
+                if(modifiedDoc)
+                    this.respondWithChangedResource(orderId, 
+                    'Modified', res)
+                else
+                    this.respondWithNotFoundError(res)
+            } catch (error) {
+                next(error)
+            }
     }
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{

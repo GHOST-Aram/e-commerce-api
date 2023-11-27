@@ -22,3 +22,11 @@ export const invalidOrderInput = {
     },
     placedBy: '87c9e4f2df7cc07'
 }
+
+export const validPatchData = {
+    delivered: true,
+    cancelled: false,
+    pickupStation: 'Suncity',
+    ETA: new Date()
+}
+
