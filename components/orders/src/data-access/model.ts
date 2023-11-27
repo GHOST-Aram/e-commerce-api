@@ -1,19 +1,19 @@
 import { HydratedDocument, Model, Schema, model } from "mongoose"
 
-export interface Item{
+export interface Item {
     productId: string,
     name: string,
     price: number,
     quantity: number
 }
 
-export interface IOrder{
+export interface IOrder {
     placedBy: string,
     items:Item[],
-    createdAt: Date
+    createdAt?: Date
 }
 
-interface OrderVirtuals{
+interface OrderVirtuals {
     total: number
 }
 
