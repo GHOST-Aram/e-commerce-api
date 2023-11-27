@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, param } from "express-validator"
 
 class Validator{
     
@@ -15,6 +15,12 @@ class Validator{
     public validateNumber = (fieldName: string) =>{
         return body(fieldName).trim().notEmpty().escape()
             .isNumeric()
+    }
+
+    public validateReferenceId = (paramName: string) =>{
+        return param(paramName).trim().escape().notEmpty()
+            .matches(/^[a-fA-F0-9]{24}$/)
+            .withMessage('Invalid reference Id')
     }
 }
 
