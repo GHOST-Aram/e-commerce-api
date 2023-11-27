@@ -41,6 +41,15 @@ export class DataAccess{
             }
             else return null
     })
+
+    public findByIdAndDelete = jest.fn(
+        async(orderId: string): Promise<HydratedOrderDoc | null> =>{
+            if(orderId === '64c9e4f2df7cc072af2ac9e8'){
+                return new Order(orderInput)
+                
+            }
+            else return null
+    })
 }
 
 export const dataAccess = new DataAccess()

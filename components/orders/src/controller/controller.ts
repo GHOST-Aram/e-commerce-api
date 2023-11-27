@@ -143,6 +143,29 @@ export class Controller{
                 next(error)
             }
     }
+
+    public deleteOrder = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const orderId = req.params.orderId
+
+            try {
+                const deletedOrder = await this.dal
+                    .findByIdAndDelete(orderId)
+
+                if(deletedOrder){
+                    this.respondWithDeletedResource(
+                    deletedOrder.id, res)
+                } else {
+                    this.respondWithNotFoundError(res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    public respondWithDeletedResource = (id: string, res: Response) =>{
+        res.status(200).json({ message: 'Deleted', id})
+    }
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
             const errors = validationResult(req)
