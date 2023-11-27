@@ -5,6 +5,10 @@ export const initialInputValidators = [
     validator.validateObjectIDArray('items')
 ]
 
-export const validateUpdateData = [
+export const updateInputValidator = [
     validator.validateObjectIDArray('items')
+]
+
+export const patchDataValidator = [
+    validator.validateObjectId('item')
 ]

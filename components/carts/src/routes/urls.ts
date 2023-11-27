@@ -15,10 +15,14 @@ export const routesWrapper = (controller: Controller) =>{
     router.get('/:customerId', controller.getOneCart)
 
     router.put('/', controller.respondWithMethodNotAllowed)
-    router.put('/:customerId',middlewear.validateUpdateData,
+    router.put('/:customerId',middlewear.updateInputValidator,
         controller.handleValidationErrors,
         controller.updateCartItems)
 
     router.patch('/', controller.respondWithMethodNotAllowed)
+    router.patch('/:customerId/add-item', 
+        middlewear.patchDataValidator,
+        controller.handleValidationErrors,
+        controller.addItem)
     return router
 }
