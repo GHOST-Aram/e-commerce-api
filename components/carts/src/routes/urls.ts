@@ -24,5 +24,10 @@ export const routesWrapper = (controller: Controller) =>{
         middlewear.patchDataValidator,
         controller.handleValidationErrors,
         controller.addItem)
+
+    router.patch('/:customerId/remove-item',
+        middlewear.patchDataValidator,
+        controller.handleValidationErrors,
+        controller.removeItem)
     return router
 }

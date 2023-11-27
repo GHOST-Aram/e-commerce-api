@@ -32,6 +32,27 @@ export class Controller{
             }
     }
 
+    public removeItem = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const customerId = req.params.customerId
+            this.handleInvalidId(customerId, res)
+
+            const itemId: string = req.body.item
+            try {
+                const modifiedCart = await this.dal.findCartAndRemoveItemId(
+                    customerId, itemId
+                )
+                if(modifiedCart){
+                    this.respondWithModifiedResource(
+                        modifiedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }    
+            } catch (error) {
+                next(error)
+            }
+    }
+
     private respondWithModifiedResource = (
         resourceId: string, res: Response) =>{
             res.location(`/carts/${resourceId}`)

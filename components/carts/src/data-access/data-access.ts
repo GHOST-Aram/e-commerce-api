@@ -12,7 +12,16 @@ export class DataAccess{
 
             return modifiedCart
     }
-    
+    public findCartAndRemoveItemId = async(
+        customerId: string, itemId: string
+        ): Promise<HydratedCartDoc | null > =>{
+            const modifiedCart = await Cart.findOneAndUpdate(
+                { customer: customerId },
+                { $pull: {items: itemId} }
+            )
+
+            return modifiedCart
+    }
     public createNew = async(data:ICart) =>{
         const cart = new Cart({
             items: data.items,

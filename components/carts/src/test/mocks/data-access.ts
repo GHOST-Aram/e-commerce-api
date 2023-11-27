@@ -43,6 +43,21 @@ export class DataAccess{
                 } 
         }
     )
+
+    public findCartAndRemoveItemId = jest.fn(
+        async(customerId: string, itemId: string
+            ): Promise<HydratedCartDoc| null> =>{
+                if(customerId === '64c9e4f2df7cc072af2ac9e5'){
+                    return new Cart({
+                        customer: customerId,
+                        items: []
+                    })
+                } else {
+                    return  null
+                } 
+        }
+    )
+    
     public findWithPagination = jest.fn(
         async(paginator: Paginator) =>{
             return this.createFakeCartsArray(paginator.limit)
