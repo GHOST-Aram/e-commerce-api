@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response, request } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
 import { validationResult } from "express-validator"
@@ -93,6 +93,33 @@ export class Controller{
             res.status(201).json({ message: 'Created'})
     }
 
+    public deleteCart = async(
+        req: Request, res: Response, next:NextFunction
+        ) =>{
+            const customerId = req.params.customerId
+            this.handleInvalidId(customerId, res)
+
+            try {
+                const deletedCart = await this.dal
+                    .findByCustomerIDAndDelete(customerId)
+                
+                if(deletedCart){
+                    this.respondWithDeletedResource(
+                        deletedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithDeletedResource = (id: string, res: Response) =>{
+        res.status(200).json({
+            message: 'Deleted',
+            id: id
+        })
+    }
     public getOneCart = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
