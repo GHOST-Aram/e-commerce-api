@@ -25,6 +25,11 @@ export class DataAccess{
         ): Promise<HydratedOrderDoc | null> =>{
             return Order.findByIdAndUpdate(orderId, updateDoc)
     }
+
+    public findByIdAndDelete = async(orderId: string
+        ): Promise<HydratedOrderDoc | null> => {
+            return await Order.findByIdAndDelete(orderId)
+    }
 }
 
 export const dataAccess  = new DataAccess()
