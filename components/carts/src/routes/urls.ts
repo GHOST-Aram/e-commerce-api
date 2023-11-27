@@ -29,5 +29,8 @@ export const routesWrapper = (controller: Controller) =>{
         middlewear.patchDataValidator,
         controller.handleValidationErrors,
         controller.removeItem)
+
+    router.delete('/', controller.respondWithMethodNotAllowed)
+    router.delete('/:customerId', controller.deleteCart)
     return router
 }
