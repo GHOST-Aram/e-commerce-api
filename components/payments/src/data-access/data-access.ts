@@ -19,9 +19,14 @@ export class DataAccess{
                 .limit(paginator.limit)
     }
 
-    public findByOrderIdAnUpdate = async(orderId: string, updateDoc: IPayment
+    public findByOrderIdAndUpdate = async(orderId: string, updateDoc: IPayment
         ): Promise<HydratedPaymentDoc | null > =>{
             return await Payment.findOneAndUpdate({ orderId }, updateDoc)
+    }
+
+    public findByOrderIdAndDelete = async(orderId: string
+        ): Promise<HydratedPaymentDoc | null> =>{
+            return await Payment.findOneAndDelete({ orderId })
     }
 }
 
