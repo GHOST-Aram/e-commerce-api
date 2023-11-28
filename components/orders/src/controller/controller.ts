@@ -101,7 +101,6 @@ export class Controller{
             const updateData: IOrder = req.body 
             const orderId = req.params.orderId
 
-            console.log("Order Id: ", orderId)
 
             try {
                 const updatedOrder = await this.dal.findByIdAndUpdate(
