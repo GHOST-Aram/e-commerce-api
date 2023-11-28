@@ -26,7 +26,8 @@ describe('GET Payments Routes', () =>{
         expect(response.body.payments.length).toEqual(12)
     })
 
-    test('Rejects requests with invalid order Ids (400 Bad request)', 
+    test('Rejects requests with invalid reference Ids (payment.orderId) '+
+    '(400 Bad request)', 
     async() =>{
         const response = await request(app).get(
             '/payments/4f2df7cc072af2ac9e8')
@@ -36,8 +37,8 @@ describe('GET Payments Routes', () =>{
         expect(response.body.message).toMatch(/Invalid/i)
     })
 
-    test('Responds with status 404 (Not Found) if the order '+
-        'requested does not exist', 
+    test('Responds with status 404 (Not Found) if the payment '+
+        'requested (by orderId) does not exist', 
     async() =>{
         const response = await request(app).get(
             '/payments/87c1e4f2df7cc972af2ac9e8')
@@ -47,7 +48,7 @@ describe('GET Payments Routes', () =>{
         expect(response.body.message).toMatch(/not found/i)
     })
 
-    test('Responds with status 200 and order payload if request '+
+    test('Responds with status 200 and payment payload if request '+
         'is successful', 
     async() =>{
         const response = await request(app).get(
