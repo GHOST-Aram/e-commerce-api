@@ -101,7 +101,7 @@ export class Controller{
             const updateDoc: IPayment = req.body
 
             try {
-                const updatedPayment = await this.dal.findByOrderIdAnUpdate(
+                const updatedPayment = await this.dal.findByOrderIdAndUpdate(
                     referenceId, updateDoc)
 
                 if(updatedPayment){
@@ -128,7 +128,7 @@ export class Controller{
             const updateDoc = req.body
 
             try {
-                const modifiedPayment = await this.dal.findByOrderIdAnUpdate(
+                const modifiedPayment = await this.dal.findByOrderIdAndUpdate(
                     referenceId, updateDoc)
                     
                 if(modifiedPayment){
@@ -140,6 +140,30 @@ export class Controller{
             } catch (error) {
                 next(error)
             }
+    }
+
+    public deletePayment = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const referenceId = req.params.orderId
+
+            try {
+                const deletedDoc = await this.dal.findByOrderIdAndDelete(
+                    referenceId)
+
+                if(deletedDoc){
+                    this.respondWithDeletedResource(deletedDoc.orderId, 
+                        res)
+                } else {
+                    this.respondWithNotFoundError(res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithDeletedResource = (
+        id: string, res: Response) =>{
+            res.status(200).json({ message: 'Deleted', id })
     }
 
     public respondWithMethodNotAllowed = (
