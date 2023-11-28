@@ -23,3 +23,7 @@ export const postValidators = [
     validator.validateNumber('account_number').notEmpty()
         .withMessage(`Account Number ${required}`)
 ]
+
+export const referenceIdValidator = [
+    validator.validateReferencId('orderId')
+]
