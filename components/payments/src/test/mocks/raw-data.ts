@@ -15,3 +15,9 @@ export const invalidInput = {
     transaction_date: new Date(),
     account_number: '0796699806',
 }
+
+export const patchInput = {
+    processor: 'M-Pesa',
+    amount: 4000,
+    receipt_number: 'PTR4K5HD76',
+}
