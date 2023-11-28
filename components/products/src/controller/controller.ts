@@ -15,7 +15,6 @@ export class ProductsController{
     public AddNewProduct = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
-            this.handleValidationErrors(req, res)
 
             const productData: IProduct = req.body
             try {
@@ -269,7 +268,6 @@ export class ProductsController{
     public modifyOneProduct = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
-            this.handleValidationErrors(req, res)
 
             const productId = req.params.id
             this.handleInvalidId(productId, res)
@@ -299,7 +297,6 @@ export class ProductsController{
     public updateOneProduct = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
-            this.handleValidationErrors(req, res)
 
             const productId = req.params.id
             this.handleInvalidId(productId, res)
@@ -327,8 +324,7 @@ export class ProductsController{
     }
 
     public handleValidationErrors = (
-        req: Request,
-        res: Response 
+        req: Request, res: Response, next: NextFunction 
         ) =>{
             const errors = validationResult(req)
 
@@ -337,6 +333,8 @@ export class ProductsController{
                     message: 'Invalid input',
                     errors: errors.array()
                 })
-            } 
+            }  else {
+                next()
+            }
     }
 }
