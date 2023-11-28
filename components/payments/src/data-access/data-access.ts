@@ -18,6 +18,11 @@ export class DataAccess{
             return await Payment.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
     }
+
+    public findByOrderIdAnUpdate = async(orderId: string, updateDoc: IPayment
+        ): Promise<HydratedPaymentDoc | null > =>{
+            return await Payment.findOneAndUpdate({ orderId }, updateDoc)
+    }
 }
 
 export const dataAccess  = new DataAccess()

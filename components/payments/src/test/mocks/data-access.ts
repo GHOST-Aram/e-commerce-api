@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals"
-import { HydratedPaymentDoc, Payment } from "../../data-access/model"
+import { HydratedPaymentDoc, IPayment, Payment } from "../../data-access/model"
 import { paymentInput } from "./raw-data"
 import { Paginator } from "../../data-access/data-access"
 
@@ -35,6 +35,16 @@ export class DataAccess{
 
             return payments
     }
+
+    public findByOrderIdAnUpdate = jest.fn(
+        async(orderId: string, updateDoc: IPayment
+            ): Promise<HydratedPaymentDoc | null> =>{
+                if(orderId === '64c9e4f2df7cc072af2ac9e8'){
+                    return new Payment(paymentInput)
+                } else {
+                    return null
+                }
+    })
 }
 
 export const dataAccess = new DataAccess()
