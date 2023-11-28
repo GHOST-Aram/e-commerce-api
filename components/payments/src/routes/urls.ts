@@ -9,7 +9,15 @@ export const routesWrapper = (controller: Controller) =>{
     router.post('/', 
         middlewear.postValidators,
         controller.handleValidationErrors, 
-        controller.addNewPayment)
-        
+        controller.addNewPayment
+    )
+
+    router.get('/',controller.getManyPayments)
+    router.get('/:orderId', 
+        middlewear.referenceIdValidator,
+        controller.handleValidationErrors,
+        controller.getOnePayment
+    )
+
     return router
 }
