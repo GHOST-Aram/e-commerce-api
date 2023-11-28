@@ -1,4 +1,4 @@
-import { ValidationChain, body } from "express-validator"
+import { ValidationChain, body, param } from "express-validator"
 import { formatter } from "./formatter"
 import { isValidObjectId } from "mongoose"
 
@@ -13,6 +13,10 @@ export class Validator{
 
     public isValidId = (id: string): boolean =>{
         return isValidObjectId(id)
+    }
+
+    public validateReferenceId = (paramName: string) =>{
+        return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 
     public validateName(fieldName: string): ValidationChain{

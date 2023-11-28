@@ -44,7 +44,7 @@ describe('DELETE requests', () =>{
             '/products/67cc072af2ac8d4')
 
         expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid id/i)
+        expect(response.body.message).toMatch(/invalid/i)
         expect(response.headers['content-type']).toMatch(/json/)
     })
 
