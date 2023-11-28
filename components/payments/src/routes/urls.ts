@@ -35,5 +35,12 @@ export const routesWrapper = (controller: Controller) =>{
         controller.modifyPayment
     )
 
+    router.delete('/', controller.respondWithMethodNotAllowed)
+    router.delete('/:orderId', 
+        middlewear.referenceIdValidator,
+        controller.handleValidationErrors,
+        controller.deletePayment
+    )
+
     return router
 }
