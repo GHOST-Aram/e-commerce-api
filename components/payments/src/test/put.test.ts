@@ -61,13 +61,13 @@ describe('PUT Payments routes', () =>{
         'update is successful', 
     async() =>{
         const response = await request(app).put(
-            '/payments/64c9e4f2df7dd072af2ac9e5')
+            '/payments/64c9e4f2df7cc072af2ac9e8')
             .send(data.paymentInput)
 
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/updated/i)
         expect(response.header.location).toMatch(
-            /^\/payments\/64c9e4f2df7dd072af2ac9e5$/)
+            /^\/payments\/64c9e4f2df7cc072af2ac9e8$/)
     })
 })

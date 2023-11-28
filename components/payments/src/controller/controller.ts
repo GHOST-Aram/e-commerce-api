@@ -33,11 +33,11 @@ export class Controller{
     }
 
     public getOnePayment = async(req: Request, res:Response, next: NextFunction) =>{
-        const orderId = req.params.orderId
+        const referenceId =  req.params.orderId
 
         try {
-            const payment = await this.dal.findByOrderId(orderId)
-            
+            const payment = await this.dal.findByOrderId(referenceId)
+
             if(payment){
                 this.respondWithFoundResource(payment, res)
             } else {
@@ -95,6 +95,33 @@ export class Controller{
         return paginator
     }
 
+    public updatePayment = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const referenceId =  req.params.orderId
+            const updateDoc: IPayment = req.body
+
+            try {
+                const updatedPayment = await this.dal.findByOrderIdAnUpdate(
+                    referenceId, updateDoc)
+
+                if(updatedPayment){
+                    this.respondWithChangedResource( updatedPayment.orderId, 
+                        'Updated', res)
+                } else {
+                    const newPayment = await this.dal.createNewPayment(updateDoc)
+                    this.respondWithCreatedResource(newPayment.orderId, res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithChangedResource = (
+        orderId: string, change: string, res: Response) =>{
+            res.location(`/payments/${ orderId }`)
+            res.status(200).json({ message: change })
+    }
+    
     public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{
             res.status(405).json({ message: 'Method not allowed' })
