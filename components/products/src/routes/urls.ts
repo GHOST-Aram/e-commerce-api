@@ -9,6 +9,7 @@ const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
     router.post('/',productValidators, 
+        controller.handleValidationErrors,
         controller.AddNewProduct)
 
     router.get('/', controller.getProducts)
@@ -27,17 +28,22 @@ const routesWrapper = (controller: ProductsController) =>{
         controller.getProductsByPriceRange)
 
     router.get('/categories/:categoryName',
-        controller.getProductsByCategory)
+        controller.getProductsByCategory
+    )
 
     router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:id',productValidators, 
-        controller.updateOneProduct )
+        controller.handleValidationErrors,
+        controller.updateOneProduct 
+    )
 
     router.patch('/',controller.respondWithMethodNotAllowed)
 
     router.patch('/:id', patchValidators,
-        controller.modifyOneProduct)
+        controller.handleValidationErrors,
+        controller.modifyOneProduct
+    )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', controller.deleteOneProduct)
