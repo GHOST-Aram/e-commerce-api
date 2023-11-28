@@ -27,3 +27,13 @@ export const postValidators = [
 export const referenceIdValidator = [
     validator.validateReferencId('orderId')
 ]
+
+export const patchValidators = [
+    validator.validateObjectId('orderId').optional(),
+    validator.validateName('processor').optional(),
+    validator.validateAlphanumeric('receipt_number').optional(),
+    validator.validateNumber('amount').optional(),
+    validator.validateName('currency').optional(),
+    validator.validateNumber('transaction_date').optional(),
+    validator.validateNumber('account_number').optional()
+]

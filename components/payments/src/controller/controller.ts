@@ -122,6 +122,26 @@ export class Controller{
             res.status(200).json({ message: change })
     }
     
+    public modifyPayment = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const referenceId = req.params.orderId
+            const updateDoc = req.body
+
+            try {
+                const modifiedPayment = await this.dal.findByOrderIdAnUpdate(
+                    referenceId, updateDoc)
+                    
+                if(modifiedPayment){
+                    this.respondWithChangedResource(modifiedPayment.orderId, 
+                        'Modified', res)
+                } else {
+                    this.respondWithNotFoundError(res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
     public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{
             res.status(405).json({ message: 'Method not allowed' })
