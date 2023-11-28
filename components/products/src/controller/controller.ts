@@ -38,7 +38,6 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const productId = req.params.id
-            this.handleInvalidId(productId, res)
 
             try {
                 const deletedProduct = await this.dal.findProductByIdAndDelete(
@@ -52,12 +51,6 @@ export class ProductsController{
                 next(error)
             }
         }
-
-    private handleInvalidId = (productId: string, res: Response) =>{
-        if(!validator.isValidId(productId)){
-            res.status(400).json({ message: 'Invalid id'})
-        }
-    }
 
     private respondWithDeletedResource = (
         deletedProduct: HydratedProductDoc, res: Response
@@ -77,7 +70,6 @@ export class ProductsController{
         req:Request, res: Response, next: NextFunction
         ) => {
             const productId  = req.params.id
-            this.handleInvalidId(productId, res)
 
             try {
                 const product = await this.dal.findProductById(
@@ -268,9 +260,7 @@ export class ProductsController{
     public modifyOneProduct = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
-
             const productId = req.params.id
-            this.handleInvalidId(productId, res)
             
             const patchData = req.body
             try {
@@ -299,7 +289,6 @@ export class ProductsController{
         ) =>{
 
             const productId = req.params.id
-            this.handleInvalidId(productId, res)
             
             const productData: IProduct = req.body
             try { 
@@ -330,7 +319,7 @@ export class ProductsController{
 
             if(!errors.isEmpty()){
                 res.status(400).json({
-                    message: 'Invalid input',
+                    message: 'Invalid input or referenceId',
                     errors: errors.array()
                 })
             }  else {

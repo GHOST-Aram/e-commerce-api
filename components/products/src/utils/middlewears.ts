@@ -77,3 +77,7 @@ export const patchValidators = [
         .optional(),
 
 ]
+
+export const validateReferenceId = [
+    validator.validateReferenceId('id')
+]
