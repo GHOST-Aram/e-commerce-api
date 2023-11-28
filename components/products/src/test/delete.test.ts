@@ -3,7 +3,7 @@ import request from "supertest"
 import { app } from "./app.test.config"
 
 
-describe('PATCH requests', () =>{
+describe('DELETE requests', () =>{
 
     test('Responds with status 405 for delete all', 
     async() =>{

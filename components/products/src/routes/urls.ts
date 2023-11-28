@@ -29,19 +29,17 @@ const routesWrapper = (controller: ProductsController) =>{
     router.get('/categories/:categoryName',
         controller.getProductsByCategory)
 
-    router.put('/', productValidators, 
-        controller.updateAllProducts)
+    router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:id',productValidators, 
         controller.updateOneProduct )
 
-    router.patch('/', patchValidators, 
-        controller.modifyAllProducts)
+    router.patch('/',controller.respondWithMethodNotAllowed)
 
     router.patch('/:id', patchValidators,
         controller.modifyOneProduct)
 
-    router.delete('/', controller.deleteAll)
+    router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', controller.deleteOneProduct)
 
     return router
