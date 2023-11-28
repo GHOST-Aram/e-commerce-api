@@ -1,22 +1,26 @@
 import { Router } from "express";
 import { ProductsController } from "../controller/controller";
-import { 
-    patchValidators, 
-    productValidators 
-} from "../utils/middlewears";
+import * as middlewears from "../utils/middlewears";
 
 const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
-    router.post('/',productValidators, 
+    router.post('/',
+        middlewears.productValidators, 
         controller.handleValidationErrors,
-        controller.AddNewProduct)
+        controller.AddNewProduct
+    )
 
     router.get('/', controller.getProducts)
-    router.get('/:id', controller.getOneProduct)
+    router.get('/:id', 
+        middlewears.validateReferenceId,
+        controller.handleValidationErrors,
+        controller.getOneProduct
+    )
 
     router.get('/brands/:brandName', 
-        controller.getProductsByBrand)
+        controller.getProductsByBrand
+    )
 
     router.get('/manufacturer/:manufacturerName', 
         controller.getProductsByManufacturer)
@@ -33,20 +37,28 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.put('/', controller.respondWithMethodNotAllowed)
 
-    router.put('/:id',productValidators, 
+    router.put('/:id',
+        middlewears.productValidators, 
+        middlewears.validateReferenceId,
         controller.handleValidationErrors,
         controller.updateOneProduct 
     )
 
     router.patch('/',controller.respondWithMethodNotAllowed)
 
-    router.patch('/:id', patchValidators,
+    router.patch('/:id', 
+        middlewears.patchValidators,
+        middlewears.validateReferenceId,
         controller.handleValidationErrors,
         controller.modifyOneProduct
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
-    router.delete('/:id', controller.deleteOneProduct)
+    router.delete('/:id', 
+        middlewears.validateReferenceId,
+        controller.handleValidationErrors,
+        controller.deleteOneProduct
+    )
 
     return router
 
