@@ -27,20 +27,6 @@ export class ProductsController{
             }
         }
 
-    private handleValidationErrors = (
-        req: Request,
-        res: Response 
-        ) =>{
-            const errors = validationResult(req)
-
-            if(!errors.isEmpty()){
-                res.status(400).json({
-                    message: 'Invalid input',
-                    errors: errors.array()
-                })
-            } 
-        }
-
     private respondWithCreatedResource = (
         res: Response, 
         productId: string
@@ -48,10 +34,6 @@ export class ProductsController{
             res.location(`/products/${productId}`)
             res.status(201).json({ message: 'Created'})
         }
-
-    public deleteAll = (req: Request, res: Response) =>{
-        res.status(405).json({ message: 'Method not allowed' })
-    }
 
     public deleteOneProduct = async(
         req: Request, res: Response, next: NextFunction
@@ -283,10 +265,6 @@ export class ProductsController{
             }
         }
 
-    public modifyAllProducts = (req: Request, res: Response) =>{
-        this.handleValidationErrors(req, res)
-        res.status(405).json({ message: 'Method not allowed'})
-    }
 
     public modifyOneProduct = async(
         req: Request, res: Response, next: NextFunction
@@ -317,10 +295,6 @@ export class ProductsController{
             res.status(200).json({ message: change })
         }
 
-    public updateAllProducts = (req: Request, res: Response) =>{
-        this.handleValidationErrors(req, res)
-        res.status(405).json({message: 'Method not allowed'})
-    }
 
     public updateOneProduct = async(
         req: Request, res: Response, next: NextFunction
@@ -346,4 +320,23 @@ export class ProductsController{
                 next(error)
             }   
         }
+    
+    public respondWithMethodNotAllowed = (
+        req: Request, res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed. ' })
+    }
+
+    public handleValidationErrors = (
+        req: Request,
+        res: Response 
+        ) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json({
+                    message: 'Invalid input',
+                    errors: errors.array()
+                })
+            } 
+    }
 }
