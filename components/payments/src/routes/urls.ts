@@ -27,5 +27,13 @@ export const routesWrapper = (controller: Controller) =>{
         controller.updatePayment
     )
 
+    router.patch('/', controller.respondWithMethodNotAllowed)
+    router.patch('/:orderId',
+        middlewear.patchValidators,
+        middlewear.referenceIdValidator,
+        controller.handleValidationErrors,
+        controller.modifyPayment
+    )
+
     return router
 }
