@@ -38,6 +38,6 @@ describe('POST Payments route', () =>{
 
       expect(response.status).toEqual(201)
       expect(response.header.location).toMatch(
-         /^\/orders\/[a-fA-F0-9]{24}$/)
+         /^\/payments\/[a-fA-F0-9]{24}$/)
    })
 })
