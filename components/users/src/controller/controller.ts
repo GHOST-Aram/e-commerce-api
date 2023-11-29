@@ -3,7 +3,7 @@ import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { validationResult } from "express-validator";
 import { HydratedUserDoc, IUser } from "../data-access/model";
-import { isValidObjectId } from "mongoose";
+import { Paginator } from "../data-access/data-access";
 
 export class UsersController{
     private dal: UsersDAL
@@ -64,6 +64,12 @@ export class UsersController{
     private respondWithNotFound = (res: Response) =>{
         res.status(404).json({ message: 'User ID not found'})
     }
+
+    private respondWithFoundResource = (
+        resource: HydratedUserDoc[] | HydratedUserDoc, 
+        res: Response) =>{
+            res.status(200).json({ resource: resource  })   
+    }
     
     public getMany = async(
         req: Request, res: Response, next: NextFunction
@@ -77,12 +83,6 @@ export class UsersController{
             } catch (error) {
                 next(error)
             }
-    }
-
-    private respondWithFoundResource = (
-        resource: HydratedUserDoc[] | HydratedUserDoc, 
-        res: Response) =>{
-            res.status(200).json({ resource: resource  })   
     }
 
     private paginate = (req: Request): Paginator =>{
@@ -165,10 +165,7 @@ export class UsersController{
 
     private respondWithDeletedResource = (
         id: string, res: Response) =>{
-            res.status(200).json({
-                message: 'deleted',
-                id: id
-            })
+            res.status(200).json({ message: 'deleted', id })
     }
 
     public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
@@ -188,9 +185,4 @@ export class UsersController{
                 next()
             }
     }
-}
-
-export interface Paginator{
-    skipDocs: number,
-    limit: number
 }
