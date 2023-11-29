@@ -18,10 +18,6 @@ describe('DELETE users route', () =>{
             '/users/invalidId78327874823')
         assert.respondsWithBadRequest(response)
         assert.respondsWithValidationErrorsArray(response)  
-            '/users/invalidId78327874823')
-
-        assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)  
     })
 
     test('Responds with Not Found (status 404): User does not exist.', 
