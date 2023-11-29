@@ -1,4 +1,3 @@
-import { Paginator } from "../controller/controller"
 import { HydratedUserDoc, IUser, User } from "./model"
 
 export class UsersDAL{
@@ -42,3 +41,7 @@ export class UsersDAL{
     }
 }
 export const usersDAL = new UsersDAL()
+export interface Paginator{
+    skipDocs: number,
+    limit: number
+}
