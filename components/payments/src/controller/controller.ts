@@ -156,6 +156,7 @@ export class Controller{
                 } else {
                     this.respondWithNotFoundError(res)
                 }
+                
             } catch (error) {
                 next(error)
             }
