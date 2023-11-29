@@ -5,10 +5,10 @@ import { HydratedUserDoc, IUser } from "../data-access/model";
 import { Paginator } from "../data-access/data-access";
 
 export class UsersController{
-    private dal: UsersDAL
+    private dataAccess: UsersDAL
 
     constructor(dataAccessLayer: UsersDAL){
-        this.dal = dataAccessLayer
+        this.dataAccess = dataAccessLayer
     }
 
     public AddNew = async(
@@ -16,13 +16,13 @@ export class UsersController{
             
             const userData = req.body
             try {
-                const user = await this.dal.findByEmail(
+                const user = await this.dataAccess.findByEmail(
                     userData.email)
 
                 if(user)
                     this.respondWithConflict(res)
                 else {
-                    const user = await this.dal.createNew(
+                    const user = await this.dataAccess.createNew(
                         userData)
                     this.respondWithCreatedResource(user, res)
                 }
@@ -49,7 +49,7 @@ export class UsersController{
             const userId = req.params.id
 
             try {
-                const user = await this.dal.findById(userId)
+                const user = await this.dataAccess.findById(userId)
                 
                 if(user === null)
                     this.respondWithNotFound(res)
@@ -76,7 +76,7 @@ export class UsersController{
             const pagination = this.paginate(req)
 
             try {
-                const users = await this.dal.findMany(
+                const users = await this.dataAccess.findMany(
                     pagination)
                 this.respondWithFoundResource(users, res)
             } catch (error) {
@@ -103,7 +103,7 @@ export class UsersController{
 
             const patchData: IUser = req.body
             try {
-                const user = await this.dal.findByIdAndUpdate(
+                const user = await this.dataAccess.findByIdAndUpdate(
                     userId, patchData)
                 
                 if(user)
@@ -125,14 +125,14 @@ export class UsersController{
 
             const userData = req.body
             try {
-                const user = await this.dal.findByIdAndUpdate(
+                const user = await this.dataAccess.findByIdAndUpdate(
                     userId, userData)
                 
                 if(user)
                     this.respondWithChangedResource(
                         user.id, 'Updated', res)
                 
-                const newUser = await this.dal.createNew(userData)
+                const newUser = await this.dataAccess.createNew(userData)
                 this.respondWithCreatedResource(newUser, res)
             } catch (error) {
                 next(error)
@@ -150,7 +150,7 @@ export class UsersController{
             const userId = req.params.id
 
             try {
-                const deletedUser = await this.dal.findByIdAndDelete(
+                const deletedUser = await this.dataAccess.findByIdAndDelete(
                     userId)
                 if(deletedUser)
                     this.respondWithDeletedResource(
