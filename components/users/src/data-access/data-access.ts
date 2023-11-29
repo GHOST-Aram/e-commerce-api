@@ -1,15 +1,15 @@
 import { HydratedUserDoc, IUser, User } from "./model"
 
 export class UsersDAL{
-    public createNewUser = (userData: IUser
+    public createNew = async(userData: IUser
         ): Promise<HydratedUserDoc> =>{
         const user = new User(userData)
-        const savedUser = user.save()
+        const savedUser = await user.save()
 
         return savedUser
     }
 
-    public findMultipleUsers = async(pagination: Paginator
+    public findMany = async(pagination: Paginator
         ): Promise<HydratedUserDoc[]> =>{
             const users = await User.find({}, '-password')
                 .skip(pagination.skipDocs)
@@ -19,22 +19,22 @@ export class UsersDAL{
     }
 
     
-    public findUserByEmail = async(email: string
+    public findByEmail = async(email: string
         ): Promise<HydratedUserDoc | null> =>{
         return await User.findOne({ email })
     }
 
-    public findUserById = async(userId: string
+    public findById = async(userId: string
         ): Promise<HydratedUserDoc | null> =>{
             const user = await User.findById(userId)
             return user
     }
 
-    public findUserByIdAndDelete = async(userId: string
+    public findByIdAndDelete = async(userId: string
         ): Promise<HydratedUserDoc | null> =>{
             return await User.findByIdAndDelete(userId)
     }
-    public findUserByIdAndUpdate = async(
+    public findByIdAndUpdate = async(
         userID: string, updateData: IUser
         ): Promise<HydratedUserDoc | null> =>{
             return User.findByIdAndUpdate(userID, updateData)    
