@@ -6,17 +6,17 @@ import { HydratedReviewDoc, IReview } from "../data-access/model"
 
 export class Controller{
 
-    private dal: DataAccess
+    private dataAccess: DataAccess
 
     constructor(dataAccess: DataAccess){
-        this.dal = dataAccess
+        this.dataAccess = dataAccess
     }
 
     public addNewReview = async(
         req: Request, res: Response, next: NextFunction) =>{
             const reviewData = req.body
             try {
-                const reviewDoc = await this.dal.createNewReview(
+                const reviewDoc = await this.dataAccess.createNewReview(
                     reviewData)
                 this.respondWithCreatedResource(reviewDoc.id, res)
             } catch (error) {
@@ -36,7 +36,7 @@ export class Controller{
 
             const paginator = this.paginate(req)
             try {
-                const reviews = await this.dal.findReviewsByProductId(
+                const reviews = await this.dataAccess.findReviewsByProductId(
                     productId, paginator)
                 this.respondWithFoundResource(reviews, res)
             } catch (error) {
@@ -71,7 +71,9 @@ export class Controller{
             const paginator = this.paginate(req)
 
             try {
-                const reviews = await this.dal.findRandomReviews(paginator)
+                const reviews = await this.dataAccess
+                    .findRandomReviews(paginator)
+                    
                 this.respondWithFoundResource(reviews, res)
             } catch (error) {
                 next(error)
@@ -84,7 +86,7 @@ export class Controller{
             const updateDoc: IReview = req.body
 
             try {
-                const updatedReview = await this.dal
+                const updatedReview = await this.dataAccess
                     .findReviewByIdAndUpdate(reviewId, updateDoc)
 
                 if(updatedReview)
@@ -92,7 +94,7 @@ export class Controller{
                     res)
                 
                 else{
-                    const newReview = await this.dal.createNewReview(
+                    const newReview = await this.dataAccess.createNewReview(
                         updateDoc)
                     this.respondWithCreatedResource(newReview.id, res)
                 }
@@ -114,7 +116,7 @@ export class Controller{
         const updateDoc: IReview = req.body
 
         try {
-            const updatedReview = await this.dal
+            const updatedReview = await this.dataAccess
                 .findReviewByIdAndUpdate(reviewId, updateDoc)
 
             if(updatedReview)
@@ -139,7 +141,7 @@ export class Controller{
             const reviewId = req.params.reviewId
             
             try {
-                const deletedReview = await this.dal
+                const deletedReview = await this.dataAccess
                     .findReviewByIdAndDelete(reviewId)
     
                 if(deletedReview)
