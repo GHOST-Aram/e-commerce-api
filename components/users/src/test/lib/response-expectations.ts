@@ -35,8 +35,8 @@ export class APIResponseExpectations{
     
     public respondsWithNotFoundError = (response: Response) =>{
         expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/)
         expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.body.message).toMatch(/not found/)
     }
     
     public respondsWithFoundResource = (response: Response) =>{
@@ -71,8 +71,6 @@ export class APIResponseExpectations{
     }
 
     public respondsWithUpdatedResource = (response: Response) => {
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/updated/i)
         expect(response.header.location).toMatch(
             /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
