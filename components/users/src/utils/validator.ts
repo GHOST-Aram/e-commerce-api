@@ -1,4 +1,4 @@
-import { ValidationChain, body } from 'express-validator'
+import { ValidationChain, body, param } from 'express-validator'
 
 export class Validator {
 
@@ -13,6 +13,9 @@ export class Validator {
             .escape().optional()
     }
 
+    public validateReferenceId = (paramName: string) =>{
+        return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
+    }
 }
 
 export const validator = new Validator()

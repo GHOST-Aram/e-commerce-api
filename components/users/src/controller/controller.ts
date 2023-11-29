@@ -14,7 +14,6 @@ export class UsersController{
 
     public AddNewUser = async(
         req: Request, res: Response, next: NextFunction) =>{
-            this.handleValidationErrors(req, res)
             
             const userData = req.body
             try {
@@ -33,8 +32,8 @@ export class UsersController{
             }
     }
 
-    private handleValidationErrors = (
-        req: Request, res: Response) =>{
+    public handleValidationErrors = (
+        req: Request, res: Response, next: NextFunction) =>{
             const errors = validationResult(req)
 
             if(!errors.isEmpty()){
@@ -42,6 +41,8 @@ export class UsersController{
                     message: 'Invalid input',
                     errors: errors.array()
                 })
+            } else{
+                next()
             }
     }
 
@@ -146,7 +147,6 @@ export class UsersController{
             const userId = req.params.id
 
             this.handleInvalidId(userId, res)
-            this.handleValidationErrors(req, res)
 
             const patchData: IUser = req.body
             try {
@@ -175,7 +175,6 @@ export class UsersController{
             const userId = req.params.id
             this.handleInvalidId(userId, res)
 
-            this.handleValidationErrors(req, res)
 
             const userData = req.body
             try {
