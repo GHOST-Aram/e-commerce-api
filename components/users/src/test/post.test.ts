@@ -5,7 +5,6 @@ import * as data from './mocks/raw-data'
 import { assert } from './lib/response-assertion'
 
 describe('POST users', () =>{
-
     test('Rejects request with client defined Id (status 405): '+
         'Method not allowed. ', 
     async() =>{
