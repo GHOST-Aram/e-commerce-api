@@ -71,7 +71,7 @@ export class Controller{
             const paginator = this.paginate(req)
 
             try {
-                const reviews = await this.dal.findReviews(paginator)
+                const reviews = await this.dal.findRandomReviews(paginator)
                 this.respondWithFoundResource(reviews, res)
             } catch (error) {
                 next(error)
