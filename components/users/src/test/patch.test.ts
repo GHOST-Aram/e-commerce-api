@@ -2,48 +2,50 @@ import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as data from "./mocks/raw-data";
-import { expectations } from "./lib/response-expectations";
+import { expectations as assert} from "./lib/response-expectations";
 
-describe('patch users route', () =>{
-    test('Does not allow batch patches on users (405)', async() =>{
+describe('PATCH Users route', () =>{
+    test('Rejects patch-all request: Status 405 Method not allowed', async() =>{
         const response = await request(app).patch('/users')
             .send(data.validPartialData)
-        expectations.expectMethodNotAllowedResponse(response)
+
+        assert.respondsWithMethodNotAllowed(response)
     })
 
-    test('Rejects invalid users IDs with status 400',async () => {
+    test('Responds with Validation errors: Invalid reference Id.',async () => {
         const response = await request(app).patch(
-            '/users/invalidId')
-            .send(data.validPartialData)
-        expectations.expectBadRequestResponse(response)
+            '/users/7ryew8qwq').send(data.validPartialData)
+
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
     })
 
-    test('Responds with validation errors and status 400 if '+
-        'invalid patch input data', 
+    test('Responds with validation errors: Invalid input', 
     async() =>{
         const response = await request(app).patch(
             '/users/64c9e4f2df7cc072af2ac9e4')
             .send(data.invalidPartialData)
 
-        expectations.expectBadRequestResponse(response)
-        expectations.expectErrorResponseWithArray(response)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
     })  
 
-    test('Responds with 404 error if userID is valid but does not '+
-        'exits', 
+    test('Responds with Not Found(404): User does not exist', 
     async() =>{
         const response = await request(app).patch(
             '/users/64c9e4f2df7cc072af2ac8a4')
             .send(data.validPartialData)
-        expectations.expectNotFoundResponse(response)   
+
+        assert.respondsWithNotFoundError(response)   
     })
 
-    test('Responds with 200 and location URI if patch '+
-        'was success', 
+    test('Responds with modified resource (200 and location uri): User found', 
     async() =>{
         const response = await request(app).patch(
             '/users/64c9e4f2df7cc072af2ac9e4')
             .send(data.validPartialData)
-        expectations.expectSuccessfullPatchResponse(response)
+            
+        assert.respondsWithSuccess(response)
+        assert.respondsWithModifedResource(response)
     })
 })
