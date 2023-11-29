@@ -14,7 +14,8 @@ describe('POST users', () =>{
         assert.respondsWithMethodNotAllowed(response)
     })
 
-    test('Responds with conflict (status 409): User exists with same email', 
+    test('Responds with conflict (status 409): '+
+        'User exists with same email.', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.userWithExistingEmail)
@@ -22,7 +23,8 @@ describe('POST users', () =>{
         assert.respondsWithConflict(response)
     })
 
-    test('Responds with validation errors (status 400): Invalid input.', 
+    test('Responds with validation errors (status 400): '+
+        'Invalid input.', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.invalidUserData)
@@ -32,7 +34,8 @@ describe('POST users', () =>{
 
     })
 
-    test('Responds with created resource (status 201): Operation Success.', 
+    test('Responds with created resource (status 201): '+
+        'Operation Success.', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.validUserData)
