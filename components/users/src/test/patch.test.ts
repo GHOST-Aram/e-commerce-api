@@ -2,7 +2,7 @@ import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as data from "./mocks/raw-data";
-import { expectations as assert} from "./lib/response-expectations";
+import { assert} from "./lib/response-assertion";
 
 describe('PATCH Users route', () =>{
     test('Rejects patch-all request (status 405): Method not allowed.', 
