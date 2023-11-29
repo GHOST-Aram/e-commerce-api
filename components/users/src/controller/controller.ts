@@ -16,13 +16,13 @@ export class UsersController{
             
             const userData = req.body
             try {
-                const user = await this.dal.findUserByEmail(
+                const user = await this.dal.findByEmail(
                     userData.email)
 
                 if(user)
                     this.respondWithConflict(res)
                 else {
-                    const user = await this.dal.createNewUser(
+                    const user = await this.dal.createNew(
                         userData)
                     this.respondWithCreatedResource(user, res)
                 }
@@ -49,7 +49,7 @@ export class UsersController{
             const userId = req.params.id
 
             try {
-                const user = await this.dal.findUserById(userId)
+                const user = await this.dal.findById(userId)
                 
                 if(user === null)
                     this.respondWithNotFound(res)
@@ -76,7 +76,7 @@ export class UsersController{
             const pagination = this.paginate(req)
 
             try {
-                const users = await this.dal.findMultipleUsers(
+                const users = await this.dal.findMany(
                     pagination)
                 this.respondWithFoundResource(users, res)
             } catch (error) {
@@ -103,7 +103,7 @@ export class UsersController{
 
             const patchData: IUser = req.body
             try {
-                const user = await this.dal.findUserByIdAndUpdate(
+                const user = await this.dal.findByIdAndUpdate(
                     userId, patchData)
                 
                 if(user)
@@ -125,14 +125,14 @@ export class UsersController{
 
             const userData = req.body
             try {
-                const user = await this.dal.findUserByIdAndUpdate(
+                const user = await this.dal.findByIdAndUpdate(
                     userId, userData)
                 
                 if(user)
                     this.respondWithChangedResource(
                         user.id, 'Updated', res)
                 
-                const newUser = await this.dal.createNewUser(userData)
+                const newUser = await this.dal.createNew(userData)
                 this.respondWithCreatedResource(newUser, res)
             } catch (error) {
                 next(error)
@@ -150,7 +150,7 @@ export class UsersController{
             const userId = req.params.id
 
             try {
-                const deletedUser = await this.dal.findUserByIdAndDelete(
+                const deletedUser = await this.dal.findByIdAndDelete(
                     userId)
                 if(deletedUser)
                     this.respondWithDeletedResource(
