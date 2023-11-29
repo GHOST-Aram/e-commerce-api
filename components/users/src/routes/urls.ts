@@ -17,15 +17,27 @@ export const routesWrapper = (controller: UsersController) =>{
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
-    router.put('/:id', middlewear.userValidators, 
-        controller.updateOneUser)
+    router.put('/:id', 
+        validator.validateReferenceId('id'),
+        middlewear.userValidators, 
+        controller.handleValidationErrors,
+        controller.updateOneUser
+    )
     
     router.patch('/', controller.respondWithMethodNotAllowed)
-    router.patch('/:id', middlewear.patchValidators, 
-        controller.modifyOneUser)
+    router.patch('/:id', 
+        validator.validateReferenceId('id'),
+        middlewear.patchValidators, 
+        controller.handleValidationErrors,
+        controller.modifyOneUser
+    )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
-    router.delete('/:id', controller.removeOneUser)
+    router.delete('/:id', 
+        validator.validateReferenceId('id'),
+        controller.handleValidationErrors,
+        controller.removeOneUser
+    )
 
     return router
 }
