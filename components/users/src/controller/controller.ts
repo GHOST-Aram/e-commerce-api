@@ -84,12 +84,6 @@ export class UsersController{
             }
     }
 
-    private respondWithFoundResource = (
-        resource: HydratedUserDoc[] | HydratedUserDoc, 
-        res: Response) =>{
-            res.status(200).json({ resource: resource  })   
-    }
-
     private paginate = (req: Request): Paginator =>{
         const page = Number(req.query.page)
         const limit = Number(req.query.limit)
