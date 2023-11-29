@@ -16,6 +16,7 @@ describe('DELETE users route', () =>{
     async () => {
         const response = await request(app).delete(
             '/users/invalidId78327874823')
+
         assert.respondsWithBadRequest(response)
         assert.respondsWithValidationErrorsArray(response)  
     })
@@ -24,6 +25,7 @@ describe('DELETE users route', () =>{
     async() =>{
         const response = await request(app).delete(
             '/users/64c9e4f2df7cc072af2ac8a4')
+            
        assert.respondsWithNotFoundError(response)
     })
 
@@ -32,6 +34,7 @@ describe('DELETE users route', () =>{
     async() =>{
         const response = await request(app).delete(
             '/users/64c9e4f2df7cc072af2ac9e4')
+
         assert.respondsWithSuccess(response)
         assert.respondsWithDeletedResource(response)
     })
