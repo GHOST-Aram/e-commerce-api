@@ -1,7 +1,6 @@
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
-import { validationResult } from "express-validator";
 import { HydratedUserDoc, IUser } from "../data-access/model";
 import { Paginator } from "../data-access/data-access";
 
@@ -170,19 +169,5 @@ export class UsersController{
 
     public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
-    }
-
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction) =>{
-            const errors = validationResult(req)
-
-            if(!errors.isEmpty()){
-                res.status(400).json({
-                    message: 'Invalid input',
-                    errors: errors.array()
-                })
-            } else{
-                next()
-            }
     }
 }
