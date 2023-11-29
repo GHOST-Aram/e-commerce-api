@@ -52,13 +52,8 @@ export class Controller{
         resource: HydratedPaymentDoc [] | HydratedPaymentDoc,
         res: Response
         ) =>{
-            res.status(200)
-
-            if(Array.isArray(resource)){
-                res.json({ payments: resource })
-            } else {
-                res.json({ payment: resource })
-            }
+            res.status(200).json({ resource })
+           
     }
 
     private respondWithNotFoundError = (res: Response) =>{

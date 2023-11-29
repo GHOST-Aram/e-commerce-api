@@ -1,63 +1,54 @@
 import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import request from "supertest"
+import { assert } from "./lib/response-assertion";
 
 describe('GET Payments Routes', () =>{
-    test('Responds with payments list paginated to default limit', 
+    test('Responds with paginated list, (status 200): '+
+        'Default pagination (limit 10).', 
     async() =>{
         const response = await request(app).get('/payments')
 
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body).toHaveProperty('payments')
-        expect(Array.isArray(response.body.payments)).toBeTruthy()
-        expect(response.body.payments.length).toEqual(10)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 10)
     })
 
-    test('Responds with payments list paginated to requested lmit', 
+    test('Responds with paginated list (status 200): '+
+        'Requested pagination.', 
     async() =>{
         const response = await request(app).get(
             '/payments?page=1&limit=12')
         
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body).toHaveProperty('payments')
-        expect(Array.isArray(response.body.payments)).toBeTruthy()
-        expect(response.body.payments.length).toEqual(12)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 12)
     })
 
-    test('Rejects requests with invalid reference Ids (payment.orderId) '+
-    '(400 Bad request)', 
+    test('Responds with validation errors, (status 400): '+
+    'Invalid reference Id', 
     async() =>{
         const response = await request(app).get(
             '/payments/4f2df7cc072af2ac9e8')
 
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/Invalid/i)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
 
-    test('Responds with status 404 (Not Found) if the payment '+
-        'requested (by orderId) does not exist', 
+    test('Responds with Not Found, (status 404): '+ 
+        'Target does not exist.', 
     async() =>{
         const response = await request(app).get(
             '/payments/87c1e4f2df7cc972af2ac9e8')
 
-        expect(response.status).toEqual(404)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/not found/i)
+        assert.respondsWithNotFound(response)
     })
 
-    test('Responds with status 200 and payment payload if request '+
-        'is successful', 
+    test('Responds with found resource , status(200): '+
+        'GET-one operation success.', 
     async() =>{
         const response = await request(app).get(
             '/payments/64c9e4f2df7cc072af2ac9e8')
         
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body).toHaveProperty('payment')
-        expect(response.body.payment).toHaveProperty('orderId')
-        expect(response.body.payment).toHaveProperty('amount')
+        assert.respondsWithSuccess(response)
+        assert.respondsWithFoundResource(response)
     })  
 })
