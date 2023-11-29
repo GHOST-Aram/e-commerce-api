@@ -5,6 +5,15 @@ import * as data from './mocks/raw-data'
 import { expectations as assert } from './lib/response-expectations'
 
 describe('POST users', () =>{
+    test('Rejects request with client defined Id (status 405): '+
+        'Method not allowed. ', 
+    async() =>{
+        const response = await request(app).post(
+            '/users/64c9e4f2df7cc072af2ac9e4')
+        
+        assert.respondsWithMethodNotAllowed(response)
+    })
+
     test('Responds with conflict (status 409): User exists with same email', 
     async() =>{
         const response = await request(app).post('/users')
