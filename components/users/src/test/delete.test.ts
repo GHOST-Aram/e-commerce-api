@@ -16,6 +16,9 @@ describe('DELETE users route', () =>{
     async () => {
         const response = await request(app).delete(
             '/users/invalidId78327874823')
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)  
+            '/users/invalidId78327874823')
 
         assert.respondsWithBadRequest(response)
         assert.respondsWithValidationErrorsArray(response)  
