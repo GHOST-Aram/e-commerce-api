@@ -2,48 +2,57 @@ import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as rawData from "./mocks/raw-data";
-import { expectations } from "./lib/response-expectations";
+import { expectations as assert } from "./lib/response-expectations";
 
 describe('PUT users route', () =>{
-    test('Does not allow batch updates on users (405)', async() =>{
+    test('Rejects update-all requests ( status 405): '+
+        'Method not Allowed.', 
+    async() =>{
         const response = await request(app).put('/users')
             .send(rawData.validUserData)
-        expectations.expectMethodNotAllowedResponse(response)
+
+        assert.respondsWithMethodNotAllowed(response)
     })
 
-    test('Rejects invalid users IDs with status 400',async () => {
+    test('Responds with validation errors (status 400): '+
+        'Invalid reference Id.',
+    async () => {
         const response = await request(app).put(
             '/users/invalidId')
             .send(rawData.validUserData)
-        expectations.expectBadRequestResponse(response)
+
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
     })
 
-    test('Responds with validation errors and status 400 if '+
-        'invalid input', 
+    test('Responds with validation errors (status 400): '+
+        'Invalid input.', 
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac9e4')
             .send(rawData.invalidUserData)
 
-        expectations.expectBadRequestResponse(response)
-        expectations.expectErrorResponseWithArray(response)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
     })  
 
-    test('Creates new user and responds with status 201 if userID'+
-        ' is valid but does not exits', 
+    test('Responds with created resource location URI(status 201): '+
+        'New user created.', 
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac8a4')
             .send(rawData.validUserData)
-        expectations.expectCreatedResponse(response)
+
+        assert.respondsWithCreatedResource(response)
     })
 
-    test('Responds with 200 and location URI if user update '+
-        'was success', 
+    test('Responds with updated resource location URI (status 200): '+
+        'Update success.', 
     async() =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac9e4')
             .send(rawData.validUserData)
-        expectations.expectUpdatedResponse(response)
+            
+        assert.respondsWithUpdatedResource(response)
     })
 })
