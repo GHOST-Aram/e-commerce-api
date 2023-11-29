@@ -9,15 +9,15 @@ export const routesWrapper = (controller: Controller) =>{
     router.post('/', 
         middlewear.newReviewInputValidators ,
         validator.handleValidationErrors,
-        controller.addNewReview)
+        controller.addNew)
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
 
-    router.get('/', controller.getRandomReviews)
+    router.get('/', controller.getRandomDocs)
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
-        controller.getReviewsByProductId
+        controller.getByProductId
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
@@ -25,7 +25,7 @@ export const routesWrapper = (controller: Controller) =>{
         middlewear.newReviewInputValidators,
         validator.validateReferenceId('reviewId'),
         validator.handleValidationErrors,
-        controller.updateReview
+        controller.updateOne
     )
 
     router.patch('/', controller.respondWithMethodNotAllowed)
@@ -33,14 +33,14 @@ export const routesWrapper = (controller: Controller) =>{
         validator.validateReferenceId('reviewId'),
         middlewear.patchInputValidators,
         validator.handleValidationErrors,
-        controller.modifyReview
+        controller.modifyOne
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed )
     router.delete('/:reviewId', 
         validator.validateReferenceId('reviewId'),
         validator.handleValidationErrors,
-        controller.deleteReview
+        controller.deleteOne
     )
 
     return router

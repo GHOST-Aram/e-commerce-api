@@ -3,43 +3,23 @@ import { HydratedReviewDoc, IReview, Review } from '../../data-access/model'
 import { Paginator } from '../../data-access/data-access'
 import { reviewData } from './raw-data'
 export class DataAccess{
-    public createNewReview = jest.fn(async(input: IReview) =>{
+    public createNew = jest.fn(async(input: IReview) =>{
         return new Review(input)
     })
-    public findReviewByIdAndDelete = jest.fn(
-        async(id: string): Promise<HydratedReviewDoc | null> =>{
-            if(id === '64c9e4f2df7cc072af2ac9e4')
-                return new Review(reviewData)
 
-            return null
-        }
-    )
-    public findReviewByIdAndUpdate = jest.fn(
-        async(id: string): Promise<HydratedReviewDoc | null> =>{
-            if(id === '64c9e4f2df7cc072af2ac9e4')
-                return new Review(reviewData)
-
-            return null
-    })
-
-    public findReviews = jest.fn(async(
-        paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
-            return this.createReviewsArray(paginator.limit)
-    })
-
-    public findReviewsByProductId = jest.fn(async(
+    public findByProductId = jest.fn(async(
         productId: string, 
         paginator: Paginator
         ): Promise<HydratedReviewDoc[]> =>{
             let reviews: HydratedReviewDoc[] = []
 
             if(productId === '64c9e4f2df7cc072af2ac9e4')
-                reviews = this.createReviewsArray(paginator.limit)
+                reviews = this.createDocumentsArray(paginator.limit)
 
             return reviews
-        })
+    })
 
-    private createReviewsArray = (length: number
+    private createDocumentsArray = (length: number
         ): HydratedReviewDoc[] =>{
             let count = 0
             const reviews: HydratedReviewDoc[] = []
@@ -50,6 +30,29 @@ export class DataAccess{
 
             return reviews
     }
+
+    public findRandomDocs = jest.fn(async(
+        paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
+            return this.createDocumentsArray(paginator.limit)
+    })
+
+    public findByIdAndUpdate = jest.fn(
+        async(id: string): Promise<HydratedReviewDoc | null> =>{
+            if(id === '64c9e4f2df7cc072af2ac9e4')
+                return new Review(reviewData)
+
+            return null
+    })
+
+    public findByIdAndDelete = jest.fn(
+        async(id: string): Promise<HydratedReviewDoc | null> =>{
+            if(id === '64c9e4f2df7cc072af2ac9e4')
+                return new Review(reviewData)
+    
+            return null
+        }
+    )
 }
+
 
 export const dataAccess = new DataAccess()
