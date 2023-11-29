@@ -18,20 +18,21 @@ export class DataAccess{
            
     }
 
-    public findReviews = async(paginator: Paginator
+    public findRandomReviews = async(paginator: Paginator
         ): Promise<HydratedReviewDoc[]> =>{
             return await Review.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
     }
 
-    public findReviewByIdAndDelete = async(id: string
-        ): Promise<HydratedReviewDoc | null> =>{
-            return await Review.findByIdAndDelete(id)
-    }
     public findReviewByIdAndUpdate = async(id: string, updateDoc: IReview
         ): Promise<HydratedReviewDoc | null> =>{
             return await Review.findByIdAndUpdate(
                 id, updateDoc, { new: true })
+    }
+
+    public findReviewByIdAndDelete = async(id: string
+        ): Promise<HydratedReviewDoc | null> =>{
+            return await Review.findByIdAndDelete(id)
     }
 }
 
