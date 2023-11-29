@@ -8,12 +8,6 @@ export class ResponseAssertion{
         expect(response.body.message).toMatch(/not allowed/i)
         expect(response.headers['content-type']).toMatch(/json/i)
     }
-
-    public respondsWithConflict = (response: Response) =>{
-        expect(response.status).toEqual(409)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/exists/)
-    }
     
     public respondsWithBadRequest = (response: Response) =>{
         expect(response.status).toEqual(400)
@@ -40,15 +34,8 @@ export class ResponseAssertion{
         expect(response.body.message).toMatch(/not found/i)
     }
 
-    public respondsWithFoundResource = (response: Response) =>{
-        expect(response.body).toHaveProperty('resource')
-        expect(response.body.resource).toHaveProperty('_id')
-    }
-
     public respondsWithPaginatedResource = (
         response: Response, limit: number) =>{
-
-            expect(response.body).toHaveProperty('resource')
 
             const resource = response.body.resource
             expect(Array.isArray(resource)).toBeTruthy()
