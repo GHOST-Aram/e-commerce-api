@@ -2,7 +2,7 @@ import { describe, test } from '@jest/globals'
 import request from 'supertest'
 import {app} from './lib/test.config'
 import * as data from './mocks/raw-data'
-import { expectations as assert } from './lib/response-expectations'
+import { assert } from './lib/response-assertion'
 
 describe('POST users', () =>{
     test('Rejects request with client defined Id (status 405): '+
