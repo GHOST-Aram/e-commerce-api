@@ -52,7 +52,7 @@ describe('PUT users route', () =>{
         const response = await request(app).put(
             '/users/64c9e4f2df7cc072af2ac9e4')
             .send(rawData.validUserData)
-            
+        assert.respondsWithSuccess(response)
         assert.respondsWithUpdatedResource(response)
     })
 })
