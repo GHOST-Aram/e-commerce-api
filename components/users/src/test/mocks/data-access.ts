@@ -6,11 +6,12 @@ import {
 } from "../../data-access/model"
 
 export class UsersDAL{
-    public createNewUser = jest.fn(async(userData: IUser) =>{
+    public createNew = jest.fn(async(
+        userData: IUser): Promise<HydratedUserDoc> =>{
         return new User(userData)  
     })
 
-    public findUserById = jest.fn(async(userID: string
+    public findById = jest.fn(async(userID: string
         ): Promise<HydratedUserDoc | null> =>{
             if(userID === '64c9e4f2df7cc072af2ac9e4'){
                 const user = new User({
@@ -26,12 +27,12 @@ export class UsersDAL{
     
     })
 
-    public findMultipleUsers = jest.fn(async(
+    public findMany = jest.fn(async(
         pagination: Paginator): Promise<HydratedUserDoc[]> =>{
-            return this.createFakeUsersArray(pagination.limit)
+            return this.createFakeDocsArray(pagination.limit)
     })
 
-    private createFakeUsersArray = (limit: number) =>{
+    private createFakeDocsArray = (limit: number) =>{
         const users: HydratedUserDoc[] = []
 
         let userCount = 0
@@ -47,7 +48,7 @@ export class UsersDAL{
 
         return users
     }
-    public findUserByEmail = jest.fn(async(email: string
+    public findByEmail = jest.fn(async(email: string
         ): Promise<HydratedUserDoc | null> =>{
         if(email === 'existingEmail@gmail.com')
             return new User({
@@ -58,7 +59,7 @@ export class UsersDAL{
 
         return null
     })
-    public findUserByIdAndDelete = jest.fn(
+    public findByIdAndDelete = jest.fn(
         async(userId: string): Promise<HydratedUserDoc | null> =>{
             if(userId === '64c9e4f2df7cc072af2ac9e4'){
                 return new User({
@@ -70,7 +71,7 @@ export class UsersDAL{
 
             return null
     })
-    public findUserByIdAndUpdate = jest.fn(
+    public findByIdAndUpdate = jest.fn(
         async(userId: string): Promise<HydratedUserDoc | null> =>{
             if(userId === '64c9e4f2df7cc072af2ac9e4'){
                 return new User({
