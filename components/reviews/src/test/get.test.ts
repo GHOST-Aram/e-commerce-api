@@ -1,65 +1,57 @@
 import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import request from "supertest"
+import { assert } from "./lib/response-assertions";
 
-describe('GET Reviews Routes (Get reviews by product ID | random reviews)', () =>{
+describe('GET Reviews routes (Get reviews by product ID or random reviews)', () =>{
 
-    test('Responds with random reviews paginated with default limit ', 
+    test('Random reviews: responds with paginated resource, (status 200): '+
+        'Default pagination limit => 10 ', 
     async() =>{
         const response = await request(app).get(
             '/reviews')
         
-        expect(response.status).toEqual(200)
-        expect(response.body).toHaveProperty('reviews')
-        expect(response.body.reviews.length).toEqual(10)
-        expect(response.headers['content-type']).toMatch(/json/)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 10)
     })
 
-    test('Responds with random reviews limited to the given'+
-        ' pagination limit (status 200)', 
+    test('Random reviews: Responds with paginated resource, '+ 
+        '(status 200): Requested pagination.', 
     async() =>{
         const response = await request(app).get(
             '/reviews?page=1&limit=23')
         
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(Array.isArray(response.body.reviews)).toBeTruthy()
-        expect(response.body.reviews.length).toEqual(23)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 23)
     })
 
-    test('Responds with status 200 and paginated list of default ' 
-        +'length (10) (Get reviews by product ID)', 
-    async() =>{
-        const response = await request(app).get(
-            '/reviews/64c9e4f2df7cc072af2ac9e4')
-        
-        expect(response.status).toEqual(200)
-        expect(response.body).toHaveProperty('reviews')
-        expect(response.body.reviews.length).toEqual(10)
-        expect(response.headers['content-type']).toMatch(/json/)
-    })
-
-    test('Responds with specific product reviews with length equal to given the'+
-    'pagination limit (status 200)', 
+    test('Specific product review: Responds with paginated '+
+        'resource, status (200): Requested pagination.', 
     async() =>{
         const response = await request(app).get(
             '/reviews/64c9e4f2df7cc072af2ac9e4?page=1&limit=23')
         
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(Array.isArray(response.body.reviews)).toBeTruthy()
-        expect(response.body.reviews.length).toEqual(23)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 23)
     })
 
-    test('Responds with 400 status (Bad Request) if the given '+
-        'product ID is invalid', 
+    test('Specific product review: Responds with paginated '+
+        'resource, status (200): Default pagination => 10.', 
+    async() =>{
+        const response = await request(app).get(
+            '/reviews')
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 10)
+    })
+
+    test('Responds with validation errors, (status 400): '+
+        'Invalid reference (product) Id', 
     async() =>{
         const response = await request(app).get(
             '/reviews/34522jdjd')
 
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.headers['content-type']).toMatch(/json/)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
-
 })

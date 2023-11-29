@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, param } from "express-validator"
 class Validator{
 
     validateRequiredField = (fieldName: string) =>{
@@ -11,6 +11,10 @@ class Validator{
     validateOptionalField = (fieldName: string) =>{
         return body(fieldName).trim()
             .escape()
+    }
+
+    validateReferenceId = (paramName: string) =>{
+        return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 }
 

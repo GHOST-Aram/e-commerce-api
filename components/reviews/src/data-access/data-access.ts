@@ -28,9 +28,10 @@ export class DataAccess{
         ): Promise<HydratedReviewDoc | null> =>{
             return await Review.findByIdAndDelete(id)
     }
-    public findReviewByIdAndUpdate = async(id: string
+    public findReviewByIdAndUpdate = async(id: string, updateDoc: IReview
         ): Promise<HydratedReviewDoc | null> =>{
-            return await Review.findByIdAndUpdate(id, { new: true })
+            return await Review.findByIdAndUpdate(
+                id, updateDoc, { new: true })
     }
 }
 
