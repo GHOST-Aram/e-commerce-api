@@ -27,6 +27,18 @@ export class UsersDAL{
     
     })
 
+    public findByEmail = jest.fn(async(email: string
+        ): Promise<HydratedUserDoc | null> =>{
+        if(email === 'existingEmail@gmail.com')
+            return new User({
+                last_name: 'John',
+                first_name: 'Does',
+                email: 'existingEmail@gmail.com'
+        })
+
+        return null
+    })
+    
     public findMany = jest.fn(async(
         pagination: Paginator): Promise<HydratedUserDoc[]> =>{
             return this.createFakeDocsArray(pagination.limit)
@@ -48,17 +60,7 @@ export class UsersDAL{
 
         return users
     }
-    public findByEmail = jest.fn(async(email: string
-        ): Promise<HydratedUserDoc | null> =>{
-        if(email === 'existingEmail@gmail.com')
-            return new User({
-                last_name: 'John',
-                first_name: 'Does',
-                email: 'existingEmail@gmail.com'
-        })
-
-        return null
-    })
+   
     public findByIdAndDelete = jest.fn(
         async(userId: string): Promise<HydratedUserDoc | null> =>{
             if(userId === '64c9e4f2df7cc072af2ac9e4'){
