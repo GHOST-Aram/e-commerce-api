@@ -59,9 +59,7 @@ export class UsersController{
                 user: resource
             })
     }
-    public removeAllUsers = async(req: Request, res: Response) =>{
-        this.respondWithMethodNotAllowed(res)
-    }
+
     public removeOneUser = async(
         req: Request, res: Response,next: NextFunction) =>{
             const userId = req.params.id
@@ -72,7 +70,7 @@ export class UsersController{
                     userId)
                 if(deletedUser)
                     this.respondWithDeletedResource(
-                    deletedUser, res)
+                    deletedUser.id, res)
                 
                 this.respondWith404Error(res)
             } catch (error) {
@@ -81,12 +79,13 @@ export class UsersController{
     }
 
     private respondWithDeletedResource = (
-        resource: HydratedUserDoc, res: Response) =>{
+        id: string, res: Response) =>{
             res.status(200).json({
                 message: 'deleted',
-                user: resource
+                id: id
             })
     }
+
     public getMultipleUsers = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
@@ -114,12 +113,9 @@ export class UsersController{
     }
 
     private respondWithFoundResource = (
-        resoure: HydratedUserDoc[] | HydratedUserDoc, 
+        resource: HydratedUserDoc[] | HydratedUserDoc, 
         res: Response) =>{
-            if(Array.isArray(resoure))
-                res.status(200).json({ users: resoure  })
-            else
-                res.status(200).json({ user: resoure })
+            res.status(200).json({ resource: resource  })   
     }
 
     public getOneUser = async(
@@ -145,10 +141,6 @@ export class UsersController{
             res.status(400).json({ message: 'Invalid user id'})
     }
 
-    public modifyAllUsers = (req: Request, res: Response) =>{
-        this.respondWithMethodNotAllowed(res)
-    }
-
     public modifyOneUser = async(
         req: Request, res: Response, next: NextFunction) =>{
             const userId = req.params.id
@@ -171,11 +163,9 @@ export class UsersController{
             } 
 
     }
-    public updateAllUsers = (req: Request, res: Response) =>{
-        this.respondWithMethodNotAllowed(res)
-    }
 
-    private respondWithMethodNotAllowed = (res: Response) =>{
+
+    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
 

@@ -2,25 +2,25 @@ import { Response } from "supertest";
 import { expect } from "@jest/globals";
 
 export class APIResponseExpectations{
-    public expectMethodNotAllowedResponse = (response: Response) =>{
+    public respondsWithMethodNotAllowed = (response: Response) =>{
         expect(response.status).toEqual(405)
         expect(response.body.message).toMatch(/not allowed/i)
         expect(response.headers['content-type']).toMatch(/json/i)
     }
     
-    public expectBadRequestResponse = (response: Response) =>{
+    public respondsWithBadRequest = (response: Response) =>{
         expect(response.status).toEqual(400)
         expect(response.body.message).toMatch(/invalid/i)
         expect(response.headers['content-type']).toMatch(/json/)
     }
     
-    public expectConflictResponse = (response: Response) =>{
+    public respondsWithConflict = (response: Response) =>{
         expect(response.status).toEqual(409)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/exists/)
     }
 
-    public expectCreatedResponse = (response: Response) =>{
+    public respondsWithCreatedResource = (response: Response) =>{
         expect(response.status).toEqual(201)
         expect(response.body.message).toMatch(/created/i)
         expect(response.headers['content-type']).toMatch(/json/)
@@ -28,39 +28,38 @@ export class APIResponseExpectations{
             /\/[.\w]+\/[a-fA-F0-9]{24}/)
     }
 
-    public expectErrorResponseWithArray = (response: Response) =>{
+    public respondsWithValidationErrorsArray = (response: Response) =>{
         expect(response.body).toHaveProperty('errors')
         expect(Array.isArray(response.body.errors)).toBeTruthy()
     }
     
-    public expectNotFoundResponse = (response: Response) =>{
+    public respondsWithNotFoundError = (response: Response) =>{
         expect(response.status).toEqual(404)
         expect(response.body.message).toMatch(/not found/)
         expect(response.headers['content-type']).toMatch(/json/)
     }
     
-    public expectResponseWithUserDocument = (response: Response) =>{
-        expect(response.body).toHaveProperty('user')
-        expect(response.body.user).toHaveProperty('_id')
-        expect(response.body.user).not.toHaveProperty('password')
+    public respondsWithFoundResource = (response: Response) =>{
+        expect(response.body).toHaveProperty('resource')
+        expect(response.body.resource).toHaveProperty('_id')
     }
 
-    public expectResponseWithPaginatedUsersArray = (
+    public respondsWithPaginatedResource = (
         response: Response, limit: number) =>{
-            const users = response.body.users
 
-            expect(Array.isArray(users)).toBeTruthy()
-            expect(users.length).toEqual(limit)
+            expect(response.body).toHaveProperty('resource')
+
+            const resource = response.body.resource
+            expect(Array.isArray(resource)).toBeTruthy()
+            expect(resource.length).toEqual(limit)
     }
 
-    public expectSuccessfulDeletionResponse = (
-        response: Response) =>{
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
+    public respondsWithDeletedResource = (response: Response) =>{
+        expect(response.body.id).toMatch(/^[a-fA-F0-9]{24}$/)
         expect(response.body.message).toMatch(/deleted/i)
     }
 
-    public expectSuccessfullPatchResponse = (response: Response) =>{
+    public respondsWithModifedResource = (response: Response) =>{
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/modified/i)
@@ -68,12 +67,12 @@ export class APIResponseExpectations{
             /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
     }
 
-    public expectSuccessfulResponse = (response: Response) =>{
+    public respondsWithSuccess = (response: Response) =>{
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
     }
 
-    public expectUpdatedResponse = (response: Response) => {
+    public respondsWithUpdatedResource = (response: Response) => {
         expect(response.status).toEqual(200)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/updated/i)

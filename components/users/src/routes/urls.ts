@@ -11,15 +11,15 @@ export const routesWrapper = (controller: UsersController) =>{
     router.get('/', controller.getMultipleUsers)
     router.get('/:id', controller.getOneUser)
 
-    router.put('/', controller.updateAllUsers)
+    router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:id', middlewear.userValidators, 
         controller.updateOneUser)
     
-    router.patch('/', controller.modifyAllUsers)
+    router.patch('/', controller.respondWithMethodNotAllowed)
     router.patch('/:id', middlewear.patchValidators, 
         controller.modifyOneUser)
 
-    router.delete('/', controller.removeAllUsers)
+    router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', controller.removeOneUser)
 
     return router
