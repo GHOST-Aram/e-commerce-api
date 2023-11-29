@@ -1,0 +1,17 @@
+{
+  "name": "e-commerce-api",
+  "version": "1.0.0",
+  "description": "A CRUD Backend API for a simple E-commerce application: Products Component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/supertest": "^2.0.16",
+    "supertest": "^6.3.3"
+  }
+}
