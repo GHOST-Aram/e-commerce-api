@@ -64,7 +64,6 @@ export class UsersController{
     public removeOneUser = async(
         req: Request, res: Response,next: NextFunction) =>{
             const userId = req.params.id
-            this.handleInvalidId(userId, res )
 
             try {
                 const deletedUser = await this.dal.findUserByIdAndDelete(
@@ -123,7 +122,6 @@ export class UsersController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const userId = req.params.id
-            this.handleInvalidId(userId, res)
 
             try {
                 const user = await this.dal.findUserById(userId)
@@ -146,7 +144,6 @@ export class UsersController{
         req: Request, res: Response, next: NextFunction) =>{
             const userId = req.params.id
 
-            this.handleInvalidId(userId, res)
 
             const patchData: IUser = req.body
             try {
@@ -173,7 +170,6 @@ export class UsersController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const userId = req.params.id
-            this.handleInvalidId(userId, res)
 
 
             const userData = req.body
