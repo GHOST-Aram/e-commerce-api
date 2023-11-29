@@ -12,7 +12,7 @@ export class UsersController{
         this.dal = dataAccessLayer
     }
 
-    public AddNewUser = async(
+    public AddNew = async(
         req: Request, res: Response, next: NextFunction) =>{
             
             const userData = req.body
@@ -47,7 +47,7 @@ export class UsersController{
             })
     }
 
-    public getOneUser = async(
+    public getOne = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const userId = req.params.id
@@ -68,7 +68,7 @@ export class UsersController{
         res.status(404).json({ message: 'User ID not found'})
     }
     
-    public getMultipleUsers = async(
+    public getMany = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const pagination = this.paginate(req)
@@ -100,7 +100,7 @@ export class UsersController{
         return { skipDocs, limit }
     }
 
-    public modifyOneUser = async(
+    public modifyOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const userId = req.params.id
 
@@ -121,7 +121,7 @@ export class UsersController{
 
     }
 
-    public updateOneUser = async(
+    public updateOne = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const userId = req.params.id
@@ -149,7 +149,7 @@ export class UsersController{
             res.status(200).json({ message: change})
     }
 
-    public removeOneUser = async(
+    public removeOne = async(
         req: Request, res: Response,next: NextFunction) =>{
             const userId = req.params.id
 
