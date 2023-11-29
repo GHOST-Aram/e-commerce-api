@@ -41,10 +41,7 @@ export class UsersController{
         resource: HydratedUserDoc, res: Response
         ) =>{
             res.location(`/users/${resource.id}`)
-            res.status(201).json({
-                message: 'Created',
-                user: resource
-            })
+            res.status(201).json({ message: 'Created' })
     }
 
     public getOne = async(
