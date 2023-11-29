@@ -1,7 +1,7 @@
 import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from 'supertest'
-import { expectations as assert} from "./lib/response-expectations";
+import { assert} from "./lib/response-assertion";
 
 describe('GET Users Route', () =>{
 
