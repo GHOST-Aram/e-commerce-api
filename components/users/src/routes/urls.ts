@@ -6,8 +6,11 @@ import { validator } from "../utils/validator";
 const router = Router()
 
 export const routesWrapper = (controller: UsersController) =>{
-    router.post('/', middlewear.userValidators ,
-        controller.AddNewUser)
+    router.post('/', 
+        middlewear.userValidators ,
+        controller.handleValidationErrors,
+        controller.AddNewUser
+    )
 
     router.get('/', controller.getMultipleUsers)
     router.get('/:id', 
