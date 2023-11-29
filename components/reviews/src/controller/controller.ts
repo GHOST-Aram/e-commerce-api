@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { validationResult } from "express-validator"
-import { isValidObjectId } from "mongoose"
 import { HydratedReviewDoc, IReview } from "../data-access/model"
 
 export class Controller{
@@ -12,12 +10,12 @@ export class Controller{
         this.dataAccess = dataAccess
     }
 
-    public addNewReview = async(
+    public addNew = async(
         req: Request, res: Response, next: NextFunction) =>{
             const reviewData = req.body
             try {
-                const reviewDoc = await this.dataAccess.createNewReview(
-                    reviewData)
+                const reviewDoc = await this.dataAccess
+                    .createNew(reviewData)
                 this.respondWithCreatedResource(reviewDoc.id, res)
             } catch (error) {
                 next(error)
@@ -30,14 +28,15 @@ export class Controller{
             res.status(201).json({ message: 'Created'})
     }
 
-    public getReviewsByProductId = async(
+    public getByProductId = async(
         req: Request, res: Response, next: NextFunction) =>{
             const productId = req.params.productId
 
             const paginator = this.paginate(req)
             try {
-                const reviews = await this.dataAccess.findReviewsByProductId(
-                    productId, paginator)
+                const reviews = await this.dataAccess
+                    .findByProductId(productId, paginator)
+
                 this.respondWithFoundResource(reviews, res)
             } catch (error) {
                 next(error)
@@ -66,36 +65,36 @@ export class Controller{
             res.status(200).json({ resource })
     }
 
-    public getRandomReviews = async(
+    public getRandomDocs = async(
         req: Request, res: Response, next: NextFunction) =>{
             const paginator = this.paginate(req)
 
             try {
                 const reviews = await this.dataAccess
-                    .findRandomReviews(paginator)
-                    
+                    .findRandomDocs(paginator)
+
                 this.respondWithFoundResource(reviews, res)
             } catch (error) {
                 next(error)
             }
     }
 
-    public updateReview = async(
+    public updateOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const reviewId = req.params.reviewId
             const updateDoc: IReview = req.body
 
             try {
                 const updatedReview = await this.dataAccess
-                    .findReviewByIdAndUpdate(reviewId, updateDoc)
+                    .findByIdAndUpdate(reviewId, updateDoc)
 
                 if(updatedReview)
                     this.respondWithUpdatedResource(updatedReview.id,
                     res)
                 
                 else{
-                    const newReview = await this.dataAccess.createNewReview(
-                        updateDoc)
+                    const newReview = await this.dataAccess
+                        .createNew(updateDoc)
                     this.respondWithCreatedResource(newReview.id, res)
                 }
             } catch (error) {
@@ -110,14 +109,14 @@ export class Controller{
             res.status(200).json({  message: 'Updated' })
     }
 
-    public modifyReview = async(
+    public modifyOne = async(
         req: Request, res: Response, next: NextFunction) =>{
         const reviewId = req.params.reviewId
         const updateDoc: IReview = req.body
 
         try {
             const updatedReview = await this.dataAccess
-                .findReviewByIdAndUpdate(reviewId, updateDoc)
+                .findByIdAndUpdate(reviewId, updateDoc)
 
             if(updatedReview)
                 this.respondWithModifiedResource(updatedReview.id, 
@@ -136,13 +135,13 @@ export class Controller{
             res.status(200).json({  message: 'Modified' })
     }
 
-    public deleteReview = async (
+    public deleteOne = async (
         req: Request, res: Response, next: NextFunction) =>{
             const reviewId = req.params.reviewId
             
             try {
                 const deletedReview = await this.dataAccess
-                    .findReviewByIdAndDelete(reviewId)
+                    .findByIdAndDelete(reviewId)
     
                 if(deletedReview)
                     this.respondWithDeletedResource(
