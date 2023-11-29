@@ -2,69 +2,57 @@ import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import * as data from "./mocks/raw-data"
 import request from "supertest"
+import { assert } from "./lib/response-assertion";
 
 describe('PATCH Payments routes', () =>{
-    test('Rejects batch modification requests with status 405 '+
-        '(Method not allowed)', 
+    test('Rejects patch-all request, (status 405): '+
+        'Method not allowed', 
     async() =>{
         const response = await request(app).patch('/payments')
             .send(data.patchInput)
 
-        expect(response.status).toEqual(405)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/not allowed/i)
+        assert.respondsWithMethodNotAllowed(response)
     })
 
-    test('Rejects invalid payment reference ID\'s(orderId) with '+
-        'status 400(Bad request) and validation errors', 
+    test('Responds with validation erros, status(400): '+
+        'Bad request -- Invalid reference id.', 
     async() =>{
         const response = await request(app).patch(
             '/payments/64c9e4f2df7')
             .send(data.patchInput)
 
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.body).toHaveProperty('errors')
-        expect(Array.isArray(response.body.errors)).toBeTruthy()
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
 
-    test('Rejects invalid input: Responds with status'+
-        '(400 Bad request)', 
+    test('Responds with validation errors, (status 400): '+
+        ' Bad request -- Invalid input.', 
     async() =>{
         const response = await request(app).patch(
             '/payments/64c9e4f2df7cc072af2ac9e8')
             .send(data.invalidInput)
 
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.body).toHaveProperty('errors')
-        expect(Array.isArray(response.body.errors)).toBeTruthy()
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
 
-    test('Responds with status 404 if target not found.', 
+    test('Responds with Not Found, (status 404): Target not found.', 
     async() =>{
         const response = await request(app).patch(
             '/payments/64c9e4f2df7cc072af2ac9e5')
             .send(data.patchInput)
 
-        expect(response.status).toEqual(404)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/not found/i)
+        assert.respondsWithNotFound(response)
     })
 
-    test(' Responds with status 200 and location URI if '+
-        'patch is successful', 
+    test(' Responds with modified resource location URI, (status 200): '+
+        'Patch success.', 
     async() =>{
         const response = await request(app).patch(
             '/payments/64c9e4f2df7cc072af2ac9e8')
             .send(data.patchInput)
 
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/modified/i)
-        expect(response.header.location).toMatch(
-            /^\/payments\/64c9e4f2df7cc072af2ac9e8$/)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithModifedResource(response)
     })
 })
