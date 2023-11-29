@@ -1,34 +1,34 @@
-import { describe, test, expect } from '@jest/globals'
+import { describe, test } from '@jest/globals'
 import request from 'supertest'
 import {app} from './lib/test.config'
 import * as data from './mocks/raw-data'
-import { expectations } from './lib/response-expectations'
+import { expectations as assert } from './lib/response-expectations'
 
 describe('POST users', () =>{
-    test('Responds with status 409 if user exists with same email', 
+    test('Responds with conflict (status 409): User exists with same email', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.userWithExistingEmail)
-        expectations.expectConflictResponse(response)
+
+        assert.respondsWithConflict(response)
     })
 
-    test('Responds with status 400 and errors array '+
-        'for invalid input', 
+    test('Responds with validation errors (status 400): Invalid input.', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.invalidUserData)
 
-        expectations.expectBadRequestResponse(response)
-        expectations.expectErrorResponseWithArray(response)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
 
     })
 
-    test('Responds with status 201 if successfuly created', 
+    test('Responds with created resource (status 201): Operation Success.', 
     async() =>{
         const response = await request(app).post('/users')
             .send(data.validUserData)
 
-        expectations.expectCreatedResponse(response)
+        assert.respondsWithCreatedResource(response)
     })  
 
 
