@@ -1,6 +1,7 @@
 import { UsersController } from "../controller/controller";
 import { Router } from "express";
 import * as middlewear from "../utils/middlewears";
+import { validator } from "../utils/validator";
 
 const router = Router()
 
@@ -9,7 +10,11 @@ export const routesWrapper = (controller: UsersController) =>{
         controller.AddNewUser)
 
     router.get('/', controller.getMultipleUsers)
-    router.get('/:id', controller.getOneUser)
+    router.get('/:id', 
+        validator.validateReferenceId('id'),
+        controller.handleValidationErrors,
+        controller.getOneUser
+    )
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:id', middlewear.userValidators, 
