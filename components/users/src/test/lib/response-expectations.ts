@@ -7,6 +7,12 @@ export class APIResponseExpectations{
         expect(response.body.message).toMatch(/not allowed/i)
         expect(response.headers['content-type']).toMatch(/json/i)
     }
+
+    public respondsWithConflict = (response: Response) =>{
+        expect(response.status).toEqual(409)
+        expect(response.headers['content-type']).toMatch(/json/)
+        expect(response.body.message).toMatch(/exists/)
+    }
     
     public respondsWithBadRequest = (response: Response) =>{
         expect(response.status).toEqual(400)
@@ -14,12 +20,11 @@ export class APIResponseExpectations{
         expect(response.headers['content-type']).toMatch(/json/)
     }
     
-    public respondsWithConflict = (response: Response) =>{
-        expect(response.status).toEqual(409)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/exists/)
+    public respondsWithValidationErrorsArray = (response: Response) =>{
+        expect(response.body).toHaveProperty('errors')
+        expect(Array.isArray(response.body.errors)).toBeTruthy()
     }
-
+    
     public respondsWithCreatedResource = (response: Response) =>{
         expect(response.status).toEqual(201)
         expect(response.body.message).toMatch(/created/i)
@@ -28,17 +33,12 @@ export class APIResponseExpectations{
             /\/[.\w]+\/[a-fA-F0-9]{24}/)
     }
 
-    public respondsWithValidationErrorsArray = (response: Response) =>{
-        expect(response.body).toHaveProperty('errors')
-        expect(Array.isArray(response.body.errors)).toBeTruthy()
-    }
-    
     public respondsWithNotFoundError = (response: Response) =>{
         expect(response.status).toEqual(404)
         expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/not found/)
     }
-    
+
     public respondsWithFoundResource = (response: Response) =>{
         expect(response.body).toHaveProperty('resource')
         expect(response.body.resource).toHaveProperty('_id')
@@ -54,13 +54,14 @@ export class APIResponseExpectations{
             expect(resource.length).toEqual(limit)
     }
 
-    public respondsWithDeletedResource = (response: Response) =>{
-        expect(response.body.id).toMatch(/^[a-fA-F0-9]{24}$/)
-        expect(response.body.message).toMatch(/deleted/i)
-    }
-
     public respondsWithModifedResource = (response: Response) =>{
         expect(response.body.message).toMatch(/modified/i)
+        expect(response.header.location).toMatch(
+            /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
+    }
+    
+    public respondsWithUpdatedResource = (response: Response) => {
+        expect(response.body.message).toMatch(/updated/i)
         expect(response.header.location).toMatch(
             /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
     }
@@ -70,10 +71,9 @@ export class APIResponseExpectations{
         expect(response.headers['content-type']).toMatch(/json/)
     }
 
-    public respondsWithUpdatedResource = (response: Response) => {
-        expect(response.body.message).toMatch(/updated/i)
-        expect(response.header.location).toMatch(
-            /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
+    public respondsWithDeletedResource = (response: Response) =>{
+        expect(response.body.id).toMatch(/^[a-fA-F0-9]{24}$/)
+        expect(response.body.message).toMatch(/deleted/i)
     }
 }
 
