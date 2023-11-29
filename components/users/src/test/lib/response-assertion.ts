@@ -1,7 +1,8 @@
 import { Response } from "supertest";
 import { expect } from "@jest/globals";
 
-export class APIResponseExpectations{
+export class ResponseAssertion{
+
     public respondsWithMethodNotAllowed = (response: Response) =>{
         expect(response.status).toEqual(405)
         expect(response.body.message).toMatch(/not allowed/i)
@@ -77,4 +78,4 @@ export class APIResponseExpectations{
     }
 }
 
-export const expectations = new APIResponseExpectations
+export const assert = new ResponseAssertion

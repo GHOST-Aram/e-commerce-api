@@ -1,7 +1,7 @@
 import { app } from "./lib/test.config";
 import { describe, test, expect } from "@jest/globals";
 import request from "supertest"
-import { expectations as assert} from "./lib/response-expectations";
+import { assert} from "./lib/response-assertion";
 
 describe('DELETE users route', () =>{
     test('Rejects delete-all request: (status 405): '+
@@ -25,7 +25,7 @@ describe('DELETE users route', () =>{
     async() =>{
         const response = await request(app).delete(
             '/users/64c9e4f2df7cc072af2ac8a4')
-            
+
        assert.respondsWithNotFoundError(response)
     })
 

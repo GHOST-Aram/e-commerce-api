@@ -2,7 +2,7 @@ import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as rawData from "./mocks/raw-data";
-import { expectations as assert } from "./lib/response-expectations";
+import { assert } from "./lib/response-assertion";
 
 describe('PUT users route', () =>{
     test('Rejects update-all requests ( status 405): '+
