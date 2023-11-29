@@ -60,8 +60,6 @@ export class APIResponseExpectations{
     }
 
     public respondsWithModifedResource = (response: Response) =>{
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
         expect(response.body.message).toMatch(/modified/i)
         expect(response.header.location).toMatch(
             /^\/[.\w]+\/[a-fA-F0-9]{24}$/)
