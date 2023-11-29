@@ -1,5 +1,5 @@
 import { app } from "./lib/test.config";
-import { describe, test, expect } from "@jest/globals";
+import { describe, test } from "@jest/globals";
 import request from "supertest"
 import { assert} from "./lib/response-assertion";
 

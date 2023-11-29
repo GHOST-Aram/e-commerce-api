@@ -5,6 +5,23 @@ import { assert} from "./lib/response-assertion";
 
 describe('GET Users Route', () =>{
 
+    test('Responds with validationErrors (status 400): '+
+        'If referenceId is Invalid.',  
+    async() =>{
+        const response = await request(app).get(
+            '/users/9jdiks9sk0xx34')
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrorsArray(response)
+    })
+
+    test('Responds with Not Found(status 404): '+
+        'User does not exist.', 
+    async() =>{
+        const response = await request(app).get(
+            '/users/64c9e4f2df7cc072af2ac8a4')
+        assert.respondsWithNotFoundError(response)
+    })
+
     test('Responds with paginated users array(status 200): '+
         'Default lenght 10 ', 
     async() =>{
@@ -23,23 +40,6 @@ describe('GET Users Route', () =>{
         assert.respondsWithSuccess(response)
         assert.respondsWithPaginatedResource(response, 23)
     } )
-
-    test('Responds with validationErrors (status 400): '+
-        'If referenceId is Invalid.',  
-    async() =>{
-        const response = await request(app).get(
-            '/users/9jdiks9sk0xx34')
-        assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
-    })
-
-    test('Responds with Not Found(status 404): '+
-        'User does not exist.', 
-    async() =>{
-        const response = await request(app).get(
-            '/users/64c9e4f2df7cc072af2ac8a4')
-        assert.respondsWithNotFoundError(response)
-    })
 
     test('Responds with found resource (status 200): '+
         'GET operation success.', 

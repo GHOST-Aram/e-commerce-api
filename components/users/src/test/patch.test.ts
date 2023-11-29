@@ -5,7 +5,9 @@ import * as data from "./mocks/raw-data";
 import { assert} from "./lib/response-assertion";
 
 describe('PATCH Users route', () =>{
-    test('Rejects patch-all request (status 405): Method not allowed.', 
+
+    test('Rejects patch-all request (status 405): '+
+        'Method not allowed.', 
     async() =>{
         const response = await request(app).patch('/users')
             .send(data.validPartialData)
