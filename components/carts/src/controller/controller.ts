@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, request } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
-import { validationResult } from "express-validator"
 
 export class Controller{
 
