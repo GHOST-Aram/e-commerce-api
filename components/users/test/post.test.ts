@@ -1,4 +1,4 @@
-import { assert} from "../../../library/api-testing/response-assertion";
+import { assert} from "../../../library/testing/response-assertion";
 import { describe, test } from '@jest/globals'
 import request from 'supertest'
 import {app} from './lib/test.config'
