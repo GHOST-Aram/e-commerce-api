@@ -19,7 +19,7 @@ export class Validator {
             .escape().optional()
     }
 
-    public validateReferenceId = (paramName: string) =>{
+    public validateReferenceId = (paramName: string): ValidationChain =>{
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 

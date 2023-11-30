@@ -6,6 +6,7 @@ import { validator } from "../utils/validator";
 const router = Router()
 
 export const routesWrapper = (controller: UsersController) =>{
+    
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/', 
         middlewear.userValidators ,
