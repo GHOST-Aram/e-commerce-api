@@ -10,7 +10,7 @@ export class Controller{
     constructor(dataAccess: DataAccess){
         this.dal = dataAccess
     }
-    public addNewCart = async(
+    public addNew = async(
         req: Request, res: Response, next: NextFunction) =>{
             const cartInfo: ICart = req.body
 
@@ -42,7 +42,7 @@ export class Controller{
             res.status(201).json({ message: 'Created'})
     }
 
-    public getOneCart = async(
+    public getOne = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const customerId = req.params.customerId
@@ -71,7 +71,7 @@ export class Controller{
             res.status(200).json({ resource })
     }
 
-    public getManyCarts = async(
+    public getMany = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const paginator: Paginator = this.paginate(req)
@@ -104,7 +104,7 @@ export class Controller{
         return paginator
     }
 
-    public updateCartItems = async(
+    public updateOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const customerId = req.params.customerId
             
@@ -137,7 +137,7 @@ export class Controller{
             res.status(200).json({ message: 'Updated' })
         }
 
-    public addItem = async(
+    public addtoCart = async(
         req: Request, res: Response, next: NextFunction) =>{
             const customerId = req.params.customerId
 
@@ -157,7 +157,7 @@ export class Controller{
             }
     }
 
-    public removeItem = async(
+    public removeFromCart = async(
         req: Request, res: Response, next: NextFunction) =>{
             const customerId = req.params.customerId
 
@@ -183,7 +183,7 @@ export class Controller{
             res.status(200).json({ message: 'Modified' })
     } 
 
-    public deleteCart = async(
+    public deleteOne = async(
         req: Request, res: Response, next:NextFunction
         ) =>{
             const customerId = req.params.customerId

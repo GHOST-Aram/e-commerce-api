@@ -9,40 +9,40 @@ export const routesWrapper = (controller: Controller) =>{
     router.post('/', 
         middlewear.initialInputValidators, 
         controller.handleValidationErrors, 
-        controller.addNewCart
+        controller.addNew
     )
 
     router.post('/:id', 
         controller.respondWithMethodNotAllowed
     )
 
-    router.get('/', controller.getManyCarts)
+    router.get('/', controller.getMany)
     router.get('/:customerId',
         validator.validateReferenceId('customerId') ,
         controller.handleValidationErrors,
-        controller.getOneCart)
+        controller.getOne)
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:customerId',middlewear.updateInputValidator,
         controller.handleValidationErrors,
-        controller.updateCartItems)
+        controller.updateOne)
 
     router.patch('/', controller.respondWithMethodNotAllowed)
     router.patch('/:customerId/add-item', 
         middlewear.patchDataValidator,
         controller.handleValidationErrors,
-        controller.addItem)
+        controller.addtoCart)
 
     router.patch('/:customerId/remove-item',
         middlewear.patchDataValidator,
         controller.handleValidationErrors,
-        controller.removeItem)
+        controller.removeFromCart)
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:customerId', 
         validator.validateReferenceId('customerId'),
         controller.handleValidationErrors,
-        controller.deleteCart
+        controller.deleteOne
     )
     return router
 }
