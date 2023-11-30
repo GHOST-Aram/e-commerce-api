@@ -35,7 +35,8 @@ export class DataAccess{
             return await Cart.findOne({ customer: customerId })
     }
 
-    public findByCustomerIDAndDelete = async(customerId: string) =>{
+    public findByCustomerIDAndDelete = async(customerId: string
+        ): Promise<HydratedCartDoc | null> =>{
             return await Cart.findOneAndDelete({ customer: customerId })
     }
     

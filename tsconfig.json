@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node20/tsconfig.json",
+  "extends": "@tsconfig/node20/tsconfig.json",
     "$schema": "https://json.schemastore.org/tsconfig",
     "display": "Node 20",
     "_version": "20.1.0",
