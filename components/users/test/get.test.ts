@@ -11,7 +11,7 @@ describe('GET Users Route', () =>{
         const response = await request(app).get(
             '/users/9jdiks9sk0xx34')
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
     })
 
     test('Responds with Not Found(status 404): '+
@@ -19,7 +19,7 @@ describe('GET Users Route', () =>{
     async() =>{
         const response = await request(app).get(
             '/users/64c9e4f2df7cc072af2ac8a4')
-        assert.respondsWithNotFoundError(response)
+        assert.respondsWithNotFound(response)
     })
 
     test('Responds with paginated users array(status 200): '+

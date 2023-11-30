@@ -21,7 +21,7 @@ export class ResponseAssertion{
         expect(response.headers['content-type']).toMatch(/json/)
     }
     
-    public respondsWithValidationErrorsArray = (response: Response) =>{
+    public respondsWithValidationErrors = (response: Response) =>{
         expect(response.body).toHaveProperty('errors')
         expect(Array.isArray(response.body.errors)).toBeTruthy()
     }
@@ -34,15 +34,20 @@ export class ResponseAssertion{
             /\/[.\w]+\/[a-fA-F0-9]{24}/)
     }
 
-    public respondsWithNotFoundError = (response: Response) =>{
+    public respondsWithNotFound = (response: Response) =>{
         expect(response.status).toEqual(404)
         expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/not found/)
+        expect(response.body.message).toMatch(/not found/i)
     }
 
     public respondsWithFoundResource = (response: Response) =>{
         expect(response.body).toHaveProperty('resource')
         expect(response.body.resource).toHaveProperty('_id')
+    }
+
+    public respondsWithEmptyResourceArray = (response: Response) =>{
+        expect(Array.isArray(response.body.resource)).toBeTruthy()
+        expect(response.body.resource.length).toEqual(0)
     }
 
     public respondsWithPaginatedResource = (

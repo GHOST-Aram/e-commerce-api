@@ -22,7 +22,7 @@ describe('PATCH Users route', () =>{
             '/users/7ryew8qwq').send(data.validPartialData)
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
     })
 
     test('Responds with validation errors (status 400): '+
@@ -33,7 +33,7 @@ describe('PATCH Users route', () =>{
             .send(data.invalidPartialData)
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
     })  
 
     test('Responds with Not Found(404): User does not exist', 
@@ -42,7 +42,7 @@ describe('PATCH Users route', () =>{
             '/users/64c9e4f2df7cc072af2ac8a4')
             .send(data.validPartialData)
 
-        assert.respondsWithNotFoundError(response)   
+        assert.respondsWithNotFound(response)   
     })
 
     test('Responds with modified resource and location URI(status 200): '+

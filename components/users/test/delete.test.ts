@@ -18,7 +18,7 @@ describe('DELETE users route', () =>{
             '/users/invalidId78327874823')
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)  
+        assert.respondsWithValidationErrors(response)  
     })
 
     test('Responds with Not Found (status 404): User does not exist.', 
@@ -26,7 +26,7 @@ describe('DELETE users route', () =>{
         const response = await request(app).delete(
             '/users/64c9e4f2df7cc072af2ac8a4')
 
-       assert.respondsWithNotFoundError(response)
+       assert.respondsWithNotFound(response)
     })
 
     test('Responds with deleted resource Id (status 200): '+

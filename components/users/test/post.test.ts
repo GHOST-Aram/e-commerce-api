@@ -31,7 +31,7 @@ describe('POST users', () =>{
             .send(data.invalidUserData)
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
 
     })
 

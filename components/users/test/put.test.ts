@@ -23,7 +23,7 @@ describe('PUT users route', () =>{
             .send(rawData.validUserData)
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
     })
 
     test('Responds with validation errors (status 400): '+
@@ -34,7 +34,7 @@ describe('PUT users route', () =>{
             .send(rawData.invalidUserData)
 
         assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrorsArray(response)
+        assert.respondsWithValidationErrors(response)
     })  
 
     test('Responds with created resource location URI(status 201): '+
