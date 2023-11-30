@@ -26,21 +26,6 @@ class Validator{
             .withMessage('Invalid reference Id')
             
     }
-
-    public validateBooleanField = (fieldName: string) =>{
-        return body(fieldName).escape()
-            .withMessage(`${fieldName} is required`)
-            .isBoolean()
-            .withMessage(`${fieldName} can only be true or false`)
-    }
-
-    public validateDateField = (fieldName: string) =>{
-        return body(fieldName).escape()
-            .withMessage(`${fieldName} is required`)
-            .isDate()
-            .withMessage(`${fieldName} must be a valid Date`)
-    }
 }
-
 
 export const validator = new Validator()

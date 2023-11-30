@@ -67,14 +67,8 @@ export class Controller{
     private respondWithFoundResource = (
         resource: HydratedOrderDoc[] | HydratedOrderDoc, 
         res: Response ) =>{
-            res.status(200)
-
-            if(Array.isArray(resource))
-                res.json({ orders: resource})
-            else {
-                res.json({ order: resource })
-            }
-        }
+            res.status(200).json({ resource})
+    }
 
     public getOneOrder = async(
         req: Request, res: Response, next: NextFunction) =>{
