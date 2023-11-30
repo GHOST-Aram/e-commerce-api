@@ -1,36 +1,38 @@
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./app.test.config"
+import { app } from "./lib/app.test.config"
+import { assert } from "./lib/response-assertion"
 
 
 
 describe('GET Products By Id', () =>{
 
-    test('Responds with single product given ID', async() =>{
-        const response = await request(app).get(
-            '/products/64c9e4f2df7cc072af2ac9e4')
-        const product = response.body.product
-
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.status).toEqual(200)
-        expect(product).toHaveProperty('_id')
-        expect(product).toHaveProperty('selling_price')
-        expect(product).toHaveProperty('available_units')
-    })
-
-    test('Responds with 400 Error for invalid product IDs', async() =>{
+    test('Responds with validation errors, status 400: '+
+        'Invalid reference Id (product id).', 
+    async() =>{
         const response = await request(app).get(
             '/products/64c9e4')
 
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid/ig)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
 
-    test('Responds with 404 Error for non-existing product IDs', async() =>{
+    test('Responds with Not Found, status 404: '+
+        'Target does not exist.', 
+    async() =>{
         const response = await request(app).get(
             '/products/64c9e4f2df7cc072af2ac9d4')
 
-        expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/ig)
+        assert.respondsWithNotFound(response)
+    })
+
+    test('Responds with found resource, status 200:' +
+        ' Get request success.', 
+    async() =>{
+        const response = await request(app).get(
+            '/products/64c9e4f2df7cc072af2ac9e4')
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithFoundResource(response)
     })
  })

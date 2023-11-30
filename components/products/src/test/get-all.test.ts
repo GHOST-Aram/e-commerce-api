@@ -1,30 +1,29 @@
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./app.test.config"
+import { app } from "./lib/app.test.config"
+import { assert } from "./lib/response-assertion"
 
-describe('GET PRODUCTS', () => { 
-    test('Respond with JSON content-type', async() =>{
-        const response = await request(app).get('/products')
-        expect(response.headers['content-type']).toMatch(/json/)
+describe('GET Products routes | Get', () => { 
+
+    test('Responds with paginated data (Default pagination), status 200: ' + 
+        'Get request success --Pagination => 10', 
+    async() =>{
+        const response = await request(app).get(
+            '/products')
+        const products = response.body.products
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 10)
     })
 
-    test('Responds with an array of all products', async()=>{
-        const response = await request(app).get('/products')
-        expect(Array.isArray(response.body.products)).toBeTruthy()
-    })
-
-    test('Responds with 200 status if products found', async() =>{
-        const response = await request(app).get('/products')
-        expect(response.status).toEqual(200)
-    })
-
-    test('Responds with paginated data', async() =>{
+    test('Responds with paginated data, status 200: ' + 
+        'Get request success -- Pagination -- user requested.', 
+    async() =>{
         const response = await request(app).get(
             '/products?page=1&limit=4')
         const products = response.body.products
         
-        expect(products).toHaveProperty('length')
-        expect(products.length).toBeGreaterThan(0)
-        expect(products.length).toBeLessThanOrEqual(4)
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 4)
     })
  })

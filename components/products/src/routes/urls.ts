@@ -1,10 +1,13 @@
 import { Router } from "express";
 import { ProductsController } from "../controller/controller";
 import * as middlewears from "../utils/middlewears";
+import { validator } from "../utils/validator";
 
 const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
+    
+    router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
         middlewears.productValidators, 
         controller.handleValidationErrors,
@@ -19,19 +22,32 @@ const routesWrapper = (controller: ProductsController) =>{
     )
 
     router.get('/brands/:brandName', 
+        validator.validateReferenceName('brandName'),
+        controller.handleValidationErrors,
         controller.getProductsByBrand
     )
 
-    router.get('/manufacturer/:manufacturerName', 
-        controller.getProductsByManufacturer)
+    router.get('/manufacturer/:manufacturerName',
+        validator.validateReferenceName('manufacturerName'),
+        controller.handleValidationErrors, 
+        controller.getProductsByManufacturer
+    )
 
     router.get('/models/:modelName', 
-        controller.getProductsByModel)
+        validator.validateReferenceName('modelName'),
+        controller.handleValidationErrors,
+        controller.getProductsByModel
+    )
 
-    router.get('/selling-price/:range', 
-        controller.getProductsByPriceRange)
+    router.get('/selling-price/:range',
+        validator.validatePriceRange('range'),
+        controller.handleValidationErrors,
+        controller.getProductsByPriceRange
+    )
 
     router.get('/categories/:categoryName',
+        validator.validateReferenceName('categoryName'),
+        controller.handleValidationErrors,
         controller.getProductsByCategory
     )
 

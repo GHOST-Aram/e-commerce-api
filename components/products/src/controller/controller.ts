@@ -32,35 +32,8 @@ export class ProductsController{
         ) =>{
             res.location(`/products/${productId}`)
             res.status(201).json({ message: 'Created'})
-        }
-
-    public deleteOneProduct = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const productId = req.params.id
-
-            try {
-                const deletedProduct = await this.dal.findProductByIdAndDelete(
-                    productId)
-                
-                if(deletedProduct)
-                    this.respondWithDeletedResource(deletedProduct, res)
-                
-                this.respondWith404Error(res)
-            } catch (error) {
-                next(error)
-            }
-        }
-
-    private respondWithDeletedResource = (
-        deletedProduct: HydratedProductDoc, res: Response
-        ) =>{
-            res.status(200).json({
-                message: 'Deleted',
-                product: deletedProduct
-            })
-        }
-
+    }
+    
     private respondWith404Error = (res: Response) =>{
         res.status(404).json(
             { message: 'Product not found' })
@@ -82,7 +55,15 @@ export class ProductsController{
             } catch (error) {
                 next(error)
             }
-        }
+    
+    }
+
+    private respondWithFoundResource = (
+        resource: HydratedProductDoc[] | HydratedProductDoc, 
+        res: Response
+        ) =>{
+           res.status(200).json({ resource })
+    }
 
     public getProducts= async(
         req: Request, res: Response, next: NextFunction
@@ -117,63 +98,33 @@ export class ProductsController{
         return ({ skipDocs, limit })
     }
 
-    private respondWithFoundResource = (
-        resource: HydratedProductDoc[] | HydratedProductDoc, 
-        res: Response
-        ) =>{
-            if(Array.isArray(resource)){
-                res.status(200).json({ products: resource })
-            }
-            else{
-                res.status(200).json({ product: resource })
-            }
-        }
-
     public getProductsByBrand = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const brandName = req.params.brandName
-            this.handleInvalidName('brand', brandName, res)
 
             const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsByBrand(
                     brandName, paginator)
                 
-                if(products.length > 0)
-                    this.respondWithFoundResource(products, res)
-                
-                this.respondWith404Error(res)
+                this.respondWithFoundResource(products, res)
             } catch (error) {
                 next(error)
             } 
         }
     
-    private handleInvalidName = (
-        property: string, value: string, res: Response
-        ) =>{
-            if(!validator.isValidNameFormat(value)){
-                res.status(400).json(
-                    { message: `Invalid ${property} name`})
-            }
-        }
-
     public getProductsByManufacturer = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const manufName = req.params.manufacturerName
-            this.handleInvalidName('manufacturer', 
-                manufName, res)
 
             const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsBymanufacturer(
                     manufName, paginator)
                 
-                if(products.length > 0)
-                    this.respondWithFoundResource(products, res)
-                
-                this.respondWith404Error(res)
+                this.respondWithFoundResource(products, res)
             } catch (error) {
                 next(error)
             } 
@@ -183,28 +134,18 @@ export class ProductsController{
         req: Request, res: Response, next: NextFunction
         ) =>{
             const modelName = req.params.modelName
-            this.handleInvalidModel(modelName, res)
-            
             const paginator = this.paginate(req)
+
             try {
                 const products = await this.dal.findProductsByModel(
                     modelName, paginator)
                 
-                if(products.length > 0)
-                    this.respondWithFoundResource(products, res)
-                
-                this.respondWith404Error(res)
+                this.respondWithFoundResource(products, res)
             } catch (error) {
                 next(error)
             } 
         }
 
-    private handleInvalidModel = (
-        model: string, res: Response) =>{
-        if(!validator.isValidModelName(model)){
-            res.status(400).json({ message: 'Invalid model name'})
-        }
-    }
 
     public getProductsByPriceRange = async(
         req: Request, res: Response, next: NextFunction
@@ -212,45 +153,31 @@ export class ProductsController{
             const rangeString = req.params.range
             const priceRange: PriceRange = formatter
                 .extractPriceRange(rangeString)
-            this.handleInvalidPriceRange(priceRange, res)    
+               
                 
-            const pagination = this.paginate()
+            const pagination = this.paginate(req)
             try {
                 const products = await this.dal
                     .findProductsByPriceRange(priceRange, 
                         pagination)
-        
-                if(products.length > 0)
-                    this.respondWithFoundResource(products, res)
-                
-                this.respondWith404Error(res)
+
+                this.respondWithFoundResource(products, res)                
             } catch (error) {
                 next(error)
             }
         }
     
-    private handleInvalidPriceRange = (
-        priceRange: PriceRange, res: Response
-        ) =>{
-        if(priceRange.start === null || priceRange.start === null){
-            res.status(400).json({ message: 'Invalid range'})
-        }
-    }
     public getProductsByCategory = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
-            const category = req.params.categoryName
-            this.handleInvalidName('category', category, res)        
+            const category = req.params.categoryName        
             
             const paginator = this.paginate(req)
             try {
                 const products = await this.dal.findProductsByCategory(
                     category, paginator)
 
-                if(products.length > 0)
-                    this.respondWithFoundResource(products, res)
-                
-                this.respondWith404Error(res)
+                this.respondWithFoundResource(products, res)
             } catch (error) {
                 next(error)
             }
@@ -305,7 +232,31 @@ export class ProductsController{
             } catch (error) {
                 next(error)
             }   
+    }
+
+    public deleteOneProduct = async(
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            const productId = req.params.id
+
+            try {
+                const deletedProduct = await this.dal.findProductByIdAndDelete(
+                    productId)
+                
+                if(deletedProduct)
+                    this.respondWithDeletedResource(
+                    deletedProduct.id, res)
+                
+                this.respondWith404Error(res)
+            } catch (error) {
+                next(error)
+            }
         }
+
+    private respondWithDeletedResource = (
+        id: string, res: Response) =>{
+            res.status(200).json({ message: 'Deleted', id })
+    }
     
     public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{

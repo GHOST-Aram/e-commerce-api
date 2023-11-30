@@ -1,72 +1,57 @@
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./app.test.config"
+import { app } from "./lib/app.test.config"
+import { assert } from "./lib/response-assertion"
 
 describe('GET products by Price Range', () =>{
-    test('Responds with status code 200 if successful', 
+
+    test('Responds with validation errors, status 400: '+
+    'Invalid reference -- Invalid range format', 
     async() =>{
         const response = await request(app).get(
-            '/products/selling-price/200-800')
-        expect(response.status).toEqual(200)
+            '/products/selling-price/ksh499-Ksh599')
+
+       assert.respondsWithBadRequest(response)
+       assert.respondsWithValidationErrors(response)
     })
 
-    test('Resonds with json content-type', async() =>{
+    test('Responds with validation errors, status 400: '+
+    'Invalid reference -- start=end', 
+    async() =>{
         const response = await request(app).get(
-            '/products/selling-price/200-800')
-        expect(response.headers['content-type']).toMatch(/json/)
+            '/products/selling-price/100-100')
+
+       assert.respondsWithBadRequest(response)
+       assert.respondsWithValidationErrors(response)
     })
 
-    test('Responds with array if successfull', async() =>{
-        const response = await request(app).get(
-            '/products/selling-price/200-800')
-        const products = response.body.products
-
-        expect(response.status).toEqual(200)
-        expect(Array.isArray(products)).toBeTruthy()
-        expect(products).toHaveProperty('length')
-        expect(products.length).toBeGreaterThanOrEqual(1)
-    })
-
-    test('Responds with 404 status if no products matches the '+
-        'range', 
+    test('Responds with an empty array, status 200:' + 
+        'No documents match requested creteria (price range).',
     async() =>{
         const response = await request(app).get(
             '/products/selling-price/10000000-200000000')
 
-        expect(response.status).toEqual(404)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/not found/i)
-    })
+        assert.respondsWithSuccess(response)
+        assert.respondsWithEmptyResourceArray(response)
+    } )
 
-    test('Responds with 200 status and available products for '+
-        'reversed ranges', 
+    test('Responds with paginated resource, status 200: '+
+        'Accepts revered price ranges.', 
     async() =>{
         const response = await request(app).get(
             '/products/selling-price/800-200')
 
-        expect(response.status).toEqual(200)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body).toHaveProperty('products')
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 10)
     })
 
-    test('Responds with 400 status for requests containing '+
-        'non-numerical characters in range parameter', 
-    async() =>{
+    test('Responds with paginated resource, status 200: '+ 
+            'Pagination as requested by client.', 
+        async() =>{
         const response = await request(app).get(
-            '/products/selling-price/ksh499-599')
-
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid range/i)
-    })
-
-    test('Responds wih 400 status for invalid range format', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/selling-price/200800')
-
-        expect(response.status).toEqual(400)
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.body.message).toMatch(/invalid range/i)
+            '/products/selling-price/200-800?page=1&limit=23')
+       
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 23)
     })
 })

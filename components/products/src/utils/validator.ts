@@ -1,20 +1,7 @@
 import { ValidationChain, body, param } from "express-validator"
 import { formatter } from "./formatter"
-import { isValidObjectId } from "mongoose"
 
 export class Validator{
-    public isValidNameFormat = (name: string) =>{
-        return /^[a-zA-Z\s]{2,100}$/.test(name)
-    }
-
-    public isValidModelName = (modelName: string) => {
-        return /^\w{2,100}/.test(modelName) 
-    }
-
-    public isValidId = (id: string): boolean =>{
-        return isValidObjectId(id)
-    }
-
     public validateReferenceId = (paramName: string) =>{
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
@@ -25,6 +12,14 @@ export class Validator{
         return body(fieldName)
             .matches(/^.{2,100}$/)
             .withMessage(`${formattedName} must be a 2-50 characters long`)
+            .trim()
+            .escape()
+    }
+
+    public validateReferenceName = (paramName: string) =>{
+        return param(paramName)
+            .matches(/^[a-z0-9]{2,100}$/i)
+            .withMessage(`${paramName} must be a 2-50 characters long`)
             .trim()
             .escape()
     }
@@ -55,6 +50,20 @@ export class Validator{
             .isArray()
             .withMessage('Specifications field must be an array')
             .escape()
+    }
+
+    public validatePriceRange = (paramName: string) =>{
+        return param(paramName).custom((value) =>{
+            const { start, end } = formatter.convertToNumbers(value)
+    
+            if(typeof start === 'number' && typeof end === 'number'){
+                if(start < end)
+                    return true
+                else if( end < start)
+                    return true
+            }
+            return false
+        })
     }
 }
 export const validator = new Validator()

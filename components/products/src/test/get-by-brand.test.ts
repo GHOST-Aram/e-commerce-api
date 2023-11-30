@@ -1,60 +1,48 @@
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./app.test.config"
+import { app } from "./lib/app.test.config"
+import { assert } from "./lib/response-assertion"
 
 describe('GET Products by brand', () =>{
-    test('Responds with JSON content', async() =>{
-        const response = await request(app).get(
-            '/products/brands/samsung')
-        expect(response.headers['content-type']).toMatch(/json/)
-    })
 
-    test('Responds with status 200 if products in the brand exist', 
+    test('Responds with validation errors, status 400: '+ 
+        'Invalid reference (brand name).',
+    async() =>{
+        const response = await request(app).get(
+            '/products/brands/4(){}')
+
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
+    } )
+
+    test('Responds with an empty array, status 200:' + 
+        'No documents match requested creteria (manufacturer name).',
+    async() =>{
+        const response = await request(app).get(
+            '/products/brands/hisense')
+
+        assert.respondsWithSuccess(response)
+        assert.respondsWithEmptyResourceArray(response)
+    } )
+
+    test('Responds with paginated resource, status 200: '+
+        'Default pagination => 10.', 
     async() =>{
         const response = await request(app).get(
             '/products/brands/samsung')
-        expect(response.status).toEqual(200)
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response,10)
     })
 
-    test('Responds with Array of products if brand exists', 
+
+    test('Responds with paginated resource, status 200: '+ 
+        'Requested pagination  => limit 20.', 
     async() =>{
-        const response = await request(app).get(
-            '/products/brands/samsung')
-        expect(Array.isArray(response.body.products)).toBeTruthy()
-    })
-
-    test('Responds with array limited to pagination limit', async() =>{
         const response =  await request(app).get(
             '/products/brands/samsung?page=1&limit=20')
-        const products = response.body.products
-
-        expect(products.length).toBeLessThanOrEqual(20)
-        expect(products.length).toEqual(20)
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 20)
     })
-
-    test('Responds with list limited to default limit if no limit', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/brands/samsung')
-        expect(response.body.products.length).toEqual(10)
-    })
-
-    test('Responds with error 404 if product of requested brand not found', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/brands/nokia')
-
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/ig)
-    })
-
-    test('Responds with status 400 if brand name is empty',async() =>{
-        const response = await request(app).get(
-            '/products/brands/4a')
-
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid brand/ig)
-    } )
 })

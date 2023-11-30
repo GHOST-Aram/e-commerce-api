@@ -1,63 +1,48 @@
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./app.test.config"
+import { app } from "./lib/app.test.config"
+import { assert } from "./lib/response-assertion"
 
 describe('GET Products by category', () =>{
 
-    test('Responds with JSON content', async() =>{
-        const response = await request(app).get(
-            '/products/categories/phones')
-        expect(response.headers['content-type']).toMatch(/json/)
-    })
 
-    test('Responds with status 200 if products in the categories exist', 
+    test('Responds with validation errors, status 400: ' +
+        'Invalid reference name (category name).',
+    async() =>{
+        const response = await request(app).get(
+            '/products/categories/4a|><')
+
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
+    } )
+
+    test('Responds with an empty array, status 200:' + 
+        'No documents match requested creteria (category name).',
+    async() =>{
+        const response = await request(app).get(
+            '/products/categories/smartphones')
+
+        assert.respondsWithSuccess(response)
+        assert.respondsWithEmptyResourceArray(response)
+    } )
+
+    test('Responds with paginated resource, status 200: '+ 
+        'Default pagination -- limit = 10.', 
     async() =>{
         const response = await request(app).get(
             '/products/categories/phones')
-        expect(response.status).toEqual(200)
+        
+            assert.respondsWithSuccess(response)
+            assert.respondsWithPaginatedResource(response, 10)
     })
 
-    test('Responds with Array of products if the category exists', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/categories/phones')
-        expect(Array.isArray(response.body.products)).toBeTruthy()
-    })
-
-    test('Responds with an array limited to pagination limit', 
+    test('Responds with paginated resource, status 200: '+ 
+        'Paginates resource as requested.', 
     async() =>{
         const response =  await request(app).get(
             '/products/categories/phones?page=1&limit=20')
-        const products = response.body.products
-
-        expect(products.length).toBeLessThanOrEqual(20)
-        expect(products.length).toEqual(20)
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithPaginatedResource(response, 20)
     })
-
-    test('Responds with list limited to default limit if no limit', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/categories/phones')
-        expect(response.body.products.length).toEqual(10)
-    })
-
-    test('Responds with error 404 if product of requested category not found', 
-    async() =>{
-        const response = await request(app).get(
-            '/products/categories/desktops')
-
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.status).toEqual(404)
-        expect(response.body.message).toMatch(/not found/ig)
-    })
-
-    test('Responds with status 400 if categories name is invalid',
-    async() =>{
-        const response = await request(app).get(
-            '/products/categories/4a')
-
-        expect(response.headers['content-type']).toMatch(/json/)
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid category/ig)
-    } )
 })

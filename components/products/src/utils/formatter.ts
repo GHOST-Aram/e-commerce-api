@@ -8,14 +8,12 @@ class Formatter{
                 return this.assignValues(start, end)
             else if( end < start)
                 return this.swapValues(start, end)
-            else 
-                return { start: null, end: null}
         }
 
         return { start: null, end: null}
     }
 
-    private convertToNumbers = (rangeString: string) =>{
+    public convertToNumbers = (rangeString: string) =>{
         const stringArr = rangeString.trim().split('-')
         
         const start = Number(stringArr[0])
