@@ -11,44 +11,45 @@ const routesWrapper = (controller: ProductsController) =>{
     router.post('/',
         middlewears.productValidators, 
         validator.handleValidationErrors,
-        controller.AddNewProduct
+        controller.AddNew
     )
 
-    router.get('/', controller.getProducts)
+    router.get('/', controller.getMany)
     router.get('/:id', 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
-        controller.getOneProduct
-    )
-
-    router.get('/brands/:brandName', 
-        validator.validateReferenceName('brandName'),
-        validator.handleValidationErrors,
-        controller.getProductsByBrand
-    )
-
-    router.get('/manufacturer/:manufacturerName',
-        validator.validateReferenceName('manufacturerName'),
-        validator.handleValidationErrors, 
-        controller.getProductsByManufacturer
-    )
-
-    router.get('/models/:modelName', 
-        validator.validateReferenceName('modelName'),
-        validator.handleValidationErrors,
-        controller.getProductsByModel
+        controller.getOne
     )
 
     router.get('/selling-price/:range',
         validator.validatePriceRangeParam('range'),
         validator.handleValidationErrors,
-        controller.getProductsByPriceRange
+        controller.getByPriceRange
     )
 
     router.get('/categories/:categoryName',
         validator.validateReferenceName('categoryName'),
         validator.handleValidationErrors,
-        controller.getProductsByCategory
+        controller.getByCategory
+    )
+    
+    router.get('/brands/:brandName', 
+        validator.validateReferenceName('brandName'),
+        validator.handleValidationErrors,
+        controller.getByBrand
+    )
+
+
+    router.get('/manufacturer/:manufacturerName',
+        validator.validateReferenceName('manufacturerName'),
+        validator.handleValidationErrors, 
+        controller.getByManufacturer
+    )
+
+    router.get('/models/:modelName', 
+        validator.validateReferenceName('modelName'),
+        validator.handleValidationErrors,
+        controller.getByModelName
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
@@ -57,7 +58,7 @@ const routesWrapper = (controller: ProductsController) =>{
         middlewears.productValidators, 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
-        controller.updateOneProduct 
+        controller.updateOne
     )
 
     router.patch('/',controller.respondWithMethodNotAllowed)
@@ -66,14 +67,14 @@ const routesWrapper = (controller: ProductsController) =>{
         middlewears.patchValidators,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
-        controller.modifyOneProduct
+        controller.modifyOne
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
-        controller.deleteOneProduct
+        controller.deleteOne
     )
 
     return router

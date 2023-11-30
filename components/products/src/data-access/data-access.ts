@@ -8,31 +8,20 @@ export interface Paginator{
 
 export class ProductsDAL{
     
-    public createNewProduct = async( 
+    public createNew = async( 
         productData: IProduct): Promise<string> =>{
-        const product =  new Product({
-            name: productData.name,
-            image_file: productData.image_file 
-                ? productData.image_file : null,
-
-            image_url: productData.image_url 
-                ? productData.image_url : undefined,
-
-            description: productData.description,
-            brand: productData.brand,
-            manufacturer: productData.manufacturer,
-            model: productData.model,
-            category: productData.category,
-            selling_price: productData.selling_price,
-            marked_price: productData.marked_price,
-            available_units: productData.available_units,
-            specifications: productData.specifications,
-        })
+        const product = new Product(productData)
 
         return (await product.save()).id
     }
 
-    public findProducts = async(
+    public findById = async(
+        productId: string
+        ): Promise<HydratedProductDoc | null > =>{
+            return await Product.findById(productId)
+    }
+
+    public findMany = async(
         {skipDocs, limit}: Paginator
         ): Promise<HydratedProductDoc[]> =>{
             const products = await Product.find()
@@ -40,82 +29,9 @@ export class ProductsDAL{
                 .limit(limit)
             
             return products
-        }
+    }
 
-    public findProductsByBrand = async (
-        brandName: string, paginator: Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            const products = await Product.find(
-                { brand: brandName})
-                .skip(paginator.skipDocs)
-                .limit(paginator.limit)
-
-            return products
-        }
-
-    public findProductById = async(
-        productId: string
-        ): Promise<HydratedProductDoc | null > =>{
-            return await Product.findById(productId)
-        }
-    
-    public findProductByIdAndDelete = async(
-        productId: string
-        ): Promise<HydratedProductDoc | null > =>{
-            const deleted = await Product.findByIdAndDelete(
-                productId)
-
-            return deleted
-        }
-    public findProductByIdAndUpdate = async(
-        productId: string, updateData: IProduct
-        ): Promise<string | undefined> =>{
-            const product = await Product.findByIdAndUpdate(
-                productId, updateData)
-
-            if(product === null)
-                return undefined
-
-            return product.id
-        }
-
-    public findProductsBymanufacturer = async (
-        manufacturerName: string, 
-        paginator:Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            const products = await Product.find(
-                { manufacturer: manufacturerName})
-                .skip(paginator.skipDocs)
-                .limit(paginator.limit)
-
-            return products
-        }
-
-    public findProductsByModel = async (
-        modelName: string, 
-        paginator: Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            const products = await Product.find(
-                { model: modelName})
-                .skip(paginator.skipDocs)
-                .limit(paginator.limit)
-
-            return products
-        }
-
-    public findProductsByCategory = async (
-        categoryName: string, 
-        paginator:Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            const products = await Product.find(
-                { category: categoryName })
-                .skip(paginator.skipDocs)
-                .limit(paginator.limit)
-
-            return products
-        }
-
-    public findProductsByPriceRange = async(
+    public findByPriceRange = async(
         priceRange: PriceRange, 
         paginator: Paginator
         ): Promise<HydratedProductDoc[]> =>{
@@ -129,6 +45,72 @@ export class ProductsDAL{
             .limit(paginator.limit)
 
             return products
-        }
+    }
 
+    public findByCategory = async (
+        categoryName: string, 
+        paginator:Paginator
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { category: categoryName })
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
+
+            return products
+    }
+
+    public findByBrand = async (
+        brandName: string, paginator: Paginator
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { brand: brandName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
+
+            return products
+    }
+
+    public findBymanufacturer = async (
+        manufacturerName: string, 
+        paginator:Paginator
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { manufacturer: manufacturerName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
+
+            return products
+    }
+
+    public findByModelName = async (
+        modelName: string, 
+        paginator: Paginator
+        ): Promise<HydratedProductDoc[]> => {
+            const products = await Product.find(
+                { model: modelName})
+                .skip(paginator.skipDocs)
+                .limit(paginator.limit)
+
+            return products
+    }
+    
+    public findByIdAndDelete = async(
+        productId: string
+        ): Promise<HydratedProductDoc | null > =>{
+            const deleted = await Product.findByIdAndDelete(
+                productId)
+
+            return deleted
+    }
+    public findByIdAndUpdate = async(
+        productId: string, updateData: IProduct
+        ): Promise<string | undefined> =>{
+            const product = await Product.findByIdAndUpdate(
+                productId, updateData)
+
+            if(product === null)
+                return undefined
+
+            return product.id
+    }
 }
