@@ -1,8 +1,8 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { app } from "./lib/test.config";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as rawData from "./mocks/raw-data";
-import { assert } from "./lib/response-assertion";
 
 describe('PUT users route', () =>{
     

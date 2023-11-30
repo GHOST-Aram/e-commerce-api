@@ -1,8 +1,8 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { app } from "./lib/test.config";
-import { expect, test, describe } from "@jest/globals"
+import { test, describe } from "@jest/globals"
 import * as data from "./mocks/raw-data"
 import request from "supertest"
-import { assert } from "./lib/response-assertion";
 
 describe('POST Payments route', () =>{
 

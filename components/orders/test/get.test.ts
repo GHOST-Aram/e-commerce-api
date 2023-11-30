@@ -1,7 +1,7 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { app } from "./lib/test.config";
-import { expect, test, describe } from "@jest/globals"
+import { test, describe } from "@jest/globals"
 import request from "supertest"
-import { assert } from "./lib/response-assertions";
 
 describe('GET orders Routes', () =>{
 

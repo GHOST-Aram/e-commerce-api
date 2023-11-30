@@ -1,8 +1,8 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { app } from "./lib/test.config";
 import { test, describe } from "@jest/globals"
 import request from "supertest"
 import * as data from "./mocks/raw-data";
-import { assert } from "./lib/response-assertions";
 
 describe('Cart POST routes', () =>{
 

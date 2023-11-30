@@ -1,8 +1,9 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { describe, test } from '@jest/globals'
 import request from 'supertest'
 import {app} from './lib/test.config'
 import * as data from './mocks/raw-data'
-import { assert } from './lib/response-assertion'
+
 
 describe('POST users', () =>{
 

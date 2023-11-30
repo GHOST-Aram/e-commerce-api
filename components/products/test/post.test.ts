@@ -1,8 +1,8 @@
+import { assert} from "../../../library/api-testing/response-assertion";
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
 import { badData, productData } from "./mocks/raw-document"
 import { app } from "./lib/app.test.config"
-import { assert } from "./lib/response-assertion"
 
 describe('POST Products route', () =>{
 
