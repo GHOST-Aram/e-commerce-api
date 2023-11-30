@@ -11,7 +11,7 @@ const routesWrapper = (controller: ProductsController) =>{
     router.post('/',
         middlewears.productValidators, 
         validator.handleValidationErrors,
-        controller.AddNew
+        controller.addNew
     )
 
     router.get('/', controller.getMany)

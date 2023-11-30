@@ -2,8 +2,9 @@ import { BaseController, Paginator } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { IOrder } from "../data-access/model"
+import { Controllable } from "../../../library/bases/controllable"
 
-export class OrdersController extends BaseController{
+export class OrdersController extends BaseController implements Controllable{
 
     private dal: DataAccess
 
@@ -99,13 +100,5 @@ export class OrdersController extends BaseController{
         } catch (error) {
             next(error)
         }
-    }
-
-    public respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({ message: 'Deleted', id})
-    }
-
-    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
-        res.status(405).json({ message: 'Method not allowed'})
     }
 }

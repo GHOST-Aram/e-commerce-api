@@ -3,8 +3,9 @@ import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { IUser } from "../data-access/model";
 import { BaseController } from "../../../library/bases/controller";
+import { Controllable } from "../../../library/bases/controllable";
 
-export class UsersController extends BaseController{
+export class UsersController extends BaseController implements Controllable{
     private dataAccess: UsersDAL
 
     constructor(dataAccessLayer: UsersDAL){
@@ -12,7 +13,7 @@ export class UsersController extends BaseController{
         this.dataAccess = dataAccessLayer
     }
 
-    public AddNew = async(req: Request, res: Response, next: NextFunction) =>{
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
         const userData = req.body
 
         try {
@@ -91,7 +92,7 @@ export class UsersController extends BaseController{
         } 
     }
 
-    public removeOne = async(req: Request, res: Response,next: NextFunction) =>{
+    public deleteOne = async(req: Request, res: Response,next: NextFunction) =>{
         const userId = req.params.id
 
         try {

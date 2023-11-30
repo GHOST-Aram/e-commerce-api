@@ -2,8 +2,9 @@ import { BaseController, Paginator } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
+import { Controllable } from "../../../library/bases/controllable"
 
-export class CartsController extends BaseController{
+export class CartsController extends BaseController implements Controllable{
 
     private dal: DataAccess
 
@@ -11,7 +12,7 @@ export class CartsController extends BaseController{
         super()
         this.dal = dataAccess
     }
-    
+
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
         const cartInfo: ICart = req.body
 

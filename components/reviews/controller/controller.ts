@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { HydratedReviewDoc, IReview } from "../data-access/model"
+import { IReview } from "../data-access/model"
 import { BaseController } from "../../../library/bases/controller"
+import { Controllable } from "../../../library/bases/controllable"
 
-export class ReviewsController extends BaseController{
+export class ReviewsController extends BaseController implements Controllable{
 
     private dataAccess: DataAccess
 
@@ -23,7 +24,8 @@ export class ReviewsController extends BaseController{
         }
     }
 
-    public getByProductId = async(req: Request, res: Response, next: NextFunction) =>{
+    public getOne = async(req: Request, res: Response, next: NextFunction
+        ) =>{
         const productId = req.params.productId
 
         const paginator = this.paginate(req)
@@ -37,7 +39,8 @@ export class ReviewsController extends BaseController{
         }
     }
 
-    public getRandomDocs = async(req: Request, res: Response, next: NextFunction) =>{
+    public getMany = async(req: Request, res: Response, next: NextFunction
+        ) =>{
         const paginator = this.paginate(req)
 
         try {

@@ -2,8 +2,9 @@ import { BaseController } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { IPayment } from "../data-access/model"
+import { Controllable } from "../../../library/bases/controllable"
 
-export class PayController extends BaseController{
+export class PayController extends BaseController implements Controllable{
 
     private dal: DataAccess
 

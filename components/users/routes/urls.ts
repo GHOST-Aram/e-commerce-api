@@ -11,7 +11,7 @@ export const routesWrapper = (controller: UsersController) =>{
     router.post('/', 
         middlewear.userValidators ,
         validator.handleValidationErrors,
-        controller.AddNew
+        controller.addNew
     )
 
     router.get('/', controller.getMany)
@@ -41,7 +41,7 @@ export const routesWrapper = (controller: UsersController) =>{
     router.delete('/:id', 
         validator.validateReferenceId('id'),
         validator.handleValidationErrors,
-        controller.removeOne
+        controller.deleteOne
     )
 
     return router

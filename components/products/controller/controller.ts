@@ -3,8 +3,9 @@ import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { PriceRange, formatter } from "../utils/formatter"
 import { BaseController } from "../../../library/bases/controller"
+import { Controllable } from "../../../library/bases/controllable"
 
-export class ProductsController extends BaseController{
+export class ProductsController extends BaseController implements Controllable{
     private dataAccess
 
     constructor(dataAccessLayer: ProductsDAL){
@@ -12,7 +13,7 @@ export class ProductsController extends BaseController{
         this.dataAccess = dataAccessLayer
     }
 
-    public AddNew = async(req: Request, res: Response, next: NextFunction) =>{
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
         const productData: IProduct = req.body
 
@@ -52,20 +53,23 @@ export class ProductsController extends BaseController{
         } 
     } 
 
-    public getByPriceRange = async(req: Request, res: Response, next: NextFunction) =>{
+    public getByPriceRange = async(req: Request, res: Response, next: NextFunction
+        ) =>{
         const rangeString = req.params.range
         const priceRange: PriceRange = formatter.extractPriceRange(rangeString)
         const pagination = this.paginate(req)
 
         try {
-            const products = await this.dataAccess.findByPriceRange(priceRange, pagination)
+            const products = await this.dataAccess.findByPriceRange(priceRange, 
+                pagination)
             this.respondWithFoundResource(products, res)                
         } catch (error) {
             next(error)
         }
     }
 
-    public getByCategory = async(req: Request, res: Response, next: NextFunction) =>{
+    public getByCategory = async(req: Request, res: Response, next: NextFunction
+        ) =>{
         const category = req.params.categoryName        
         
         const paginator = this.paginate(req)
@@ -97,14 +101,16 @@ export class ProductsController extends BaseController{
         const paginator = this.paginate(req)
 
         try {
-            const products = await this.dataAccess.findBymanufacturer(manufName, paginator)
+            const products = await this.dataAccess.findBymanufacturer(manufName, 
+                paginator)
             this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
         } 
     }
 
-    public getByModelName = async(req: Request, res: Response, next: NextFunction) =>{
+    public getByModelName = async(req: Request, res: Response, next: NextFunction
+        ) =>{
         const modelName = req.params.modelName
         const paginator = this.paginate(req)
 
@@ -123,7 +129,8 @@ export class ProductsController extends BaseController{
         const productData: IProduct = req.body
         
         try { 
-            const id = await this.dataAccess.findByIdAndUpdate(productId, productData)
+            const id = await this.dataAccess.findByIdAndUpdate(productId, 
+                productData)
 
             if(id){
                 this.respondWithUpdatedResource(id, res)
@@ -141,7 +148,8 @@ export class ProductsController extends BaseController{
         const patchData = req.body
 
         try {
-            const id = await this.dataAccess.findByIdAndUpdate(productId, patchData)
+            const id = await this.dataAccess.findByIdAndUpdate(productId, 
+                patchData)
 
             if(id)
                 this.respondWithModifiedResource(id, res)
@@ -156,7 +164,8 @@ export class ProductsController extends BaseController{
         const productId = req.params.id
 
         try {
-            const deletedProduct = await this.dataAccess.findByIdAndDelete(productId)
+            const deletedProduct = await this.dataAccess.findByIdAndDelete(
+                productId)
             
             if(deletedProduct)
                 this.respondWithDeletedResource(deletedProduct.id, res)

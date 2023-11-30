@@ -14,11 +14,11 @@ export const routesWrapper = (controller: ReviewsController) =>{
         controller.addNew
     )
 
-    router.get('/', controller.getRandomDocs)
+    router.get('/', controller.getMany)
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
-        controller.getByProductId
+        controller.getOne
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
