@@ -9,58 +9,50 @@ export class Controller{
         this.dal = dataAccess
     }
 
-    public addNew = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const orderData: IOrder = req.body
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        const orderData: IOrder = req.body
 
-            try {
-                const newOrder = await this.dal.createNew(
-                    orderData)
-
-                this.respondWithCreatedResource(newOrder.id, res)
-            } catch (error) {
-                next(error)
-            }
+        try {
+            const newOrder = await this.dal.createNew(orderData)
+            this.respondWithCreatedResource(newOrder.id, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
-    public getOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const orderId = req.params.orderId
+    public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const orderId = req.params.orderId
 
-            try {
-                const order = await this.dal.findById(orderId)
-                
-                if(order)
-                    this.respondWithFoundResource(order, res)
-                
-                this.respondWithNotFoundError(res)
-            } catch (error) {
-                next(error)
-            }
+        try {
+            const order = await this.dal.findById(orderId)
+            
+            if(order)
+                this.respondWithFoundResource(order, res)
+            
+            this.respondWithNotFoundError(res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithNotFoundError = (res: Response) => {
         res.status(404).json({ message: 'Resource not found.'})
     }
 
-    private respondWithCreatedResource = (
-        resourceId: string, res:Response) =>{
-            res.location(`/orders/${resourceId}`)
-            res.status(201).json({ message: 'Created' })
+    private respondWithCreatedResource = (resourceId: string, res:Response) =>{
+        res.location(`/orders/${resourceId}`)
+        res.status(201).json({ message: 'Created' })
     }
 
-    public getMany = async(
-        req: Request, res: Response, next: NextFunction)  =>{
-            const paginator: Paginator = this.paginate(req)
+    public getMany = async(req: Request, res: Response, next: NextFunction)  =>{
+        const paginator: Paginator = this.paginate(req)
 
-            try {
-                const orders = await this.dal.findWithPagination(
-                    paginator)
-
-                this.respondWithFoundResource(orders, res)
-            } catch (error) {
-                next(error)
-            }
+        try {
+            const orders = await this.dal.findWithPagination(paginator)
+            this.respondWithFoundResource(orders, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private paginate = (req: Request): Paginator =>{
@@ -89,27 +81,23 @@ export class Controller{
             res.status(200).json({ resource})
     }
 
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const updateData: IOrder = req.body 
-            const orderId = req.params.orderId
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const updateData: IOrder = req.body 
+        const orderId = req.params.orderId
 
+        try {
+            const updatedOrder = await this.dal.findByIdAndUpdate(orderId, 
+                updateData)
 
-            try {
-                const updatedOrder = await this.dal.findByIdAndUpdate(
-                    orderId, updateData)
-
-                if(updatedOrder)
-                    this.respondWithUpdatedResource(
-                    orderId, res)
-                else {
-                    const newOrder = await this.dal.createNew(
-                        updateData)
-                    this.respondWithCreatedResource(newOrder.id, res)
-                }
-            } catch (error) {
-                next(error)
+            if(updatedOrder)
+                this.respondWithUpdatedResource(orderId, res)
+            else {
+                const newOrder = await this.dal.createNew(updateData)
+                this.respondWithCreatedResource(newOrder.id, res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithUpdatedResource = (id: string, res: Response) =>{
@@ -117,22 +105,20 @@ export class Controller{
         res.status(200).json({ message: 'Updated' })
     }
 
-    public modifyOrder = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const orderId = req.params.orderId
-            const patchDoc = req.body
+    public modifyOrder = async(req: Request, res: Response, next: NextFunction) =>{
+        const orderId = req.params.orderId
+        const patchDoc = req.body
 
-            try {
-                const modifiedDoc = await this.dal.findByIdAndUpdate(
-                    orderId, patchDoc)
+        try {
+            const modifiedDoc = await this.dal.findByIdAndUpdate(orderId, patchDoc)
 
-                if(modifiedDoc)
-                    this.respondWithModifiedResource(orderId, res)
-                else
-                    this.respondWithNotFoundError(res)
-            } catch (error) {
-                next(error)
-            }
+            if(modifiedDoc)
+                this.respondWithModifiedResource(orderId, res)
+            else
+                this.respondWithNotFoundError(res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithModifiedResource = (id: string, res: Response) =>{
@@ -140,23 +126,20 @@ export class Controller{
         res.status(200).json({ message: 'Modified' })
     }
 
-    public deleteOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const orderId = req.params.orderId
+    public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const orderId = req.params.orderId
 
-            try {
-                const deletedOrder = await this.dal
-                    .findByIdAndDelete(orderId)
+        try {
+            const deletedOrder = await this.dal.findByIdAndDelete(orderId)
 
-                if(deletedOrder){
-                    this.respondWithDeletedResource(
-                    deletedOrder.id, res)
-                } else {
-                    this.respondWithNotFoundError(res)
-                }
-            } catch (error) {
-                next(error)
+            if(deletedOrder){
+                this.respondWithDeletedResource(deletedOrder.id, res)
+            } else {
+                this.respondWithNotFoundError(res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
     public respondWithDeletedResource = (id: string, res: Response) =>{
