@@ -2,15 +2,13 @@ import { HydratedPaymentDoc, IPayment, Payment } from "./model"
 
 export class DataAccess{
 
-    public createNew = async(data: IPayment
-        ): Promise<HydratedPaymentDoc> =>{
-            const payment = new Payment(data)
-            return await payment.save()
+    public createNew = async(data: IPayment): Promise<HydratedPaymentDoc> =>{
+        const payment = new Payment(data)
+        return await payment.save()
     }
 
-    public findByOrderId = async(orderId: string
-        ): Promise<HydratedPaymentDoc | null> =>{
-            return Payment.findOne({ orderId })
+    public findByOrderId = async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
+        return Payment.findOne({ orderId })
     }
 
     public findWithPagination = async(paginator: Paginator

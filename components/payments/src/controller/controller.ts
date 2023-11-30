@@ -11,19 +11,15 @@ export class Controller{
         this.dal = dataAccess
     }
 
-    public addNew = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const paymentData: IPayment = req.body
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        const paymentData: IPayment = req.body
 
-            try {
-                const createdDoc = await this.dal.createNew(
-                    paymentData)
-
-                this.respondWithCreatedResource(createdDoc.orderId, res)
-            } catch (error) {
-                next(error)
-            }
-
+        try {
+            const createdDoc = await this.dal.createNew(paymentData)
+            this.respondWithCreatedResource(createdDoc.orderId, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithCreatedResource = (id: string, res: Response) =>{
@@ -59,17 +55,15 @@ export class Controller{
         res.status(404).json({ message: 'Not Found.' })
     }
 
-    public getMany = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const paginator = this.paginate(req)
+    public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+        const paginator = this.paginate(req)
 
-            try {
-                const payments = await this.dal.findWithPagination(paginator)
-                this.respondWithFoundResource(payments, res)
-            } catch (error) {
-                next(error)
-            }
-
+        try {
+            const payments = await this.dal.findWithPagination(paginator)
+            this.respondWithFoundResource(payments, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private paginate = (req: Request): Paginator =>{
@@ -89,25 +83,24 @@ export class Controller{
         return paginator
     }
 
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const referenceId =  req.params.orderId
-            const updateDoc: IPayment = req.body
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const referenceId =  req.params.orderId
+        const updateDoc: IPayment = req.body
 
-            try {
-                const updatedPayment = await this.dal.findByOrderIdAndUpdate(
-                    referenceId, updateDoc)
+        try {
+            const updatedPayment = await this.dal.findByOrderIdAndUpdate(
+                referenceId, updateDoc)
 
-                if(updatedPayment){
-                    this.respondWithChangedResource( updatedPayment.orderId, 
-                        'Updated', res)
-                } else {
-                    const newPayment = await this.dal.createNew(updateDoc)
-                    this.respondWithCreatedResource(newPayment.orderId, res)
-                }
-            } catch (error) {
-                next(error)
+            if(updatedPayment){
+                this.respondWithChangedResource( updatedPayment.orderId, 
+                    'Updated', res)
+            } else {
+                const newPayment = await this.dal.createNew(updateDoc)
+                this.respondWithCreatedResource(newPayment.orderId, res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithChangedResource = (
@@ -116,54 +109,48 @@ export class Controller{
             res.status(200).json({ message: change })
     }
     
-    public modifyOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const referenceId = req.params.orderId
-            const updateDoc = req.body
+    public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const referenceId = req.params.orderId
+        const updateDoc = req.body
 
-            try {
-                const modifiedPayment = await this.dal.findByOrderIdAndUpdate(
-                    referenceId, updateDoc)
-                    
-                if(modifiedPayment){
-                    this.respondWithChangedResource(modifiedPayment.orderId, 
-                        'Modified', res)
-                } else {
-                    this.respondWithNotFoundError(res)
-                }
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    public deleteOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const referenceId = req.params.orderId
-
-            try {
-                const deletedDoc = await this.dal.findByOrderIdAndDelete(
-                    referenceId)
-
-                if(deletedDoc){
-                    this.respondWithDeletedResource(deletedDoc.orderId, 
-                        res)
-                } else {
-                    this.respondWithNotFoundError(res)
-                }
+        try {
+            const modifiedPayment = await this.dal.findByOrderIdAndUpdate(
+                referenceId, updateDoc)
                 
-            } catch (error) {
-                next(error)
+            if(modifiedPayment){
+                this.respondWithChangedResource(modifiedPayment.orderId, 
+                    'Modified', res)
+            } else {
+                this.respondWithNotFoundError(res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
-    private respondWithDeletedResource = (
-        id: string, res: Response) =>{
-            res.status(200).json({ message: 'Deleted', id })
+    public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const referenceId = req.params.orderId
+
+        try {
+            const deletedDoc = await this.dal.findByOrderIdAndDelete(referenceId)
+
+            if(deletedDoc){
+                this.respondWithDeletedResource(deletedDoc.orderId, res)
+            } else {
+                this.respondWithNotFoundError(res)
+            }
+            
+        } catch (error) {
+            next(error)
+        }
     }
 
-    public respondWithMethodNotAllowed = (
-        req: Request, res: Response) =>{
-            res.status(405).json({ message: 'Method not allowed' })
+    private respondWithDeletedResource = (id: string, res: Response) =>{
+        res.status(200).json({ message: 'Deleted', id })
+    }
+
+    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed' })
     }
     
 }
