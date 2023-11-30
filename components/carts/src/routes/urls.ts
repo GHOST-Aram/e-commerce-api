@@ -8,7 +8,7 @@ const router = Router()
 export const routesWrapper = (controller: Controller) =>{
     router.post('/', 
         middlewear.initialInputValidators, 
-        controller.handleValidationErrors, 
+        validator.handleValidationErrors, 
         controller.addNew
     )
 
@@ -19,29 +19,29 @@ export const routesWrapper = (controller: Controller) =>{
     router.get('/', controller.getMany)
     router.get('/:customerId',
         validator.validateReferenceId('customerId') ,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.getOne)
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:customerId',middlewear.updateInputValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.updateOne)
 
     router.patch('/', controller.respondWithMethodNotAllowed)
     router.patch('/:customerId/add-item', 
         middlewear.patchDataValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.addtoCart)
 
     router.patch('/:customerId/remove-item',
         middlewear.patchDataValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.removeFromCart)
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:customerId', 
         validator.validateReferenceId('customerId'),
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.deleteOne
     )
     return router

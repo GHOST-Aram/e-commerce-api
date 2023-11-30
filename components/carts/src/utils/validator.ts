@@ -1,4 +1,5 @@
-import { body, param } from "express-validator"
+import { body, param, validationResult } from "express-validator"
+import { Response, Request, NextFunction } from "express"
 import { isValidObjectId } from "mongoose"
 
 class Validator{
@@ -29,6 +30,21 @@ class Validator{
 
     public validateReferenceId = (paramName: string) =>{
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
+    }
+
+    public handleValidationErrors = (
+        req: Request, res: Response, next: NextFunction) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json(
+                    {
+                        message: 'Invalid input',
+                        errors: errors.array()
+                    }
+                )
+            } else
+                next()
     }
 }
 
