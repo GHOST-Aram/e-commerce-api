@@ -96,19 +96,45 @@ export class UsersController{
         return { skipDocs, limit }
     }
 
+    public updateOne = async(
+        req: Request, res: Response, next: NextFunction
+        ) =>{
+            const userId = req.params.id
+            const userData = req.body
+
+            try {
+                const user = await this.dataAccess.findByIdAndUpdate(
+                    userId, userData)
+                
+                if(user)
+                    this.respondWithUpdatedResource(user.id, res)
+                else{
+                    const newUser = await this.dataAccess.createNew(userData)
+                    this.respondWithCreatedResource(newUser, res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }   
+
+    private respondWithUpdatedResource = (
+        userId: string, res: Response) => {
+            res.location(`/users/${userId}`)
+            res.status(200).json({ message: 'Updated'})
+    }
+
     public modifyOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const userId = req.params.id
-
-
             const patchData: IUser = req.body
+            
             try {
                 const user = await this.dataAccess.findByIdAndUpdate(
                     userId, patchData)
                 
                 if(user)
-                    this.respondWithChangedResource(
-                        user.id,'Modified', res)
+                    this.respondWithModifiedResource(
+                        user.id, res)
 
                 this.respondWithNotFound(res)
             } catch (error) {
@@ -117,32 +143,10 @@ export class UsersController{
 
     }
 
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const userId = req.params.id
-
-
-            const userData = req.body
-            try {
-                const user = await this.dataAccess.findByIdAndUpdate(
-                    userId, userData)
-                
-                if(user)
-                    this.respondWithChangedResource(
-                        user.id, 'Updated', res)
-                
-                const newUser = await this.dataAccess.createNew(userData)
-                this.respondWithCreatedResource(newUser, res)
-            } catch (error) {
-                next(error)
-            }
-    }   
-
-    private respondWithChangedResource = (
-        userId: string, change:string, res: Response) => {
+    private respondWithModifiedResource = (
+        userId: string, res: Response) => {
             res.location(`/users/${userId}`)
-            res.status(200).json({ message: change})
+            res.status(200).json({ message: 'Modified'})
     }
 
     public removeOne = async(
