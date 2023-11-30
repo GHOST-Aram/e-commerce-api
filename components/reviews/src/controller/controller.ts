@@ -10,37 +10,34 @@ export class Controller{
         this.dataAccess = dataAccess
     }
 
-    public addNew = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const reviewData = req.body
-            try {
-                const reviewDoc = await this.dataAccess
-                    .createNew(reviewData)
-                this.respondWithCreatedResource(reviewDoc.id, res)
-            } catch (error) {
-                next(error)
-            }
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        const reviewData = req.body
+
+        try {
+            const reviewDoc = await this.dataAccess.createNew(reviewData)
+            this.respondWithCreatedResource(reviewDoc.id, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
-    private respondWithCreatedResource = (
-        resourceId: string, res: Response) =>{
-            res.location(`/reviews/${resourceId}`)
-            res.status(201).json({ message: 'Created'})
+    private respondWithCreatedResource = (resourceId: string, res: Response) =>{
+        res.location(`/reviews/${resourceId}`)
+        res.status(201).json({ message: 'Created'})
     }
 
-    public getByProductId = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const productId = req.params.productId
+    public getByProductId = async(req: Request, res: Response, next: NextFunction) =>{
+        const productId = req.params.productId
 
-            const paginator = this.paginate(req)
-            try {
-                const reviews = await this.dataAccess
-                    .findByProductId(productId, paginator)
+        const paginator = this.paginate(req)
+        try {
+            const reviews = await this.dataAccess
+                .findByProductId(productId, paginator)
 
-                this.respondWithFoundResource(reviews, res)
-            } catch (error) {
-                next(error)
-            }
+            this.respondWithFoundResource(reviews, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private paginate = (req: Request) =>{
@@ -60,97 +57,80 @@ export class Controller{
         return paginator
     }
 
-    private respondWithFoundResource = (
-        resource: HydratedReviewDoc[], res: Response) =>{
-            res.status(200).json({ resource })
+    private respondWithFoundResource = (resource: HydratedReviewDoc[], res: Response) =>{
+        res.status(200).json({ resource })
     }
 
-    public getRandomDocs = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const paginator = this.paginate(req)
-
-            try {
-                const reviews = await this.dataAccess
-                    .findRandomDocs(paginator)
-
-                this.respondWithFoundResource(reviews, res)
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const reviewId = req.params.reviewId
-            const updateDoc: IReview = req.body
-
-            try {
-                const updatedReview = await this.dataAccess
-                    .findByIdAndUpdate(reviewId, updateDoc)
-
-                if(updatedReview)
-                    this.respondWithUpdatedResource(updatedReview.id,
-                    res)
-                
-                else{
-                    const newReview = await this.dataAccess
-                        .createNew(updateDoc)
-                    this.respondWithCreatedResource(newReview.id, res)
-                }
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    private respondWithUpdatedResource = (
-        id: HydratedReviewDoc, res: Response
-        ) =>{
-            res.location(`/reviews/${id}`)
-            res.status(200).json({  message: 'Updated' })
-    }
-
-    public modifyOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-        const reviewId = req.params.reviewId
-        const updateDoc: IReview = req.body
+    public getRandomDocs = async(req: Request, res: Response, next: NextFunction) =>{
+        const paginator = this.paginate(req)
 
         try {
-            const updatedReview = await this.dataAccess
-                .findByIdAndUpdate(reviewId, updateDoc)
-
-            if(updatedReview)
-                this.respondWithModifiedResource(updatedReview.id, 
-                res)
-
-            this.respondWithNotFound(res)
+            const reviews = await this.dataAccess.findRandomDocs(paginator)
+            this.respondWithFoundResource(reviews, res)
         } catch (error) {
             next(error)
         }
     }
 
-    private respondWithModifiedResource = (
-        id: HydratedReviewDoc, res: Response
-        ) =>{
-            res.location(`/reviews/${id}`)
-            res.status(200).json({  message: 'Modified' })
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const reviewId = req.params.reviewId
+        const updateDoc: IReview = req.body
+
+        try {
+            const updatedReview = await this.dataAccess.findByIdAndUpdate(
+                reviewId, updateDoc)
+
+            if(updatedReview)
+                this.respondWithUpdatedResource(updatedReview.id,res)
+            else{
+                const newReview = await this.dataAccess.createNew(updateDoc)
+                this.respondWithCreatedResource(newReview.id, res)
+            }
+        } catch (error) {
+            next(error)
+        }
     }
 
-    public deleteOne = async (
-        req: Request, res: Response, next: NextFunction) =>{
-            const reviewId = req.params.reviewId
-            
-            try {
-                const deletedReview = await this.dataAccess
-                    .findByIdAndDelete(reviewId)
-    
-                if(deletedReview)
-                    this.respondWithDeletedResource(
-                    deletedReview.id, res)
-            
+    private respondWithUpdatedResource = (id: HydratedReviewDoc, res: Response) =>{
+        res.location(`/reviews/${id}`)
+        res.status(200).json({  message: 'Updated' })
+    }
+
+    public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const reviewId = req.params.reviewId
+        const updateDoc: IReview = req.body
+
+        try {
+            const updatedReview = await this.dataAccess.findByIdAndUpdate(
+                reviewId, updateDoc)
+
+            if(updatedReview)
+                this.respondWithModifiedResource(updatedReview.id, res)
+            else
                 this.respondWithNotFound(res)
-            } catch (error) {
-                next(error)
-            }    
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    private respondWithModifiedResource = (id: HydratedReviewDoc, res: Response) =>{
+        res.location(`/reviews/${id}`)
+        res.status(200).json({  message: 'Modified' })
+    }
+
+    public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{
+        const reviewId = req.params.reviewId
+        
+        try {
+            const deletedReview = await this.dataAccess.findByIdAndDelete(reviewId)
+
+            if(deletedReview)
+                this.respondWithDeletedResource( deletedReview.id, res)
+            else
+                this.respondWithNotFound(res)
+        } catch (error) {
+            next(error)
+        }    
     }
 
     private respondWithDeletedResource = (id: string, res: Response) =>{
@@ -161,8 +141,7 @@ export class Controller{
         res.status(404).json({ message: 'Not found' })
     }
     
-    public respondWithMethodNotAllowed = (
-        req:Request, res: Response) =>{
+    public respondWithMethodNotAllowed = (req:Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
 }
