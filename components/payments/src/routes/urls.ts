@@ -1,6 +1,7 @@
 import Router from 'express'
 import { Controller } from '../controller/controller'
 import * as middlewear from '../utils/middlewear'
+import { validator } from '../utils/validator'
 
 const router = Router()
 
@@ -8,14 +9,14 @@ export const routesWrapper = (controller: Controller) =>{
     router.post('/:paymentId',controller.respondWithMethodNotAllowed)
     router.post('/', 
         middlewear.postValidators,
-        controller.handleValidationErrors, 
+        validator.handleValidationErrors, 
         controller.addNew
     )
 
     router.get('/',controller.getMany)
     router.get('/:orderId', 
         middlewear.referenceIdValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.getOne
     )
 
@@ -23,7 +24,7 @@ export const routesWrapper = (controller: Controller) =>{
     router.put('/:orderId',
         middlewear.postValidators,
         middlewear.referenceIdValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.updateOne
     )
 
@@ -31,14 +32,14 @@ export const routesWrapper = (controller: Controller) =>{
     router.patch('/:orderId',
         middlewear.patchValidators,
         middlewear.referenceIdValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.modifyOne
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:orderId', 
         middlewear.referenceIdValidator,
-        controller.handleValidationErrors,
+        validator.handleValidationErrors,
         controller.deleteOne
     )
 

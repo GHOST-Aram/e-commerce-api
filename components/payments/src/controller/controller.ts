@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedPaymentDoc, IPayment } from "../data-access/model"
-import { validationResult } from "express-validator"
 import { Paginator } from "../data-access/data-access"
 
 export class Controller{
@@ -165,20 +164,6 @@ export class Controller{
     public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{
             res.status(405).json({ message: 'Method not allowed' })
-    }
-
-    public handleValidationErrors = (req: Request, res: Response, next:NextFunction) =>{
-        const errors = validationResult(req)
-
-        if(!errors.isEmpty()){
-            res.status(400).json({
-                message: 'Invalid Input or reference Id',
-                errors: errors.array()
-            })
-        } else {
-            next()
-        }
-
     }
     
 }
