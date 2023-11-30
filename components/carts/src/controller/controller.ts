@@ -9,54 +9,46 @@ export class Controller{
     constructor(dataAccess: DataAccess){
         this.dal = dataAccess
     }
-    public addNew = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const cartInfo: ICart = req.body
+    public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        const cartInfo: ICart = req.body
 
-            try {
-                const existingCart: HydratedCartDoc| null = await this.dal
-                    .findByCustomerId (cartInfo.customer)
+        try {
+            const existingCart: HydratedCartDoc| null = await this.dal
+                .findByCustomerId (cartInfo.customer)
 
-                if(existingCart !== null){
-                    this.respondWithConflict(res)
-                } else {
-                    const cart: HydratedCartDoc = await this.dal
-                        .createNew(cartInfo)
-                        
-                    this.respondWithCreatedResource(
-                        cart.customer, res)
-                }
-            } catch (error) {
-                next(error)
+            if(existingCart== null){
+                const newCart: HydratedCartDoc = await this.dal.createNew(cartInfo)  
+                this.respondWithCreatedResource(newCart.customer, res)
+            } else {
+                this.respondWithConflict(res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithConflict = (res: Response) =>{
         res.status(409).json({message: 'Cart already exists'})
     }
 
-    private respondWithCreatedResource = (
-        resourceId: string, res: Response) =>{
-            res.location(`/carts/${resourceId}`)
-            res.status(201).json({ message: 'Created'})
+    private respondWithCreatedResource = (resourceId: string, res: Response) =>{
+        res.location(`/carts/${resourceId}`)
+        res.status(201).json({ message: 'Created'})
     }
 
-    public getOne = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const customerId = req.params.customerId
+    public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const customerId = req.params.customerId
 
-            try {
-                const cart = await this.dal.findByCustomerId(
-                    customerId)
+        try {
+            const cart = await this.dal.findByCustomerId(customerId)
 
-                if(cart !== null)
-                    this.respondWithFoundResource(cart, res)
-               
+            if(cart)
+                this.respondWithFoundResource(cart, res)
+            else
                 this.respondResourceWithNotFound(res)
-            } catch (error) {
-                next(error)   
-            }
+        } catch (error) {
+            next(error)   
+        }
     }
 
     private respondResourceWithNotFound = (res: Response) =>{
@@ -70,20 +62,15 @@ export class Controller{
             res.status(200).json({ resource })
     }
 
-    public getMany = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const paginator: Paginator = this.paginate(req)
+    public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+        const paginator: Paginator = this.paginate(req)
 
-            try {
-                const carts = await this.dal.findWithPagination(
-                    paginator)
-
-                this.respondWithFoundResource(carts, res)
-            } catch (error) {
-                next(error)
-            }
-
+        try {
+            const carts = await this.dal.findWithPagination(paginator)
+            this.respondWithFoundResource(carts, res)
+        } catch (error) {
+            next(error)
+        }
     }
 
     private paginate = (req: Request): Paginator =>{
@@ -103,115 +90,99 @@ export class Controller{
         return paginator
     }
 
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const customerId = req.params.customerId
-            
-            const updateDoc: {items: string[]} = req.body
-            try {
-                const updatedCart = await this.dal
-                    .findByCustomerIdAndUpdate(customerId, updateDoc)
-                if(updatedCart){
-                    this.respondWithUpdatedResource(updatedCart.customer,
-                         res)
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const customerId = req.params.customerId
+        
+        const updateDoc: {items: string[]} = req.body
+        try {
+            const updatedCart = await this.dal
+                .findByCustomerIdAndUpdate(customerId, updateDoc)
+            if(updatedCart){
+                this.respondWithUpdatedResource(updatedCart.customer,res)
 
-                } else {
-                    const newCart = await this.dal.createNew({
-                        customer: customerId,
-                        items: updateDoc.items,
-                    })
+            } else {
+                const newCart = await this.dal.createNew({
+                    customer: customerId,
+                    items: updateDoc.items,
+                })
 
-                    this.respondWithCreatedResource(newCart.customer, 
-                        res)
-                }
-            } catch (error) {
-                next(error)
+                this.respondWithCreatedResource(newCart.customer, res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
     
-    private respondWithUpdatedResource = (
-        resourceId: string, res: Response
-        ) =>{
-            res.location(`/carts/${resourceId}`)
-            res.status(200).json({ message: 'Updated' })
+    private respondWithUpdatedResource = (resourceId: string, res: Response) =>{
+        res.location(`/carts/${resourceId}`)
+        res.status(200).json({ message: 'Updated' })
+    }
+
+    public addtoCart = async(req: Request, res: Response, next: NextFunction) =>{
+        const customerId = req.params.customerId
+
+        const itemId: string = req.body.item
+        try {
+            const modifiedCart = await this.dal.findCartAndAddItemId(
+                customerId, itemId)
+                
+            if(modifiedCart){
+                this.respondWithModifiedResource(modifiedCart.customer, res)
+            } else {
+                this.respondResourceWithNotFound(res)
+            }    
+        } catch (error) {
+            next(error)
         }
-
-    public addtoCart = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const customerId = req.params.customerId
-
-            const itemId: string = req.body.item
-            try {
-                const modifiedCart = await this.dal.findCartAndAddItemId(
-                    customerId, itemId)
-                    
-                if(modifiedCart){
-                    this.respondWithModifiedResource(
-                        modifiedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }    
-            } catch (error) {
-                next(error)
-            }
     }
 
-    public removeFromCart = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const customerId = req.params.customerId
+    public removeFromCart = async(req: Request, res: Response, next: NextFunction
+        ) =>{
+        const customerId = req.params.customerId
 
-            const itemId: string = req.body.item
-            try {
-                const modifiedCart = await this.dal.findCartAndRemoveItemId(
-                    customerId, itemId
-                )
-                if(modifiedCart){
-                    this.respondWithModifiedResource(
-                        modifiedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }    
-            } catch (error) {
-                next(error)
-            }
+        const itemId: string = req.body.item
+        try {
+            const modifiedCart = await this.dal.findCartAndRemoveItemId(
+                customerId, itemId
+            )
+            if(modifiedCart){
+                this.respondWithModifiedResource( modifiedCart.customer, res)
+            } else {
+                this.respondResourceWithNotFound(res)
+            }    
+        } catch (error) {
+            next(error)
+        }
     }
 
-    private respondWithModifiedResource = (
-        resourceId: string, res: Response) =>{
-            res.location(`/carts/${resourceId}`)
-            res.status(200).json({ message: 'Modified' })
+    private respondWithModifiedResource = (resourceId: string, res: Response) =>{
+        res.location(`/carts/${resourceId}`)
+        res.status(200).json({ message: 'Modified' })
     } 
 
-    public deleteOne = async(
-        req: Request, res: Response, next:NextFunction
-        ) =>{
-            const customerId = req.params.customerId
+    public deleteOne = async(req: Request, res: Response, next:NextFunction) =>{
+        const customerId = req.params.customerId
 
-            try {
-                const deletedCart = await this.dal
-                    .findByCustomerIDAndDelete(customerId)
-                
-                if(deletedCart){
-                    this.respondWithDeletedResource(
-                        deletedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }
-            } catch (error) {
-                next(error)
+        try {
+            const deletedCart = await this.dal
+                .findByCustomerIDAndDelete(customerId)
+            
+            if(deletedCart){
+                this.respondWithDeletedResource(deletedCart.customer, res)
+            } else {
+                this.respondResourceWithNotFound(res)
             }
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({
-            message: 'Deleted',
-            id: id
-        })
+        res.status(200).json({ message: 'Deleted',id })
     }
 
-    public respondWithMethodNotAllowed = (
-        req: Request, res: Response) =>{
-            res.status(405).json({ message: 'Method not allowed' })
+    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
+        res.status(405).json({ message: 'Method not allowed' })
     }
 }
 

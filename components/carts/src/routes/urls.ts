@@ -20,23 +20,27 @@ export const routesWrapper = (controller: Controller) =>{
     router.get('/:customerId',
         validator.validateReferenceId('customerId') ,
         validator.handleValidationErrors,
-        controller.getOne)
+        controller.getOne
+    )
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:customerId',middlewear.updateInputValidator,
         validator.handleValidationErrors,
-        controller.updateOne)
+        controller.updateOne
+    )
 
     router.patch('/', controller.respondWithMethodNotAllowed)
     router.patch('/:customerId/add-item', 
         middlewear.patchDataValidator,
         validator.handleValidationErrors,
-        controller.addtoCart)
+        controller.addtoCart
+    )
 
     router.patch('/:customerId/remove-item',
         middlewear.patchDataValidator,
         validator.handleValidationErrors,
-        controller.removeFromCart)
+        controller.removeFromCart
+    )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:customerId', 
@@ -44,5 +48,6 @@ export const routesWrapper = (controller: Controller) =>{
         validator.handleValidationErrors,
         controller.deleteOne
     )
+    
     return router
 }
