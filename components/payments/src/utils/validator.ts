@@ -1,4 +1,5 @@
-import { body, param } from "express-validator"
+import { body, param, validationResult } from "express-validator"
+import { Response, Request, NextFunction } from "express"
 
 class Validator{
     private idValidationMessage = 'must be a hexadecimal string '+
@@ -38,6 +39,20 @@ class Validator{
         return param(paramName).trim().matches(
             /^[a-fA-F0-9]{24}$/)
             .withMessage(`${paramName} ${this.idValidationMessage}`)
+    }
+
+    public handleValidationErrors = (req: Request, res: Response, next:NextFunction) =>{
+        const errors = validationResult(req)
+
+        if(!errors.isEmpty()){
+            res.status(400).json({
+                message: 'Invalid Input or reference Id',
+                errors: errors.array()
+            })
+        } else {
+            next()
+        }
+
     }
 }
 
