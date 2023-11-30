@@ -14,6 +14,7 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+
         const cartInfo: ICart = req.body
 
         try {
@@ -32,6 +33,7 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const customerId = req.params.customerId
 
         try {
@@ -47,6 +49,7 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+
         const paginator: Paginator = this.paginate(req)
 
         try {
@@ -58,15 +61,15 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const customerId = req.params.customerId
-        
         const updateDoc: {items: string[]} = req.body
+
         try {
             const updatedCart = await this.dal
                 .findByCustomerIdAndUpdate(customerId, updateDoc)
             if(updatedCart){
                 this.respondWithUpdatedResource(updatedCart.customer,res)
-
             } else {
                 const newCart = await this.dal.createNew({
                     customer: customerId,
@@ -81,9 +84,10 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public addtoCart = async(req: Request, res: Response, next: NextFunction) =>{
-        const customerId = req.params.customerId
 
+        const customerId = req.params.customerId
         const itemId: string = req.body.item
+
         try {
             const modifiedCart = await this.dal.findCartAndAddItemId(
                 customerId, itemId)
@@ -101,8 +105,8 @@ export class CartsController extends BaseController implements Controllable{
     public removeFromCart = async(req: Request, res: Response, next: NextFunction
         ) =>{
         const customerId = req.params.customerId
-
         const itemId: string = req.body.item
+
         try {
             const modifiedCart = await this.dal.findCartAndRemoveItemId(
                 customerId, itemId
@@ -118,11 +122,11 @@ export class CartsController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next:NextFunction) =>{
+
         const customerId = req.params.customerId
 
         try {
-            const deletedCart = await this.dal
-                .findByCustomerIDAndDelete(customerId)
+            const deletedCart = await this.dal.findByCustomerIDAndDelete(customerId)
             
             if(deletedCart){
                 this.respondWithDeletedResource(deletedCart.customer, res)

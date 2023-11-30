@@ -6,6 +6,7 @@ import { BaseController } from "../../../library/bases/controller"
 import { Controllable } from "../../../library/bases/controllable"
 
 export class ProductsController extends BaseController implements Controllable{
+
     private dataAccess
 
     constructor(dataAccessLayer: ProductsDAL){
@@ -42,11 +43,11 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public getMany= async(req: Request, res: Response, next: NextFunction)=>{
-        try {
-            const paginator = this.paginate(req)
-            const products = await this.dataAccess.findMany(
-                paginator)
 
+        const paginator = this.paginate(req)
+        
+        try {
+            const products = await this.dataAccess.findMany(paginator)
             this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
@@ -55,6 +56,7 @@ export class ProductsController extends BaseController implements Controllable{
 
     public getByPriceRange = async(req: Request, res: Response, next: NextFunction
         ) =>{
+
         const rangeString = req.params.range
         const priceRange: PriceRange = formatter.extractPriceRange(rangeString)
         const pagination = this.paginate(req)
@@ -70,9 +72,10 @@ export class ProductsController extends BaseController implements Controllable{
 
     public getByCategory = async(req: Request, res: Response, next: NextFunction
         ) =>{
+
         const category = req.params.categoryName        
-        
         const paginator = this.paginate(req)
+
         try {
             const products = await this.dataAccess.findByCategory(
                 category, paginator)
@@ -84,6 +87,7 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public getByBrand = async(req: Request, res: Response, next: NextFunction) =>{
+
         const brandName = req.params.brandName
         const paginator = this.paginate(req)
 
@@ -97,6 +101,7 @@ export class ProductsController extends BaseController implements Controllable{
     
     public getByManufacturer = async(req: Request, res: Response, next: NextFunction
         ) =>{
+
         const manufName = req.params.manufacturerName
         const paginator = this.paginate(req)
 
@@ -111,12 +116,13 @@ export class ProductsController extends BaseController implements Controllable{
 
     public getByModelName = async(req: Request, res: Response, next: NextFunction
         ) =>{
+
         const modelName = req.params.modelName
         const paginator = this.paginate(req)
 
         try {
-            const products = await this.dataAccess.findByModelName(
-                modelName, paginator)
+            const products = await this.dataAccess.findByModelName(modelName, 
+                paginator)
             
             this.respondWithFoundResource(products, res)
         } catch (error) {
@@ -125,6 +131,7 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const productId = req.params.id
         const productData: IProduct = req.body
         
@@ -144,6 +151,7 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const productId = req.params.id
         const patchData = req.body
 
@@ -161,6 +169,7 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        
         const productId = req.params.id
 
         try {

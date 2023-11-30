@@ -6,6 +6,7 @@ import { BaseController } from "../../../library/bases/controller";
 import { Controllable } from "../../../library/bases/controllable";
 
 export class UsersController extends BaseController implements Controllable{
+
     private dataAccess: UsersDAL
 
     constructor(dataAccessLayer: UsersDAL){
@@ -14,6 +15,7 @@ export class UsersController extends BaseController implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+
         const userData = req.body
 
         try {
@@ -31,6 +33,7 @@ export class UsersController extends BaseController implements Controllable{
     }
 
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const userId = req.params.id
 
         try {
@@ -46,6 +49,7 @@ export class UsersController extends BaseController implements Controllable{
     }
     
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+
         const pagination = this.paginate(req)
 
         try {
@@ -57,6 +61,7 @@ export class UsersController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const userId = req.params.id
         const userData = req.body
 
@@ -76,6 +81,7 @@ export class UsersController extends BaseController implements Controllable{
     }   
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const userId = req.params.id
         const patchData: IUser = req.body
 
@@ -93,6 +99,7 @@ export class UsersController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response,next: NextFunction) =>{
+        
         const userId = req.params.id
 
         try {

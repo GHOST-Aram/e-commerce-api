@@ -14,6 +14,7 @@ export class OrdersController extends BaseController implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+
         const orderData: IOrder = req.body
 
         try {
@@ -25,6 +26,7 @@ export class OrdersController extends BaseController implements Controllable{
     }
 
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const orderId = req.params.orderId
 
         try {
@@ -41,6 +43,7 @@ export class OrdersController extends BaseController implements Controllable{
 
 
     public getMany = async(req: Request, res: Response, next: NextFunction)  =>{
+
         const paginator: Paginator = this.paginate(req)
 
         try {
@@ -52,6 +55,7 @@ export class OrdersController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const updateData: IOrder = req.body 
         const orderId = req.params.orderId
 
@@ -70,7 +74,8 @@ export class OrdersController extends BaseController implements Controllable{
         }
     }
 
-    public modifyOrder = async(req: Request, res: Response, next: NextFunction) =>{
+    public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const orderId = req.params.orderId
         const patchDoc = req.body
 
@@ -87,6 +92,7 @@ export class OrdersController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        
         const orderId = req.params.orderId
 
         try {

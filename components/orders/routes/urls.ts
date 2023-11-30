@@ -34,7 +34,7 @@ export const routesWrapper = (controller: OrdersController) =>{
     router.patch('/:orderId',
         middlewear.updateValidators,
         validator.handleValidationErrors,
-        controller.modifyOrder
+        controller.modifyOne
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed)

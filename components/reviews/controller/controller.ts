@@ -14,6 +14,7 @@ export class ReviewsController extends BaseController implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+
         const reviewData = req.body
 
         try {
@@ -24,8 +25,8 @@ export class ReviewsController extends BaseController implements Controllable{
         }
     }
 
-    public getOne = async(req: Request, res: Response, next: NextFunction
-        ) =>{
+    public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const productId = req.params.productId
 
         const paginator = this.paginate(req)
@@ -39,8 +40,8 @@ export class ReviewsController extends BaseController implements Controllable{
         }
     }
 
-    public getMany = async(req: Request, res: Response, next: NextFunction
-        ) =>{
+    public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+
         const paginator = this.paginate(req)
 
         try {
@@ -52,6 +53,7 @@ export class ReviewsController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const reviewId = req.params.reviewId
         const updateDoc: IReview = req.body
 
@@ -71,6 +73,7 @@ export class ReviewsController extends BaseController implements Controllable{
     }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const reviewId = req.params.reviewId
         const updateDoc: IReview = req.body
 
@@ -88,6 +91,7 @@ export class ReviewsController extends BaseController implements Controllable{
     }
 
     public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{
+        
         const reviewId = req.params.reviewId
         
         try {

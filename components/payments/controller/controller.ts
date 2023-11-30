@@ -14,6 +14,7 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        
         const paymentData: IPayment = req.body
 
         try {
@@ -25,6 +26,7 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public getOne = async(req: Request, res:Response, next: NextFunction) =>{
+
         const referenceId =  req.params.orderId
 
         try {
@@ -41,6 +43,7 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+
         const paginator = this.paginate(req)
 
         try {
@@ -52,6 +55,7 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const referenceId =  req.params.orderId
         const updateDoc: IPayment = req.body
 
@@ -71,6 +75,7 @@ export class PayController extends BaseController implements Controllable{
     }
     
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+
         const referenceId = req.params.orderId
         const updateDoc = req.body
 
@@ -89,6 +94,7 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        
         const referenceId = req.params.orderId
 
         try {
