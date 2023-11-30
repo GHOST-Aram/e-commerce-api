@@ -1,5 +1,5 @@
 import { app } from "./lib/test.config";
-import { expect, test, describe } from "@jest/globals"
+import { test, describe } from "@jest/globals"
 import * as data from "./mocks/raw-data"
 import request from "supertest"
 import { assert } from "./lib/response-assertions";
@@ -29,15 +29,15 @@ describe('PUT reviews (By Review ID)', () =>{
 
     test('Responds with validation errors, status 400: '+
     'Invalid Input.', 
-    async() =>{
-        const response = await request(app).put(
-            '/reviews/64c9e4f2df7cc072af2ac9e4')
-            .send(data.badData)
-        
-        assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrors(response)
-    }
-)
+        async() =>{
+            const response = await request(app).put(
+                '/reviews/64c9e4f2df7cc072af2ac9e4')
+                .send(data.badData)
+            
+            assert.respondsWithBadRequest(response)
+            assert.respondsWithValidationErrors(response)
+        }
+    )
     
     test('Responds with created resource URI, (status 201): '+
         'Target not found, new document was created.', 

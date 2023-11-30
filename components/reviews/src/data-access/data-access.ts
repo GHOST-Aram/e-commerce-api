@@ -1,15 +1,12 @@
 import { HydratedReviewDoc, IReview, Review } from "./model"
 
 export class DataAccess{
-    public createNew = async(reviewData: IReview
-        ): Promise<HydratedReviewDoc> =>{
-
-            const doc = new Review(reviewData)
-            return await doc.save()
+    public createNew = async(reviewData: IReview): Promise<HydratedReviewDoc> =>{
+        const doc = new Review(reviewData)
+        return await doc.save()
     }
 
-    public findByProductId = async(
-        productId: string, paginator: Paginator
+    public findByProductId = async(productId: string, paginator: Paginator
         ) : Promise<HydratedReviewDoc[]> =>{
 
             return await Review.find({product: productId})
@@ -18,10 +15,9 @@ export class DataAccess{
            
     }
 
-    public findRandomDocs = async(paginator: Paginator
-        ): Promise<HydratedReviewDoc[]> =>{
-            return await Review.find().skip(paginator.skipDocs)
-                .limit(paginator.limit)
+    public findRandomDocs = async(paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
+        return await Review.find().skip(paginator.skipDocs)
+            .limit(paginator.limit)
     }
 
     public findByIdAndUpdate = async(id: string, updateDoc: IReview
@@ -30,9 +26,8 @@ export class DataAccess{
                 id, updateDoc, { new: true })
     }
 
-    public findByIdAndDelete = async(id: string
-        ): Promise<HydratedReviewDoc | null> =>{
-            return await Review.findByIdAndDelete(id)
+    public findByIdAndDelete = async(id: string): Promise<HydratedReviewDoc | null> =>{
+        return await Review.findByIdAndDelete(id)
     }
 }
 

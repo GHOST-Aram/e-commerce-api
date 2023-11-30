@@ -6,12 +6,13 @@ import { validator } from '../utils/validator'
 const router = Router()
 
 export const routesWrapper = (controller: Controller) =>{
+
+    router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/', 
         middlewear.newReviewInputValidators ,
         validator.handleValidationErrors,
-        controller.addNew)
-
-    router.post('/:id', controller.respondWithMethodNotAllowed)
+        controller.addNew
+    )
 
     router.get('/', controller.getRandomDocs)
     router.get('/:productId', 

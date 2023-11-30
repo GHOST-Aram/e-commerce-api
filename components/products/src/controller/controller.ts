@@ -10,50 +10,41 @@ export class ProductsController{
         this.dal = dataAccessLayer
     }
 
-    public AddNew = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
+    public AddNew = async(req: Request, res: Response, next: NextFunction) =>{
 
-            const productData: IProduct = req.body
-            try {
-                const productId = await this.dal.createNew(
-                    productData)
-                this.respondWithCreatedResource(res, productId)
-            } catch (error) {
-                next(error)
-            }
+        const productData: IProduct = req.body
+
+        try {
+            const productId = await this.dal.createNew(productData)
+            this.respondWithCreatedResource(res, productId)
+        } catch (error) {
+            next(error)
         }
+    }
 
-    private respondWithCreatedResource = (
-        res: Response, 
-        productId: string
-        ) =>{
-            res.location(`/products/${productId}`)
-            res.status(201).json({ message: 'Created'})
+    private respondWithCreatedResource = (res: Response, productId: string) =>{
+        res.location(`/products/${productId}`)
+        res.status(201).json({ message: 'Created'})
     }
     
     private respondWith404Error = (res: Response) =>{
-        res.status(404).json(
-            { message: 'Product not found' })
+        res.status(404).json({ message: 'Product not found' })
     }
     
-    public getOne =async (
-        req:Request, res: Response, next: NextFunction
-        ) => {
-            const productId  = req.params.id
+    public getOne =async (req:Request, res: Response, next: NextFunction) => {
 
-            try {
-                const product = await this.dal.findById(
-                    productId)
+        const productId  = req.params.id
 
-                if(product)
-                    this.respondWithFoundResource(product, res)
-                
+        try {
+            const product = await this.dal.findById(productId)
+
+            if(product)
+                this.respondWithFoundResource(product, res)
+            else
                 this.respondWith404Error(res)
-            } catch (error) {
-                next(error)
-            }
-    
+        } catch (error) {
+            next(error)
+        }
     }
 
     private respondWithFoundResource = (
@@ -63,18 +54,16 @@ export class ProductsController{
            res.status(200).json({ resource })
     }
 
-    public getMany= async(
-        req: Request, res: Response, next: NextFunction
-        )=>{
-            try {
-                const paginator = this.paginate(req)
-                const products = await this.dal.findMany(
-                    paginator)
+    public getMany= async(req: Request, res: Response, next: NextFunction)=>{
+        try {
+            const paginator = this.paginate(req)
+            const products = await this.dal.findMany(
+                paginator)
 
-                this.respondWithFoundResource(products, res)
-            } catch (error) {
-                next(error)
-            } 
+            this.respondWithFoundResource(products, res)
+        } catch (error) {
+            next(error)
+        } 
     } 
     
     private paginate = (req?: Request): Paginator =>{
@@ -96,111 +85,88 @@ export class ProductsController{
         return ({ skipDocs, limit })
     }
 
-    public getByPriceRange = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const rangeString = req.params.range
-            const priceRange: PriceRange = formatter
-                .extractPriceRange(rangeString)
-               
-                
-            const pagination = this.paginate(req)
-            try {
-                const products = await this.dal
-                    .findByPriceRange(priceRange, 
-                        pagination)
+    public getByPriceRange = async(req: Request, res: Response, next: NextFunction) =>{
+        const rangeString = req.params.range
+        const priceRange: PriceRange = formatter.extractPriceRange(rangeString)
+        const pagination = this.paginate(req)
 
-                this.respondWithFoundResource(products, res)                
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    public getByCategory = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const category = req.params.categoryName        
-            
-            const paginator = this.paginate(req)
-            try {
-                const products = await this.dal.findByCategory(
-                    category, paginator)
-
-                this.respondWithFoundResource(products, res)
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    public getByBrand = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const brandName = req.params.brandName
-
-            const paginator = this.paginate(req)
-            try {
-                const products = await this.dal.findByBrand(
-                    brandName, paginator)
-                
-                this.respondWithFoundResource(products, res)
-            } catch (error) {
-                next(error)
-            } 
+        try {
+            const products = await this.dal.findByPriceRange(priceRange, pagination)
+            this.respondWithFoundResource(products, res)                
+        } catch (error) {
+            next(error)
         }
+    }
+
+    public getByCategory = async(req: Request, res: Response, next: NextFunction) =>{
+        const category = req.params.categoryName        
+        
+        const paginator = this.paginate(req)
+        try {
+            const products = await this.dal.findByCategory(
+                category, paginator)
+
+            this.respondWithFoundResource(products, res)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getByBrand = async(req: Request, res: Response, next: NextFunction) =>{
+        const brandName = req.params.brandName
+        const paginator = this.paginate(req)
+
+        try {
+            const products = await this.dal.findByBrand(brandName, paginator)
+            this.respondWithFoundResource(products, res)
+        } catch (error) {
+            next(error)
+        } 
+    }
     
-    public getByManufacturer = async(
-        req: Request, res: Response, next: NextFunction
+    public getByManufacturer = async(req: Request, res: Response, next: NextFunction
         ) =>{
-            const manufName = req.params.manufacturerName
+        const manufName = req.params.manufacturerName
+        const paginator = this.paginate(req)
 
-            const paginator = this.paginate(req)
-            try {
-                const products = await this.dal.findBymanufacturer(
-                    manufName, paginator)
-                
-                this.respondWithFoundResource(products, res)
-            } catch (error) {
-                next(error)
-            } 
-        }
-
-    public getByModelName = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const modelName = req.params.modelName
-            const paginator = this.paginate(req)
-
-            try {
-                const products = await this.dal.findByModelName(
-                    modelName, paginator)
-                
-                this.respondWithFoundResource(products, res)
-            } catch (error) {
-                next(error)
-            } 
+        try {
+            const products = await this.dal.findBymanufacturer(manufName, paginator)
+            this.respondWithFoundResource(products, res)
+        } catch (error) {
+            next(error)
+        } 
     }
 
-    public updateOne = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
+    public getByModelName = async(req: Request, res: Response, next: NextFunction) =>{
+        const modelName = req.params.modelName
+        const paginator = this.paginate(req)
 
-            const productId = req.params.id
+        try {
+            const products = await this.dal.findByModelName(
+                modelName, paginator)
             
-            const productData: IProduct = req.body
-            try { 
-                const id = await this.dal.findByIdAndUpdate(
-                    productId, productData)
+            this.respondWithFoundResource(products, res)
+        } catch (error) {
+            next(error)
+        } 
+    }
 
-                if(id){
-                    this.respondWithUpdatedResource(id, res)
-                } else {
-                    const newProductId = await this.dal.createNew(
-                        productData)
-                    this.respondWithCreatedResource(res, newProductId)
-                }                 
-            } catch (error) {
-                next(error)
-            }   
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const productId = req.params.id
+        const productData: IProduct = req.body
+        
+        try { 
+            const id = await this.dal.findByIdAndUpdate(productId, productData)
+
+            if(id){
+                this.respondWithUpdatedResource(id, res)
+            } else {
+                const newProductId = await this.dal.createNew(productData)
+                this.respondWithCreatedResource(res, newProductId)
+            }                 
+        } catch (error) {
+            next(error)
+        }   
     }
 
     private respondWithUpdatedResource = (id: string, res: Response) =>{
@@ -209,58 +175,47 @@ export class ProductsController{
     }
 
 
-    public modifyOne = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const productId = req.params.id
-            
-            const patchData = req.body
-            try {
-                const id = await this.dal.findByIdAndUpdate(
-                    productId, patchData)
+    public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const productId = req.params.id
+        const patchData = req.body
 
-                if(id)
-                    this.respondWithModifiedResource(id, res)
-                
-            this.respondWith404Error(res)
-            } catch (error) {
-                next(error)
-            }
+        try {
+            const id = await this.dal.findByIdAndUpdate(productId, patchData)
+
+            if(id)
+                this.respondWithModifiedResource(id, res)
+            else
+                this.respondWith404Error(res)
+        } catch (error) {
+            next(error)
         }
-
-    private respondWithModifiedResource = (
-        productId: string, res: Response
-        ) =>{
-            res.location(`/products/${productId}`)
-            res.status(200).json({ message: 'Modified' })
     }
 
-    public deleteOne = async(
-        req: Request, res: Response, next: NextFunction
-        ) =>{
-            const productId = req.params.id
+    private respondWithModifiedResource = (productId: string, res: Response) =>{
+        res.location(`/products/${productId}`)
+        res.status(200).json({ message: 'Modified' })
+    }
 
-            try {
-                const deletedProduct = await this.dal.findByIdAndDelete(
-                    productId)
-                
-                if(deletedProduct)
-                    this.respondWithDeletedResource(
-                    deletedProduct.id, res)
-                
+    public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const productId = req.params.id
+
+        try {
+            const deletedProduct = await this.dal.findByIdAndDelete(productId)
+            
+            if(deletedProduct)
+                this.respondWithDeletedResource(deletedProduct.id, res)
+            else
                 this.respondWith404Error(res)
-            } catch (error) {
-                next(error)
-            }
+        } catch (error) {
+            next(error)
         }
+    }
 
-    private respondWithDeletedResource = (
-        id: string, res: Response) =>{
-            res.status(200).json({ message: 'Deleted', id })
+    private respondWithDeletedResource = (id: string, res: Response) =>{
+        res.status(200).json({ message: 'Deleted', id })
     }
     
-    public respondWithMethodNotAllowed = (
-        req: Request, res: Response) =>{
+    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed. ' })
     }
 }
