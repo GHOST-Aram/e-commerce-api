@@ -1,5 +1,6 @@
-import { ValidationChain, body, param } from "express-validator"
+import { ValidationChain, body, param, validationResult } from "express-validator"
 import { formatter } from "./formatter"
+import { Request, Response, NextFunction } from "express"
 
 export class Validator{
     public validateReferenceId = (paramName: string) =>{
@@ -64,6 +65,21 @@ export class Validator{
             .isArray()
             .withMessage('Specifications field must be an array')
             .escape()
+    }
+
+    public handleValidationErrors = (
+        req: Request, res: Response, next: NextFunction 
+        ) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json({
+                    message: 'Invalid input or referenceId',
+                    errors: errors.array()
+                })
+            }  else {
+                next()
+            }
     }
 }
 export const validator = new Validator()

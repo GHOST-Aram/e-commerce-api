@@ -1,9 +1,7 @@
 import { NextFunction, Request, Response } from "express"
 import { Paginator, ProductsDAL } from "../data-access/data-access"
 import { HydratedProductDoc, IProduct } from "../data-access/model"
-import { validationResult } from "express-validator"
 import { PriceRange, formatter } from "../utils/formatter"
-import { validator } from "../utils/validator"
 
 export class ProductsController{
     private dal
@@ -261,20 +259,5 @@ export class ProductsController{
     public respondWithMethodNotAllowed = (
         req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed. ' })
-    }
-
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction 
-        ) =>{
-            const errors = validationResult(req)
-
-            if(!errors.isEmpty()){
-                res.status(400).json({
-                    message: 'Invalid input or referenceId',
-                    errors: errors.array()
-                })
-            }  else {
-                next()
-            }
     }
 }
