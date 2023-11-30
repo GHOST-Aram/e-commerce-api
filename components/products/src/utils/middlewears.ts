@@ -1,29 +1,29 @@
 import { validator } from "./validator"
 
 export const productValidators = [
-    validator.validateName('name')
+    validator.validateNameField('name')
         .notEmpty()
         .withMessage(`Name field is required`),
 
-    validator.validateUrl('image_url')
+    validator.validateUrlField('image_url')
         .notEmpty()
         .withMessage('Image url is required'),
 
     validator.validateFileField('image_file'),
 
-    validator.validateName('brand')
+    validator.validateNameField('brand')
         .notEmpty()
         .withMessage(`Brand field is required`),
 
-    validator.validateName('manufacturer')
+    validator.validateNameField('manufacturer')
         .notEmpty()
         .withMessage(`Manufacturer field is required`),
 
-    validator.validateName('model')
+    validator.validateNameField('model')
         .notEmpty()
         .withMessage(`Model field is required`),
 
-    validator.validateName('category')
+    validator.validateNameField('category')
         .notEmpty()
         .withMessage(`Category field is required`),
 
@@ -39,29 +39,29 @@ export const productValidators = [
         .notEmpty()
         .withMessage(`Available units field is required`),
 
-    validator.validateSpecifications('specifications')
+    validator.validateSpecificationsField('specifications')
         .notEmpty()
         .withMessage('Specifications field is required'),
 ]
 
 export const patchValidators = [
-    validator.validateName('name')
+    validator.validateNameField('name')
         .optional(),
 
-    validator.validateUrl('image_url')
+    validator.validateUrlField('image_url')
         .optional(),
 
     validator.validateFileField('image_file'),
-    validator.validateName('brand')
+    validator.validateNameField('brand')
         .optional(),
 
-    validator.validateName('manufacturer')
+    validator.validateNameField('manufacturer')
         .optional(),
 
-    validator.validateName('model')
+    validator.validateNameField('model')
         .optional(),
 
-    validator.validateName('category')
+    validator.validateNameField('category')
         .optional(),
 
     validator.validateNumberField('selling_price')
@@ -73,7 +73,7 @@ export const patchValidators = [
     validator.validateNumberField('available_units')
         .optional(),
 
-    validator.validateSpecifications('specifications')
+    validator.validateSpecificationsField('specifications')
         .optional(),
 
 ]

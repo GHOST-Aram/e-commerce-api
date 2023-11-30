@@ -6,7 +6,7 @@ import { validator } from "../utils/validator";
 const router = Router()
 
 const routesWrapper = (controller: ProductsController) =>{
-    
+
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
         middlewears.productValidators, 
@@ -40,7 +40,7 @@ const routesWrapper = (controller: ProductsController) =>{
     )
 
     router.get('/selling-price/:range',
-        validator.validatePriceRange('range'),
+        validator.validatePriceRangeParam('range'),
         controller.handleValidationErrors,
         controller.getProductsByPriceRange
     )

@@ -6,7 +6,29 @@ export class Validator{
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 
-    public validateName(fieldName: string): ValidationChain{
+    public validateReferenceName = (paramName: string) =>{
+        return param(paramName)
+            .matches(/^[a-z0-9]{2,100}$/i)
+            .withMessage(`${paramName} must be a 2-50 characters long`)
+            .trim()
+            .escape()
+    }
+
+    public validatePriceRangeParam = (paramName: string) =>{
+        return param(paramName).custom((value) =>{
+            const { start, end } = formatter.convertToNumbers(value)
+    
+            if(typeof start === 'number' && typeof end === 'number'){
+                if(start < end)
+                    return true
+                else if( end < start)
+                    return true
+            }
+            return false
+        })
+    }
+
+    public validateNameField(fieldName: string): ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
 
         return body(fieldName)
@@ -16,15 +38,7 @@ export class Validator{
             .escape()
     }
 
-    public validateReferenceName = (paramName: string) =>{
-        return param(paramName)
-            .matches(/^[a-z0-9]{2,100}$/i)
-            .withMessage(`${paramName} must be a 2-50 characters long`)
-            .trim()
-            .escape()
-    }
-
-    public validateUrl(fieldName: string): ValidationChain{
+    public validateUrlField(fieldName: string): ValidationChain{
         return  body(fieldName)
     }
 
@@ -45,25 +59,11 @@ export class Validator{
             .withMessage(`${formattedName} must be greater than 1`)
     }
 
-    public validateSpecifications(fieldName: string): ValidationChain{
+    public validateSpecificationsField(fieldName: string): ValidationChain{
         return  body(fieldName)
             .isArray()
             .withMessage('Specifications field must be an array')
             .escape()
-    }
-
-    public validatePriceRange = (paramName: string) =>{
-        return param(paramName).custom((value) =>{
-            const { start, end } = formatter.convertToNumbers(value)
-    
-            if(typeof start === 'number' && typeof end === 'number'){
-                if(start < end)
-                    return true
-                else if( end < start)
-                    return true
-            }
-            return false
-        })
     }
 }
 export const validator = new Validator()
