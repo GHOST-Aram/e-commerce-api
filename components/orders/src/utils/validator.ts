@@ -1,5 +1,7 @@
 import { body, param } from "express-validator"
 import { isValidObjectId } from "mongoose"
+import { validationResult } from "express-validator"
+import { Response, Request, NextFunction } from "express"
 
 class Validator{
     
@@ -25,6 +27,20 @@ class Validator{
             .custom((value) => isValidObjectId(value))
             .withMessage('Invalid reference Id')
             
+    }
+
+    public handleValidationErrors = (
+        req: Request, res: Response, next: NextFunction) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json({ 
+                    errors: errors.array(),
+                    message: 'Invalid Input' 
+                })
+            } else {
+                next()
+            }
     }
 }
 

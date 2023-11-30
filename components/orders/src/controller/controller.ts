@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { validationResult } from "express-validator"
 import { HydratedOrderDoc, IOrder, Order } from "../data-access/model"
 export class Controller{
 
@@ -164,23 +163,9 @@ export class Controller{
         res.status(200).json({ message: 'Deleted', id})
     }
 
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction) =>{
-            const errors = validationResult(req)
-
-            if(!errors.isEmpty()){
-                res.status(400).json({ 
-                    errors: errors.array(),
-                    message: 'Invalid Input' 
-                })
-            } else {
-                next()
-            }
-    }
     public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
-
 }
 
 export interface Paginator {
