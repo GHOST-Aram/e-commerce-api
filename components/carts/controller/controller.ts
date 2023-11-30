@@ -1,8 +1,8 @@
 import { BaseController, Paginator } from "../../../library/bases/controller"
+import { Controllable } from "../../../library/bases/controllable"
+import { HydratedCartDoc, ICart } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { HydratedCartDoc, ICart } from "../data-access/model"
-import { Controllable } from "../../../library/bases/controllable"
 
 export class CartsController extends BaseController implements Controllable{
 
@@ -19,7 +19,7 @@ export class CartsController extends BaseController implements Controllable{
 
         try {
             const existingCart: HydratedCartDoc| null = await this.dal
-                .findByCustomerId (cartInfo.customer)
+                .findByReferenceId (cartInfo.customer)
 
             if(existingCart== null){
                 const newCart: HydratedCartDoc = await this.dal.createNew(cartInfo)  
@@ -37,7 +37,7 @@ export class CartsController extends BaseController implements Controllable{
         const customerId = req.params.customerId
 
         try {
-            const cart = await this.dal.findByCustomerId(customerId)
+            const cart = await this.dal.findByReferenceId(customerId)
 
             if(cart)
                 this.respondWithFoundResource(cart, res)
@@ -67,7 +67,7 @@ export class CartsController extends BaseController implements Controllable{
 
         try {
             const updatedCart = await this.dal
-                .findByCustomerIdAndUpdate(customerId, updateDoc)
+                .findByIdAndUpdate(customerId, updateDoc)
             if(updatedCart){
                 this.respondWithUpdatedResource(updatedCart.customer,res)
             } else {
@@ -126,7 +126,7 @@ export class CartsController extends BaseController implements Controllable{
         const customerId = req.params.customerId
 
         try {
-            const deletedCart = await this.dal.findByCustomerIDAndDelete(customerId)
+            const deletedCart = await this.dal.findByIdAndDelete(customerId)
             
             if(deletedCart){
                 this.respondWithDeletedResource(deletedCart.customer, res)

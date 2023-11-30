@@ -1,22 +1,27 @@
-import { HydratedReviewDoc, IReview, Review } from "./model"
 import { Paginator } from "../../../library/bases/controller"
+import { Accessible } from "../../../library/bases/accessible"
+import { HydratedReviewDoc, IReview, Review } from "./model"
 
-export class DataAccess{
+export class ReviewDataAccess implements Accessible{
     public createNew = async(reviewData: IReview): Promise<HydratedReviewDoc> =>{
         const doc = new Review(reviewData)
         return await doc.save()
     }
 
+    public findByReferenceId = async(refId: string): Promise<any> => {
+        return await Review.findById(refId)
+    }
+
     public findByProductId = async(productId: string, paginator: Paginator
         ) : Promise<HydratedReviewDoc[]> =>{
 
-            return await Review.find({product: productId})
-                .skip(paginator.skipDocs)
-                .limit(paginator.limit)
+        return await Review.find({product: productId})
+            .skip(paginator.skipDocs)
+            .limit(paginator.limit)
            
     }
 
-    public findRandomDocs = async(paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
+    public findWithPagination = async(paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
         return await Review.find().skip(paginator.skipDocs)
             .limit(paginator.limit)
     }
@@ -32,4 +37,4 @@ export class DataAccess{
     }
 }
 
-export const dataAccess  = new DataAccess()
+export const dataAccess  = new ReviewDataAccess()

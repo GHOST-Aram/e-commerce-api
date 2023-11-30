@@ -7,6 +7,11 @@ export class DataAccess{
         return new Review(input)
     })
 
+    public findByReferenceId = jest.fn(async(id: string
+        ): Promise<HydratedReviewDoc | null> =>{
+            return new Review(reviewData)
+    })
+    
     public findByProductId = jest.fn(async(
         productId: string, 
         paginator: Paginator
@@ -31,7 +36,7 @@ export class DataAccess{
             return reviews
     }
 
-    public findRandomDocs = jest.fn(async(
+    public findWithPagination = jest.fn(async(
         paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
             return this.createDocumentsArray(paginator.limit)
     })

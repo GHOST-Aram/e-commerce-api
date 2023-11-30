@@ -1,9 +1,9 @@
+import { BaseController } from "../../../library/bases/controller";
+import { Controllable } from "../../../library/bases/controllable";
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { IUser } from "../data-access/model";
-import { BaseController } from "../../../library/bases/controller";
-import { Controllable } from "../../../library/bases/controllable";
 
 export class UsersController extends BaseController implements Controllable{
 
@@ -37,7 +37,7 @@ export class UsersController extends BaseController implements Controllable{
         const userId = req.params.id
 
         try {
-            const user = await this.dataAccess.findById(userId)
+            const user = await this.dataAccess.findByReferenceId(userId)
             
             if(user === null)
                 this.respondWithNotFound(res)
@@ -53,7 +53,7 @@ export class UsersController extends BaseController implements Controllable{
         const pagination = this.paginate(req)
 
         try {
-            const users = await this.dataAccess.findMany(pagination)
+            const users = await this.dataAccess.findWithPagination(pagination)
             this.respondWithFoundResource(users, res)
         } catch (error) {
             next(error)
@@ -99,7 +99,7 @@ export class UsersController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response,next: NextFunction) =>{
-        
+
         const userId = req.params.id
 
         try {

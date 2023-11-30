@@ -1,19 +1,20 @@
+import { Paginator } from "../../../library/bases/controller"
+import { Accessible } from "../../../library/bases/accessible"
 import { PriceRange } from "../utils/formatter"
 import { HydratedProductDoc, IProduct, Product } from "./model"
-import { Paginator } from "../../../library/bases/controller"
 
-export class ProductsDAL{
+export class ProductsDAL implements Accessible{
     
     public createNew = async( productData: IProduct): Promise<string> =>{
         const product = new Product(productData)
         return (await product.save()).id
     }
 
-    public findById = async(productId: string): Promise<HydratedProductDoc | null > =>{
+    public findByReferenceId = async(productId: string): Promise<HydratedProductDoc | null > =>{
         return await Product.findById(productId)
     }
 
-    public findMany = async( paginator: Paginator ): Promise<HydratedProductDoc[]> =>{
+    public findWithPagination = async( paginator: Paginator ): Promise<HydratedProductDoc[]> =>{
         const products = await Product.find()
             .skip(paginator.skipDocs).limit(paginator.limit)
         
@@ -64,12 +65,6 @@ export class ProductsDAL{
             return products
     }
     
-    public findByIdAndDelete = async(productId: string
-        ): Promise<HydratedProductDoc | null > =>{
-        const deleted = await Product.findByIdAndDelete(productId)
-
-        return deleted
-    }
     public findByIdAndUpdate = async(productId: string, updateData: IProduct
         ): Promise<string | undefined> =>{
         const product = await Product.findByIdAndUpdate(productId, updateData)
@@ -78,5 +73,12 @@ export class ProductsDAL{
             return undefined
         else
             return product.id
+    }
+
+    public findByIdAndDelete = async(productId: string
+        ): Promise<HydratedProductDoc | null > =>{
+        const deleted = await Product.findByIdAndDelete(productId)
+
+        return deleted
     }
 }

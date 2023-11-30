@@ -1,14 +1,15 @@
-import { HydratedPaymentDoc, IPayment, Payment } from "./model"
 import { Paginator } from "../../../library/bases/controller"
+import { Accessible } from "../../../library/bases/accessible"
+import { HydratedPaymentDoc, IPayment, Payment } from "./model"
 
-export class DataAccess{
+export class DataAccess implements Accessible{
 
     public createNew = async(data: IPayment): Promise<HydratedPaymentDoc> =>{
         const payment = new Payment(data)
         return await payment.save()
     }
 
-    public findByOrderId = async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
+    public findByReferenceId = async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
         return Payment.findOne({ orderId })
     }
 
@@ -18,12 +19,12 @@ export class DataAccess{
                 .limit(paginator.limit)
     }
 
-    public findByOrderIdAndUpdate = async(orderId: string, updateDoc: IPayment
+    public findByIdAndUpdate = async(orderId: string, updateDoc: IPayment
         ): Promise<HydratedPaymentDoc | null > =>{
             return await Payment.findOneAndUpdate({ orderId }, updateDoc)
     }
 
-    public findByOrderIdAndDelete = async(orderId: string
+    public findByIdAndDelete = async(orderId: string
         ): Promise<HydratedPaymentDoc | null> =>{
             return await Payment.findOneAndDelete({ orderId })
     }

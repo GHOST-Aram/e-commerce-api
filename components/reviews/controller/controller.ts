@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from "express"
-import { DataAccess } from "../data-access/data-access"
-import { IReview } from "../data-access/model"
 import { BaseController } from "../../../library/bases/controller"
 import { Controllable } from "../../../library/bases/controllable"
+import { IReview } from "../data-access/model"
+import { NextFunction, Request, Response } from "express"
+import { ReviewDataAccess } from "../data-access/data-access"
 
 export class ReviewsController extends BaseController implements Controllable{
 
-    private dataAccess: DataAccess
+    private dataAccess: ReviewDataAccess
 
-    constructor(dataAccess: DataAccess){
+    constructor(dataAccess: ReviewDataAccess){
         super()
         this.dataAccess = dataAccess
     }
@@ -45,7 +45,7 @@ export class ReviewsController extends BaseController implements Controllable{
         const paginator = this.paginate(req)
 
         try {
-            const reviews = await this.dataAccess.findRandomDocs(paginator)
+            const reviews = await this.dataAccess.findWithPagination(paginator)
             this.respondWithFoundResource(reviews, res)
         } catch (error) {
             next(error)
@@ -91,7 +91,7 @@ export class ReviewsController extends BaseController implements Controllable{
     }
 
     public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{
-        
+
         const reviewId = req.params.reviewId
         
         try {

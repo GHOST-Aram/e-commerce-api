@@ -1,6 +1,21 @@
+import { Accessible } from "../../../library/bases/accessible"
 import { Paginator } from "../../../library/bases/controller"
 import { Cart, HydratedCartDoc, ICart } from "./model"
-export class DataAccess{
+
+export class DataAccess implements Accessible{
+
+    public createNew = async(data:ICart) =>{
+        const cart = new Cart({
+            items: data.items,
+            customer: data.customer
+        })
+        return await cart.save()
+    }
+
+    public findByReferenceId = async(
+        customerId : string ): Promise<HydratedCartDoc | null> =>{
+            return await Cart.findOne({ customer: customerId })
+    }
 
     public findCartAndAddItemId = async(
         customerId: string, itemId: string
@@ -22,23 +37,6 @@ export class DataAccess{
 
             return modifiedCart
     }
-    public createNew = async(data:ICart) =>{
-        const cart = new Cart({
-            items: data.items,
-            customer: data.customer
-        })
-        return await cart.save()
-    }
-
-    public findByCustomerId = async(
-        customerId : string ): Promise<HydratedCartDoc | null> =>{
-            return await Cart.findOne({ customer: customerId })
-    }
-
-    public findByCustomerIDAndDelete = async(customerId: string
-        ): Promise<HydratedCartDoc | null> =>{
-            return await Cart.findOneAndDelete({ customer: customerId })
-    }
     
     public findWithPagination = async(paginator: Paginator
         ): Promise<HydratedCartDoc[]> =>{
@@ -46,7 +44,7 @@ export class DataAccess{
                 .limit(paginator.limit)
     }
 
-    public findByCustomerIdAndUpdate = async(
+    public findByIdAndUpdate = async(
         customerId: string, updateDoc: { items: string []}
         ): Promise<HydratedCartDoc | null > =>{
             const updatedDoc = await Cart.findOneAndUpdate(
@@ -54,6 +52,11 @@ export class DataAccess{
             
             return updatedDoc 
 
+    }
+
+    public findByIdAndDelete = async(customerId: string
+        ): Promise<HydratedCartDoc | null> =>{
+            return await Cart.findOneAndDelete({ customer: customerId })
     }
 }
 

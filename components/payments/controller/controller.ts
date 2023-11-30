@@ -1,8 +1,8 @@
+import { Controllable } from "../../../library/bases/controllable"
 import { BaseController } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { IPayment } from "../data-access/model"
-import { Controllable } from "../../../library/bases/controllable"
 
 export class PayController extends BaseController implements Controllable{
 
@@ -30,7 +30,7 @@ export class PayController extends BaseController implements Controllable{
         const referenceId =  req.params.orderId
 
         try {
-            const payment = await this.dal.findByOrderId(referenceId)
+            const payment = await this.dal.findByReferenceId(referenceId)
 
             if(payment){
                 this.respondWithFoundResource(payment, res)
@@ -60,7 +60,7 @@ export class PayController extends BaseController implements Controllable{
         const updateDoc: IPayment = req.body
 
         try {
-            const updatedPayment = await this.dal.findByOrderIdAndUpdate(
+            const updatedPayment = await this.dal.findByIdAndUpdate(
                 referenceId, updateDoc)
 
             if(updatedPayment){
@@ -80,7 +80,7 @@ export class PayController extends BaseController implements Controllable{
         const updateDoc = req.body
 
         try {
-            const modifiedPayment = await this.dal.findByOrderIdAndUpdate(
+            const modifiedPayment = await this.dal.findByIdAndUpdate(
                 referenceId, updateDoc)
                 
             if(modifiedPayment){
@@ -94,11 +94,11 @@ export class PayController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
-        
+
         const referenceId = req.params.orderId
 
         try {
-            const deletedDoc = await this.dal.findByOrderIdAndDelete(referenceId)
+            const deletedDoc = await this.dal.findByIdAndDelete(referenceId)
 
             if(deletedDoc){
                 this.respondWithDeletedResource(deletedDoc.orderId, res)

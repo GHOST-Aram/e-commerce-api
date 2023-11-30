@@ -1,9 +1,9 @@
+import { BaseController } from "../../../library/bases/controller"
+import { Controllable } from "../../../library/bases/controllable"
 import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
 import { PriceRange, formatter } from "../utils/formatter"
-import { BaseController } from "../../../library/bases/controller"
-import { Controllable } from "../../../library/bases/controllable"
 
 export class ProductsController extends BaseController implements Controllable{
 
@@ -31,7 +31,7 @@ export class ProductsController extends BaseController implements Controllable{
         const productId  = req.params.id
 
         try {
-            const product = await this.dataAccess.findById(productId)
+            const product = await this.dataAccess.findByReferenceId(productId)
 
             if(product)
                 this.respondWithFoundResource(product, res)
@@ -47,7 +47,7 @@ export class ProductsController extends BaseController implements Controllable{
         const paginator = this.paginate(req)
         
         try {
-            const products = await this.dataAccess.findMany(paginator)
+            const products = await this.dataAccess.findWithPagination(paginator)
             this.respondWithFoundResource(products, res)
         } catch (error) {
             next(error)
@@ -169,7 +169,7 @@ export class ProductsController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
-        
+
         const productId = req.params.id
 
         try {

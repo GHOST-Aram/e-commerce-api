@@ -15,7 +15,7 @@ export class ProductsDAL {
             return product.id
     })
 
-    public findById = jest.fn(
+    public findByReferenceId = jest.fn(
         async(productId: string
         ): Promise<HydratedProductDoc|null> =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4')
@@ -28,7 +28,7 @@ export class ProductsDAL {
             return null         
     })
 
-    public findMany = jest.fn(async( paginator:Paginator
+    public findWithPagination = jest.fn(async( paginator:Paginator
         ): Promise<HydratedProductDoc[]> =>{
             return this.createFakeProductsArray(paginator.limit)
     })

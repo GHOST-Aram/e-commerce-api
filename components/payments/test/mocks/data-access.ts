@@ -9,7 +9,7 @@ export class DataAccess{
             return new Payment(paymentInput)
     })
 
-    public findByOrderId = jest.fn(
+    public findByReferenceId = jest.fn(
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
                 return new Payment(paymentInput)
@@ -18,10 +18,12 @@ export class DataAccess{
             }
     })
 
-    public findWithPagination = async(paginator: Paginator
-        ): Promise<HydratedPaymentDoc[]> =>{
-            return this.createDocsArray(paginator.limit)
-    }
+    public findWithPagination = jest.fn(
+        async(paginator: Paginator
+            ): Promise<HydratedPaymentDoc[]> =>{
+                return this.createDocsArray(paginator.limit)
+        }    
+    )
 
     private createDocsArray = async(length: number
         ): Promise<HydratedPaymentDoc[]> =>{
@@ -36,7 +38,7 @@ export class DataAccess{
             return payments
     }
 
-    public findByOrderIdAndUpdate = jest.fn(
+    public findByIdAndUpdate = jest.fn(
         async(orderId: string, updateDoc: IPayment
             ): Promise<HydratedPaymentDoc | null> =>{
                 if(orderId === '64c9e4f2df7cc072af2ac9e8'){
@@ -46,7 +48,7 @@ export class DataAccess{
                 }
     })
 
-    public findByOrderIdAndDelete = jest.fn(
+    public findByIdAndDelete = jest.fn(
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
                 return new Payment(paymentInput)

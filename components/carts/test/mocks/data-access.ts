@@ -4,12 +4,13 @@ import { jest } from "@jest/globals"
 import { cartData } from "./raw-data"
 
 export class DataAccess{
+
     public createNew = jest.fn(
         async(data: ICart): Promise<HydratedCartDoc> =>{
             return new Cart(data)
     })
 
-    public findByCustomerId = jest.fn(async(
+    public findByReferenceId = jest.fn(async(
         customerId: string): Promise<HydratedCartDoc | null> =>{
             if(customerId === '64c9e4f2df7cc072af2ac9e5'){
                 return new Cart(cartData)
@@ -17,17 +18,7 @@ export class DataAccess{
             return null
     })
 
-    public findByCustomerIDAndDelete = jest.fn(async(
-        customerId: string): Promise<HydratedCartDoc | null> =>{
-            if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                return new Cart({
-                    customer: customerId,
-                })
-            }
-            return null
-    })
-
-    public findByCustomerIdAndUpdate = jest.fn(
+    public findByIdAndUpdate = jest.fn(
         async(customerId: string, updateDoc: {items:string[]}
             ): Promise<HydratedCartDoc | null> =>{
                 if(customerId === '64c9e4f2df7cc072af2ac9e5'){
@@ -84,6 +75,16 @@ export class DataAccess{
 
         return carts
     }
+
+    public findByIdAndDelete = jest.fn(async(
+        customerId: string): Promise<HydratedCartDoc | null> =>{
+            if(customerId === '64c9e4f2df7cc072af2ac9e5'){
+                return new Cart({
+                    customer: customerId,
+                })
+            }
+            return null
+    })
 }
 
 export const dataAccess = new DataAccess()

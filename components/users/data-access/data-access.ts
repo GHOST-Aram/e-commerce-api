@@ -1,7 +1,9 @@
-import { HydratedUserDoc, IUser, User } from "./model"
 import { Paginator } from "../../../library/bases/controller"
+import { Accessible } from "../../../library/bases/accessible"
+import { HydratedUserDoc, IUser, User } from "./model"
 
-export class UsersDAL{
+export class UsersDAL implements Accessible{
+
     public createNew = async(userData: IUser): Promise<HydratedUserDoc> =>{
         const user = new User(userData)
         const savedUser = await user.save()
@@ -9,7 +11,7 @@ export class UsersDAL{
         return savedUser
     }
 
-    public findById = async(userId: string): Promise<HydratedUserDoc | null> =>{
+    public findByReferenceId = async(userId: string): Promise<HydratedUserDoc | null> =>{
         const user = await User.findById(userId)
         return user
     }
@@ -18,7 +20,7 @@ export class UsersDAL{
         return await User.findOne({ email })
     }
 
-    public findMany = async(pagination: Paginator): Promise<HydratedUserDoc[]> =>{
+    public findWithPagination = async(pagination: Paginator): Promise<HydratedUserDoc[]> =>{
         const users = await User.find({}, '-password')
             .skip(pagination.skipDocs)
             .limit(pagination.limit)

@@ -1,8 +1,8 @@
+import { Controllable } from "../../../library/bases/controllable"
 import { BaseController, Paginator } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { IOrder } from "../data-access/model"
-import { Controllable } from "../../../library/bases/controllable"
 
 export class OrdersController extends BaseController implements Controllable{
 
@@ -30,7 +30,7 @@ export class OrdersController extends BaseController implements Controllable{
         const orderId = req.params.orderId
 
         try {
-            const order = await this.dal.findById(orderId)
+            const order = await this.dal.findByReferenceId(orderId)
             
             if(order)
                 this.respondWithFoundResource(order, res)
@@ -92,7 +92,7 @@ export class OrdersController extends BaseController implements Controllable{
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
-        
+
         const orderId = req.params.orderId
 
         try {

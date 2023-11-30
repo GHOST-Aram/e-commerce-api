@@ -8,7 +8,14 @@ export class DataAccess{
         async(data: IOrder): Promise<HydratedOrderDoc> =>{
             return new Order(data)
     }) 
-    
+
+    public findByReferenceId = jest.fn(
+        async(orderId: string): Promise<HydratedOrderDoc | null> =>{
+            if(orderId === '64c9e4f2df7cc072af2ac9e8')
+                return new Order(orderInput)
+            else return null
+    })
+
     public findWithPagination = jest.fn(
         async(paginator: Paginator): Promise<HydratedOrderDoc[]> =>{
             return this.createFakeOrdersArray(paginator.limit)
@@ -24,13 +31,6 @@ export class DataAccess{
 
         return orders
     }
-
-    public findById = jest.fn(
-        async(orderId: string): Promise<HydratedOrderDoc | null> =>{
-            if(orderId === '64c9e4f2df7cc072af2ac9e8')
-                return new Order(orderInput)
-            else return null
-    })
 
     public findByIdAndUpdate = jest.fn(
         async(orderId: string, updateDoc: IOrder

@@ -12,7 +12,7 @@ export class UsersDAL{
         return new User(userData)  
     })
 
-    public findById = jest.fn(async(userID: string
+    public findByReferenceId = jest.fn(async(userID: string
         ): Promise<HydratedUserDoc | null> =>{
             if(userID === '64c9e4f2df7cc072af2ac9e4'){
                 const user = new User({
@@ -40,7 +40,7 @@ export class UsersDAL{
         return null
     })
     
-    public findMany = jest.fn(async(
+    public findWithPagination = jest.fn(async(
         pagination: Paginator): Promise<HydratedUserDoc[]> =>{
             return this.createFakeDocsArray(pagination.limit)
     })
