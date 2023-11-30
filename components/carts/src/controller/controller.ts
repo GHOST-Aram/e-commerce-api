@@ -2,7 +2,6 @@ import { NextFunction, Request, Response, request } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
 import { validationResult } from "express-validator"
-import { isValidObjectId } from "mongoose"
 
 export class Controller{
 
@@ -11,56 +10,6 @@ export class Controller{
     constructor(dataAccess: DataAccess){
         this.dal = dataAccess
     }
-
-    public addItem = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const customerId = req.params.customerId
-            this.handleInvalidId(customerId, res)
-
-            const itemId: string = req.body.item
-            try {
-                const modifiedCart = await this.dal.findCartAndAddItemId(
-                    customerId, itemId)
-                    
-                if(modifiedCart){
-                    this.respondWithModifiedResource(
-                        modifiedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }    
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    public removeItem = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const customerId = req.params.customerId
-            this.handleInvalidId(customerId, res)
-
-            const itemId: string = req.body.item
-            try {
-                const modifiedCart = await this.dal.findCartAndRemoveItemId(
-                    customerId, itemId
-                )
-                if(modifiedCart){
-                    this.respondWithModifiedResource(
-                        modifiedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }    
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    private respondWithModifiedResource = (
-        resourceId: string, res: Response) =>{
-            res.location(`/carts/${resourceId}`)
-            res.status(200).json({ message: 'Modified' })
-    } 
-
-
     public addNewCart = async(
         req: Request, res: Response, next: NextFunction) =>{
             const cartInfo: ICart = req.body
@@ -93,38 +42,10 @@ export class Controller{
             res.status(201).json({ message: 'Created'})
     }
 
-    public deleteCart = async(
-        req: Request, res: Response, next:NextFunction
-        ) =>{
-            const customerId = req.params.customerId
-            this.handleInvalidId(customerId, res)
-
-            try {
-                const deletedCart = await this.dal
-                    .findByCustomerIDAndDelete(customerId)
-                
-                if(deletedCart){
-                    this.respondWithDeletedResource(
-                        deletedCart.customer, res)
-                } else {
-                    this.respondResourceWithNotFound(res)
-                }
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    private respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({
-            message: 'Deleted',
-            id: id
-        })
-    }
     public getOneCart = async(
         req: Request, res: Response, next: NextFunction
         ) =>{
             const customerId = req.params.customerId
-            this.handleInvalidId(customerId, res)
 
             try {
                 const cart = await this.dal.findByCustomerId(
@@ -138,12 +59,6 @@ export class Controller{
                 next(error)   
             }
     }
-    
-    private handleInvalidId = (id: string, res: Response) =>{
-        if(!isValidObjectId(id)){
-            res.status(400).json({ message: 'Invalid id'})
-        }
-    }
 
     private respondResourceWithNotFound = (res: Response) =>{
         res.status(404).json({ message: 'Resource not Found'})
@@ -153,11 +68,7 @@ export class Controller{
         resource: HydratedCartDoc[]| HydratedCartDoc, 
         res: Response
         ) =>{
-            if(Array.isArray(resource)){
-                res.status(200).json({ carts: resource })
-            } else{
-                res.status(200).json({ cart: resource })
-            }
+            res.status(200).json({ resource })
     }
 
     public getManyCarts = async(
@@ -193,30 +104,9 @@ export class Controller{
         return paginator
     }
 
-    public respondWithMethodNotAllowed = (
-        req: Request, res: Response) =>{
-            res.status(405).json({ message: 'Method not allowed' })
-    }
-
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction) =>{
-            const errors = validationResult(req)
-
-            if(!errors.isEmpty()){
-                res.status(400).json(
-                    {
-                        message: 'Invalid input',
-                        errors: errors.array()
-                    }
-                )
-            } else
-                next()
-    }
-
     public updateCartItems = async(
         req: Request, res: Response, next: NextFunction) =>{
             const customerId = req.params.customerId
-            this.handleInvalidId(customerId, res)
             
             const updateDoc: {items: string[]} = req.body
             try {
@@ -246,10 +136,102 @@ export class Controller{
             res.location(`/carts/${resourceId}`)
             res.status(200).json({ message: 'Updated' })
         }
+
+    public addItem = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const customerId = req.params.customerId
+
+            const itemId: string = req.body.item
+            try {
+                const modifiedCart = await this.dal.findCartAndAddItemId(
+                    customerId, itemId)
+                    
+                if(modifiedCart){
+                    this.respondWithModifiedResource(
+                        modifiedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }    
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    public removeItem = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const customerId = req.params.customerId
+
+            const itemId: string = req.body.item
+            try {
+                const modifiedCart = await this.dal.findCartAndRemoveItemId(
+                    customerId, itemId
+                )
+                if(modifiedCart){
+                    this.respondWithModifiedResource(
+                        modifiedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }    
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithModifiedResource = (
+        resourceId: string, res: Response) =>{
+            res.location(`/carts/${resourceId}`)
+            res.status(200).json({ message: 'Modified' })
+    } 
+
+    public deleteCart = async(
+        req: Request, res: Response, next:NextFunction
+        ) =>{
+            const customerId = req.params.customerId
+
+            try {
+                const deletedCart = await this.dal
+                    .findByCustomerIDAndDelete(customerId)
+                
+                if(deletedCart){
+                    this.respondWithDeletedResource(
+                        deletedCart.customer, res)
+                } else {
+                    this.respondResourceWithNotFound(res)
+                }
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithDeletedResource = (id: string, res: Response) =>{
+        res.status(200).json({
+            message: 'Deleted',
+            id: id
+        })
+    }
+
+    public respondWithMethodNotAllowed = (
+        req: Request, res: Response) =>{
+            res.status(405).json({ message: 'Method not allowed' })
+    }
+
+    public handleValidationErrors = (
+        req: Request, res: Response, next: NextFunction) =>{
+            const errors = validationResult(req)
+
+            if(!errors.isEmpty()){
+                res.status(400).json(
+                    {
+                        message: 'Invalid input',
+                        errors: errors.array()
+                    }
+                )
+            } else
+                next()
+    }
 }
 
 export interface Paginator{
     skipDocs: number,
     limit: number
 }
-type Change = 'updated' | 'deleted' | 'modified'

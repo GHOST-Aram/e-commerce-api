@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, param } from "express-validator"
 import { isValidObjectId } from "mongoose"
 
 class Validator{
@@ -25,6 +25,10 @@ class Validator{
             })
             .withMessage(
                 `${fieldName} ${this.message} array`)
+    }
+
+    public validateReferenceId = (paramName: string) =>{
+        return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 }
 

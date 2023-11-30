@@ -1,6 +1,7 @@
 import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import request from "supertest"
+import { assert } from "./lib/response-assertions";
 
 describe('DELETE Cart routes', () =>{
     test('Rejects delete all carts request with status 405:'+
@@ -8,45 +9,37 @@ describe('DELETE Cart routes', () =>{
         async() =>{
             const response = await request(app).delete('/carts')
             
-            expect(response.status).toEqual(405)
-            expect(response.headers['content-type']).toMatch(/json/)
-            expect(response.body.message).toMatch(/not allowed/i)
+            assert.respondsWithMethodNotAllowed(response)
         }
     )
 
-    test('Responds with status 404 if cart to be deleted doesn\'t exist', 
-        async() =>{
-            const  response = await request(app).delete(
-                '/carts/25c9e4f2df7cc072af2ac9e5')
-
-            expect(response.status).toEqual(404)
-            expect(response.body.message).toMatch(/not found/i)
-            expect(response.headers['content-type']).toMatch(/json/)
-        }
-    )
-
-    test('Responds with status 400 if cart reference id (customer id )in request'+
-        ' params is invalid',  
+    test('Responds  validation errors, status 400: '+
+        ' Invalid reference Id (customet Id).',  
     async() =>{
         const response = await request(app).delete(
             '/carts/64c9e4f2dc9e5')
 
-        expect(response.status).toEqual(400)
-        expect(response.body.message).toMatch(/invalid/i)
-        expect(response.headers['content-type']).toMatch(/json/)
+        assert.respondsWithBadRequest(response)
+        assert.respondsWithValidationErrors(response)
     })
 
-    test('Responds with status 200 and cart reference ID if '+
-        'delete is success', 
+    test('Responds with Not Found, status 404: Target doesn\'t exist', 
+        async() =>{
+            const  response = await request(app).delete(
+                '/carts/25c9e4f2df7cc072af2ac9e5')
+
+            assert.respondsWithNotFound(response)
+        }
+    )
+
+    test('Responds deleted resource Id, status 200:  '+
+        'Delete operation success.', 
         async() =>{
             const response = await request(app).delete(
                 '/carts/64c9e4f2df7cc072af2ac9e5')
             
-            expect(response.status).toEqual(200)
-            expect(response.headers['content-type']).toMatch(/json/)
-            expect(response.body.message).toMatch(/deleted/i)
-            expect(response.body.id).toMatch(
-                /^64c9e4f2df7cc072af2ac9e5$/)
+            assert.respondsWithSuccess(response)
+            assert.respondsWithDeletedResource(response)
         }
     )
 })

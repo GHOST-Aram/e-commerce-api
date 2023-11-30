@@ -2,54 +2,45 @@ import { app } from "./lib/test.config";
 import { expect, test, describe } from "@jest/globals"
 import request from "supertest"
 import * as data from "./mocks/raw-data";
+import { assert } from "./lib/response-assertions";
 
 describe('Cart POST routes', () =>{
 
-	test('Rejects creating cart with client custom IDs (status 405)', 
+	test('Rejects requests with client defined ID, (status 405): ' +
+		'Method not allowed', 
 	async() =>{
 		const response = await request(app).post(
 			'/carts/64c9e4f2df7cc072af2ac9e4')
 			.send(data.cartData)
 
-		expect(response.status).toEqual(405)
-		expect(response.body.message).toMatch(/not allowed/i)
-		expect(response.headers['content-type']).toMatch(/json/)
+		assert.respondsWithMethodNotAllowed(response)
 	})
 	
-	test('Responds with conflict if a cart already exists with'+
-		' incoming customer ID (status 409)',
+	test('Responds with conflict, status 409: '+
+	' Customer\'s cart already exists.',
 	async() => {
 		const response = await request(app).post('/carts')
 			.send(data.existingCart)
 
-		expect(response.status).toEqual(409)
-		expect(response.headers['content-type']).toMatch(/json/)
-		expect(response.body.message).toMatch(/exists/)
+		assert.respondsWithConflict(response)
 	})
 	
-	test('Responds with validation Errors if input is invalid'+
-		' (status 404)', 
+	test('Responds with validation Errors, status 400: '+
+		' Invalid input.', 
 	async() =>{
 		const response = await request(app).post('/carts')
 			.send(data.invalidInput)
 		
-		expect(response.status).toEqual(400)
-		expect(response.body.message).toMatch(/invalid input/i)
-		expect(response.headers['content-type']).toMatch(/json/)
-		expect(response.body).toHaveProperty('errors')
-		expect(Array.isArray(response.body.errors)).toBeTruthy()
+		assert.respondsWithBadRequest(response)
+		assert.respondsWithValidationErrors(response)
 	})
 
-	test('Responds with location url (status 201) if created'+
-		' successfully',
+	test('Responds with created resource URI, status 201: '+
+		' Post request successful.',
 	async() => {
 		const response = await request(app).post('/carts')
 			.send(data.cartData)
 
-		expect(response.status).toEqual(201)
-		expect(response.body.message).toMatch(/created/i)
-		expect(response.headers['content-type']).toMatch(/json/)
-		expect(response.header.location).toMatch(
-			/\/carts\/[a-fA-F0-9]{24}/)
+		assert.respondsWithCreatedResource(response)
 	})
 })

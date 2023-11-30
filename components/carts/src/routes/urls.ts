@@ -1,18 +1,26 @@
 import Router from 'express'
 import { Controller } from '../controller/controller'
 import * as middlewear from '../utils/middlewear'
+import { validator } from '../utils/validator'
 
 const router = Router()
 
 export const routesWrapper = (controller: Controller) =>{
-    router.post('/', middlewear.initialInputValidators, 
+    router.post('/', 
+        middlewear.initialInputValidators, 
         controller.handleValidationErrors, 
-        controller.addNewCart)
+        controller.addNewCart
+    )
 
-    router.post('/:id', controller.respondWithMethodNotAllowed)
+    router.post('/:id', 
+        controller.respondWithMethodNotAllowed
+    )
 
     router.get('/', controller.getManyCarts)
-    router.get('/:customerId', controller.getOneCart)
+    router.get('/:customerId',
+        validator.validateReferenceId('customerId') ,
+        controller.handleValidationErrors,
+        controller.getOneCart)
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:customerId',middlewear.updateInputValidator,
@@ -31,6 +39,10 @@ export const routesWrapper = (controller: Controller) =>{
         controller.removeItem)
 
     router.delete('/', controller.respondWithMethodNotAllowed)
-    router.delete('/:customerId', controller.deleteCart)
+    router.delete('/:customerId', 
+        validator.validateReferenceId('customerId'),
+        controller.handleValidationErrors,
+        controller.deleteCart
+    )
     return router
 }
