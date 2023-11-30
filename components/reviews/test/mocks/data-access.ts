@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
 import { HydratedReviewDoc, IReview, Review } from '../../data-access/model'
-import { Paginator } from '../../data-access/data-access'
+import { Paginator } from '../../../../library/bases/controller'
 import { reviewData } from './raw-data'
 export class DataAccess{
     public createNew = jest.fn(async(input: IReview) =>{

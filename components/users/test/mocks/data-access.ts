@@ -1,4 +1,4 @@
-import { Paginator } from "../../data-access/data-access"
+import { Paginator } from "../../../../library/bases/controller"
 import { 
     HydratedUserDoc, 
     IUser, 

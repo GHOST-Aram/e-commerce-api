@@ -1,4 +1,5 @@
 import { HydratedPaymentDoc, IPayment, Payment } from "./model"
+import { Paginator } from "../../../library/bases/controller"
 
 export class DataAccess{
 
@@ -29,7 +30,3 @@ export class DataAccess{
 }
 
 export const dataAccess  = new DataAccess()
-export interface Paginator{
-    skipDocs: number
-    limit: number
-}

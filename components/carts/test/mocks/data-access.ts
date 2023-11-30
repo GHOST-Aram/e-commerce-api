@@ -1,7 +1,7 @@
-import { jest } from "@jest/globals"
+import { Paginator } from "../../../../library/bases/controller"
 import { Cart, HydratedCartDoc, ICart } from "../../data-access/model"
+import { jest } from "@jest/globals"
 import { cartData } from "./raw-data"
-import { Paginator } from "../../controller/controller"
 
 export class DataAccess{
     public createNew = jest.fn(

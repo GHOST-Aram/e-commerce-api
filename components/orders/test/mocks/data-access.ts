@@ -1,6 +1,6 @@
-import { jest } from "@jest/globals"
+import { Paginator } from "../../../../library/bases/controller"
 import { HydratedOrderDoc, IOrder, Order } from "../../data-access/model"
-import { Paginator } from "../../controller/controller"
+import { jest } from "@jest/globals"
 import { orderInput } from "./raw-data"
 
 export class DataAccess{

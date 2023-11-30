@@ -1,4 +1,5 @@
 import { HydratedReviewDoc, IReview, Review } from "./model"
+import { Paginator } from "../../../library/bases/controller"
 
 export class DataAccess{
     public createNew = async(reviewData: IReview): Promise<HydratedReviewDoc> =>{
@@ -32,7 +33,3 @@ export class DataAccess{
 }
 
 export const dataAccess  = new DataAccess()
-export interface Paginator{
-    skipDocs: number,
-    limit: number
-}

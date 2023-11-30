@@ -1,9 +1,9 @@
-import { Controller } from "../../controller/controller";
+import { ReviewsController } from "../../controller/controller";
 import { dataAccess } from "../mocks/data-access";
 import { routesWrapper } from "../../routes/urls";
 import { app } from "../../config/config";
 
-const controller = new Controller(dataAccess)
+const controller = new ReviewsController(dataAccess)
 
 app.use('/reviews', routesWrapper(controller))
 

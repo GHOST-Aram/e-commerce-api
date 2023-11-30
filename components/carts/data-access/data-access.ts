@@ -1,4 +1,4 @@
-import { Paginator } from "../controller/controller"
+import { Paginator } from "../../../library/bases/controller"
 import { Cart, HydratedCartDoc, ICart } from "./model"
 export class DataAccess{
 

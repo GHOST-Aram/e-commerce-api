@@ -1,4 +1,5 @@
 import { HydratedUserDoc, IUser, User } from "./model"
+import { Paginator } from "../../../library/bases/controller"
 
 export class UsersDAL{
     public createNew = async(userData: IUser): Promise<HydratedUserDoc> =>{
@@ -9,8 +10,8 @@ export class UsersDAL{
     }
 
     public findById = async(userId: string): Promise<HydratedUserDoc | null> =>{
-            const user = await User.findById(userId)
-            return user
+        const user = await User.findById(userId)
+        return user
     }
     
     public findByEmail = async(email: string): Promise<HydratedUserDoc | null> =>{
@@ -18,11 +19,11 @@ export class UsersDAL{
     }
 
     public findMany = async(pagination: Paginator): Promise<HydratedUserDoc[]> =>{
-            const users = await User.find({}, '-password')
-                .skip(pagination.skipDocs)
-                .limit(pagination.limit)
-            
-            return users
+        const users = await User.find({}, '-password')
+            .skip(pagination.skipDocs)
+            .limit(pagination.limit)
+        
+        return users
     }
 
     public findByIdAndUpdate = async(userID: string, updateData: IUser
@@ -33,9 +34,7 @@ export class UsersDAL{
     public findByIdAndDelete = async(userId: string)=>{
             return await User.findByIdAndDelete(userId)
     }
-    }
-export const usersDAL = new UsersDAL()
-export interface Paginator{
-    skipDocs: number,
-    limit: number
 }
+
+export const usersDAL = new UsersDAL()
+

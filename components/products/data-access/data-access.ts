@@ -1,10 +1,6 @@
 import { PriceRange } from "../utils/formatter"
 import { HydratedProductDoc, IProduct, Product } from "./model"
-
-export interface Paginator{
-    skipDocs: number, 
-    limit: number
-}
+import { Paginator } from "../../../library/bases/controller"
 
 export class ProductsDAL{
     

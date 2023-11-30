@@ -1,11 +1,14 @@
+import { BaseController, Paginator } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { HydratedOrderDoc, IOrder, Order } from "../data-access/model"
-export class Controller{
+import { IOrder } from "../data-access/model"
+
+export class OrdersController extends BaseController{
 
     private dal: DataAccess
 
     constructor(dataAccess: DataAccess){
+        super()
         this.dal = dataAccess
     }
 
@@ -29,20 +32,12 @@ export class Controller{
             if(order)
                 this.respondWithFoundResource(order, res)
             
-            this.respondWithNotFoundError(res)
+            this.respondWithNotFound(res)
         } catch (error) {
             next(error)
         }
     }
 
-    private respondWithNotFoundError = (res: Response) => {
-        res.status(404).json({ message: 'Resource not found.'})
-    }
-
-    private respondWithCreatedResource = (resourceId: string, res:Response) =>{
-        res.location(`/orders/${resourceId}`)
-        res.status(201).json({ message: 'Created' })
-    }
 
     public getMany = async(req: Request, res: Response, next: NextFunction)  =>{
         const paginator: Paginator = this.paginate(req)
@@ -53,32 +48,6 @@ export class Controller{
         } catch (error) {
             next(error)
         }
-    }
-
-    private paginate = (req: Request): Paginator =>{
-        const paginator: Paginator = {
-            skipDocs: 0,
-            limit: 10
-        }
-
-        if(req.query.page && req.query.limit){
-            const page = Math.abs(Number(req.query.page))
-            const limit = Math.abs(Number(req.query.limit))
-
-            if(page && limit){
-                paginator.limit = limit
-                paginator.skipDocs = (page - 1) * limit
-            }
-        } 
-        
-        return paginator
-        
-    }
-
-    private respondWithFoundResource = (
-        resource: HydratedOrderDoc[] | HydratedOrderDoc, 
-        res: Response ) =>{
-            res.status(200).json({ resource})
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
@@ -100,11 +69,6 @@ export class Controller{
         }
     }
 
-    private respondWithUpdatedResource = (id: string, res: Response) =>{
-        res.location(`/orders/${id}`)
-        res.status(200).json({ message: 'Updated' })
-    }
-
     public modifyOrder = async(req: Request, res: Response, next: NextFunction) =>{
         const orderId = req.params.orderId
         const patchDoc = req.body
@@ -115,15 +79,10 @@ export class Controller{
             if(modifiedDoc)
                 this.respondWithModifiedResource(orderId, res)
             else
-                this.respondWithNotFoundError(res)
+                this.respondWithNotFound(res)
         } catch (error) {
             next(error)
         }
-    }
-
-    private respondWithModifiedResource = (id: string, res: Response) =>{
-        res.location(`/orders/${id}`)
-        res.status(200).json({ message: 'Modified' })
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
@@ -135,7 +94,7 @@ export class Controller{
             if(deletedOrder){
                 this.respondWithDeletedResource(deletedOrder.id, res)
             } else {
-                this.respondWithNotFoundError(res)
+                this.respondWithNotFound(res)
             }
         } catch (error) {
             next(error)
@@ -149,9 +108,4 @@ export class Controller{
     public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed'})
     }
-}
-
-export interface Paginator {
-    skipDocs: number
-    limit: number
 }

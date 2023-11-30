@@ -1,14 +1,17 @@
+import { BaseController, Paginator } from "../../../library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
 
-export class Controller{
+export class CartsController extends BaseController{
 
     private dal: DataAccess
 
     constructor(dataAccess: DataAccess){
+        super()
         this.dal = dataAccess
     }
+    
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
         const cartInfo: ICart = req.body
 
@@ -27,15 +30,6 @@ export class Controller{
         }
     }
 
-    private respondWithConflict = (res: Response) =>{
-        res.status(409).json({message: 'Cart already exists'})
-    }
-
-    private respondWithCreatedResource = (resourceId: string, res: Response) =>{
-        res.location(`/carts/${resourceId}`)
-        res.status(201).json({ message: 'Created'})
-    }
-
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
         const customerId = req.params.customerId
 
@@ -45,21 +39,10 @@ export class Controller{
             if(cart)
                 this.respondWithFoundResource(cart, res)
             else
-                this.respondResourceWithNotFound(res)
+                this.respondWithNotFound(res)
         } catch (error) {
             next(error)   
         }
-    }
-
-    private respondResourceWithNotFound = (res: Response) =>{
-        res.status(404).json({ message: 'Resource not Found'})
-    }
-
-    private respondWithFoundResource = (
-        resource: HydratedCartDoc[]| HydratedCartDoc, 
-        res: Response
-        ) =>{
-            res.status(200).json({ resource })
     }
 
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
@@ -71,23 +54,6 @@ export class Controller{
         } catch (error) {
             next(error)
         }
-    }
-
-    private paginate = (req: Request): Paginator =>{
-        const paginator = {
-            skipDocs: 0,
-            limit: 10
-        }
-
-        const page = Math.abs(Number(req.query.page))
-        const limit = Math.abs(Number(req.query.limit))
-
-        if(page && limit){
-            paginator.skipDocs = (page - 1) * limit
-            paginator.limit = limit
-        }
-
-        return paginator
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
@@ -112,11 +78,6 @@ export class Controller{
             next(error)
         }
     }
-    
-    private respondWithUpdatedResource = (resourceId: string, res: Response) =>{
-        res.location(`/carts/${resourceId}`)
-        res.status(200).json({ message: 'Updated' })
-    }
 
     public addtoCart = async(req: Request, res: Response, next: NextFunction) =>{
         const customerId = req.params.customerId
@@ -129,7 +90,7 @@ export class Controller{
             if(modifiedCart){
                 this.respondWithModifiedResource(modifiedCart.customer, res)
             } else {
-                this.respondResourceWithNotFound(res)
+                this.respondWithNotFound(res)
             }    
         } catch (error) {
             next(error)
@@ -148,17 +109,12 @@ export class Controller{
             if(modifiedCart){
                 this.respondWithModifiedResource( modifiedCart.customer, res)
             } else {
-                this.respondResourceWithNotFound(res)
+                this.respondWithNotFound(res)
             }    
         } catch (error) {
             next(error)
         }
     }
-
-    private respondWithModifiedResource = (resourceId: string, res: Response) =>{
-        res.location(`/carts/${resourceId}`)
-        res.status(200).json({ message: 'Modified' })
-    } 
 
     public deleteOne = async(req: Request, res: Response, next:NextFunction) =>{
         const customerId = req.params.customerId
@@ -170,23 +126,10 @@ export class Controller{
             if(deletedCart){
                 this.respondWithDeletedResource(deletedCart.customer, res)
             } else {
-                this.respondResourceWithNotFound(res)
+                this.respondWithNotFound(res)
             }
         } catch (error) {
             next(error)
         }
     }
-
-    private respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({ message: 'Deleted',id })
-    }
-
-    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
-        res.status(405).json({ message: 'Method not allowed' })
-    }
-}
-
-export interface Paginator{
-    skipDocs: number,
-    limit: number
 }

@@ -1,13 +1,14 @@
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
-import { HydratedUserDoc, IUser } from "../data-access/model";
-import { Paginator } from "../data-access/data-access";
+import { IUser } from "../data-access/model";
+import { BaseController } from "../../../library/bases/controller";
 
-export class UsersController{
+export class UsersController extends BaseController{
     private dataAccess: UsersDAL
 
     constructor(dataAccessLayer: UsersDAL){
+        super()
         this.dataAccess = dataAccessLayer
     }
 
@@ -21,20 +22,11 @@ export class UsersController{
                 this.respondWithConflict(res)
             else {
                 const user = await this.dataAccess.createNew(userData)
-                this.respondWithCreatedResource(user, res)
+                this.respondWithCreatedResource(user.id, res)
             }
         } catch (error) {
             next(error)
         }
-    }
-
-    private respondWithConflict = (res: Response) =>{
-        res.status(409).json({ message: 'User exists with same email' })
-    }
-
-    private respondWithCreatedResource = (resource: HydratedUserDoc, res: Response) =>{
-        res.location(`/users/${resource.id}`)
-        res.status(201).json({ message: 'Created' })
     }
 
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
@@ -51,15 +43,6 @@ export class UsersController{
             next(error)
         }
     }
-
-    private respondWithNotFound = (res: Response) =>{
-        res.status(404).json({ message: 'User ID not found'})
-    }
-
-    private respondWithFoundResource = (
-        resource: HydratedUserDoc[] | HydratedUserDoc, res: Response) =>{
-            res.status(200).json({ resource: resource  })   
-    }
     
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
         const pagination = this.paginate(req)
@@ -70,18 +53,6 @@ export class UsersController{
         } catch (error) {
             next(error)
         }
-    }
-
-    private paginate = (req: Request): Paginator =>{
-        const page = Number(req.query.page)
-        const limit = Number(req.query.limit)
-        const skipDocs = (page - 1) * limit
-
-        if(!page || !limit){
-            return { skipDocs: 0, limit: 10 }
-        }
-
-        return { skipDocs, limit }
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
@@ -96,17 +67,12 @@ export class UsersController{
                 this.respondWithUpdatedResource(user.id, res)
             else{
                 const newUser = await this.dataAccess.createNew(userData)
-                this.respondWithCreatedResource(newUser, res)
+                this.respondWithCreatedResource(newUser.id, res)
             }
         } catch (error) {
             next(error)
         }
     }   
-
-    private respondWithUpdatedResource = (userId: string, res: Response) => {
-        res.location(`/users/${userId}`)
-        res.status(200).json({ message: 'Updated'})
-    }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
         const userId = req.params.id
@@ -125,11 +91,6 @@ export class UsersController{
         } 
     }
 
-    private respondWithModifiedResource = (userId: string, res: Response) => {
-        res.location(`/users/${userId}`)
-        res.status(200).json({ message: 'Modified'})
-    }
-
     public removeOne = async(req: Request, res: Response,next: NextFunction) =>{
         const userId = req.params.id
 
@@ -143,13 +104,5 @@ export class UsersController{
         } catch (error) {
             next(error)
         }
-    }
-
-    private respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({ message: 'deleted', id })
-    }
-
-    public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
-        res.status(405).json({ message: 'Method not allowed'})
     }
 }

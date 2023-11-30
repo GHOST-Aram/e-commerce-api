@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedReviewDoc, IReview } from "../data-access/model"
+import { BaseController } from "../../../library/bases/controller"
 
-export class Controller{
+export class ReviewsController extends BaseController{
 
     private dataAccess: DataAccess
 
     constructor(dataAccess: DataAccess){
+        super()
         this.dataAccess = dataAccess
     }
 
@@ -21,11 +23,6 @@ export class Controller{
         }
     }
 
-    private respondWithCreatedResource = (resourceId: string, res: Response) =>{
-        res.location(`/reviews/${resourceId}`)
-        res.status(201).json({ message: 'Created'})
-    }
-
     public getByProductId = async(req: Request, res: Response, next: NextFunction) =>{
         const productId = req.params.productId
 
@@ -38,27 +35,6 @@ export class Controller{
         } catch (error) {
             next(error)
         }
-    }
-
-    private paginate = (req: Request) =>{
-        const paginator = {
-            skipDocs: 0,
-            limit: 10
-        }
-
-        const page = Math.abs(Number(req.query.page))
-        const limit = Math.abs(Number(req.query.limit))
-
-        if(page && limit){
-            paginator.skipDocs = (page - 1) * limit
-            paginator.limit = limit
-        }
-
-        return paginator
-    }
-
-    private respondWithFoundResource = (resource: HydratedReviewDoc[], res: Response) =>{
-        res.status(200).json({ resource })
     }
 
     public getRandomDocs = async(req: Request, res: Response, next: NextFunction) =>{
@@ -91,11 +67,6 @@ export class Controller{
         }
     }
 
-    private respondWithUpdatedResource = (id: HydratedReviewDoc, res: Response) =>{
-        res.location(`/reviews/${id}`)
-        res.status(200).json({  message: 'Updated' })
-    }
-
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
         const reviewId = req.params.reviewId
         const updateDoc: IReview = req.body
@@ -113,11 +84,6 @@ export class Controller{
         }
     }
 
-    private respondWithModifiedResource = (id: HydratedReviewDoc, res: Response) =>{
-        res.location(`/reviews/${id}`)
-        res.status(200).json({  message: 'Modified' })
-    }
-
     public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{
         const reviewId = req.params.reviewId
         
@@ -131,17 +97,5 @@ export class Controller{
         } catch (error) {
             next(error)
         }    
-    }
-
-    private respondWithDeletedResource = (id: string, res: Response) =>{
-        res.status(200).json({ message: 'Deleted', id})
-    }
-
-    private respondWithNotFound = (res: Response) =>{
-        res.status(404).json({ message: 'Not found' })
-    }
-    
-    public respondWithMethodNotAllowed = (req:Request, res: Response) =>{
-        res.status(405).json({ message: 'Method not allowed'})
     }
 }

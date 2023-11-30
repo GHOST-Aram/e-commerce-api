@@ -1,11 +1,11 @@
 import Router from 'express'
-import { Controller } from '../controller/controller'
+import { PayController } from '../controller/controller'
 import * as middlewear from '../utils/middlewear'
 import { validator } from '../utils/validator'
 
 const router = Router()
 
-export const routesWrapper = (controller: Controller) =>{
+export const routesWrapper = (controller: PayController) =>{
     router.post('/:paymentId',controller.respondWithMethodNotAllowed)
     router.post('/', 
         middlewear.postValidators,

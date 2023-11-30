@@ -1,7 +1,7 @@
-import { jest } from "@jest/globals"
+import { Paginator } from "../../../../library/bases/controller"
 import { HydratedPaymentDoc, IPayment, Payment } from "../../data-access/model"
+import { jest } from "@jest/globals"
 import { paymentInput } from "./raw-data"
-import { Paginator } from "../../data-access/data-access"
 
 export class DataAccess{
     public createNew = jest.fn(

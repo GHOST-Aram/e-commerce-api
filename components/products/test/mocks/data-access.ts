@@ -5,7 +5,7 @@ import {
     Product 
 } from "../../data-access/model";
 import { PriceRange } from "../../utils/formatter";
-import { Paginator } from "../../data-access/data-access";
+import { Paginator } from "../../../../library/bases/controller";
 
 export class ProductsDAL {
 
