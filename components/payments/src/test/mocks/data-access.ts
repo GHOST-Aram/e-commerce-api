@@ -4,7 +4,7 @@ import { paymentInput } from "./raw-data"
 import { Paginator } from "../../data-access/data-access"
 
 export class DataAccess{
-    public createNewPayment = jest.fn(
+    public createNew = jest.fn(
         async(): Promise<HydratedPaymentDoc> =>{
             return new Payment(paymentInput)
     })
@@ -20,10 +20,10 @@ export class DataAccess{
 
     public findWithPagination = async(paginator: Paginator
         ): Promise<HydratedPaymentDoc[]> =>{
-            return this.createPaymentsArray(paginator.limit)
+            return this.createDocsArray(paginator.limit)
     }
 
-    private createPaymentsArray = async(length: number
+    private createDocsArray = async(length: number
         ): Promise<HydratedPaymentDoc[]> =>{
             const payments: HydratedPaymentDoc[] = []
 

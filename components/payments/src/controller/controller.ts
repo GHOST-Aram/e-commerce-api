@@ -12,12 +12,12 @@ export class Controller{
         this.dal = dataAccess
     }
 
-    public addNewPayment = async(
+    public addNew = async(
         req: Request, res: Response, next: NextFunction) =>{
             const paymentData: IPayment = req.body
 
             try {
-                const createdDoc = await this.dal.createNewPayment(
+                const createdDoc = await this.dal.createNew(
                     paymentData)
 
                 this.respondWithCreatedResource(createdDoc.orderId, res)
@@ -32,7 +32,7 @@ export class Controller{
         res.status(201).json({ message: 'Created' })
     }
 
-    public getOnePayment = async(req: Request, res:Response, next: NextFunction) =>{
+    public getOne = async(req: Request, res:Response, next: NextFunction) =>{
         const referenceId =  req.params.orderId
 
         try {
@@ -60,7 +60,7 @@ export class Controller{
         res.status(404).json({ message: 'Not Found.' })
     }
 
-    public getManyPayments = async(
+    public getMany = async(
         req: Request, res: Response, next: NextFunction) =>{
             const paginator = this.paginate(req)
 
@@ -90,7 +90,7 @@ export class Controller{
         return paginator
     }
 
-    public updatePayment = async(
+    public updateOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const referenceId =  req.params.orderId
             const updateDoc: IPayment = req.body
@@ -103,7 +103,7 @@ export class Controller{
                     this.respondWithChangedResource( updatedPayment.orderId, 
                         'Updated', res)
                 } else {
-                    const newPayment = await this.dal.createNewPayment(updateDoc)
+                    const newPayment = await this.dal.createNew(updateDoc)
                     this.respondWithCreatedResource(newPayment.orderId, res)
                 }
             } catch (error) {
@@ -117,7 +117,7 @@ export class Controller{
             res.status(200).json({ message: change })
     }
     
-    public modifyPayment = async(
+    public modifyOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const referenceId = req.params.orderId
             const updateDoc = req.body
@@ -137,7 +137,7 @@ export class Controller{
             }
     }
 
-    public deletePayment = async(
+    public deleteOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const referenceId = req.params.orderId
 

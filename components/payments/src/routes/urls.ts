@@ -9,14 +9,14 @@ export const routesWrapper = (controller: Controller) =>{
     router.post('/', 
         middlewear.postValidators,
         controller.handleValidationErrors, 
-        controller.addNewPayment
+        controller.addNew
     )
 
-    router.get('/',controller.getManyPayments)
+    router.get('/',controller.getMany)
     router.get('/:orderId', 
         middlewear.referenceIdValidator,
         controller.handleValidationErrors,
-        controller.getOnePayment
+        controller.getOne
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
@@ -24,7 +24,7 @@ export const routesWrapper = (controller: Controller) =>{
         middlewear.postValidators,
         middlewear.referenceIdValidator,
         controller.handleValidationErrors,
-        controller.updatePayment
+        controller.updateOne
     )
 
     router.patch('/', controller.respondWithMethodNotAllowed)
@@ -32,14 +32,14 @@ export const routesWrapper = (controller: Controller) =>{
         middlewear.patchValidators,
         middlewear.referenceIdValidator,
         controller.handleValidationErrors,
-        controller.modifyPayment
+        controller.modifyOne
     )
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:orderId', 
         middlewear.referenceIdValidator,
         controller.handleValidationErrors,
-        controller.deletePayment
+        controller.deleteOne
     )
 
     return router
