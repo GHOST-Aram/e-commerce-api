@@ -24,6 +24,16 @@ describe('GET orders Routes', () =>{
         assert.respondsWithNotFound(response)
     })
 
+    test('Responds with found resource, status 200: '+
+        'Get request sucees.', 
+    async() =>{
+        const response = await request(app).get(
+            '/orders/64c9e4f2df7cc072af2ac9e8')
+        
+        assert.respondsWithSuccess(response)
+        assert.respondsWithFoundResource(response)
+    })  
+
     test('Responds with paginated resource, status 200: '+ 
         'Default pagination -- limit = 10', 
     async() =>{
@@ -42,14 +52,4 @@ describe('GET orders Routes', () =>{
        assert.respondsWithSuccess(response)
        assert.respondsWithPaginatedResource(response, 12)
     })
-
-    test('Responds with found resource, status 200: '+
-        'Get request sucees.', 
-    async() =>{
-        const response = await request(app).get(
-            '/orders/64c9e4f2df7cc072af2ac9e8')
-        
-        assert.respondsWithSuccess(response)
-        assert.respondsWithFoundResource(response)
-    })  
 })

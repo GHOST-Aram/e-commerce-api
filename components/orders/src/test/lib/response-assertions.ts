@@ -34,6 +34,12 @@ export class ResponseAssertion{
         expect(response.body.message).toMatch(/not found/i)
     }
 
+    public respondsWithEmptyResourceArray = (response: Response) =>{
+        expect(response.body).toHaveProperty('resource')
+        expect(Array.isArray(response.body.resource)).toBeTruthy()
+        expect(response.body.resource.length).toEqual(0)
+    }
+    
     public respondsWithFoundResource = (response: Response) =>{
         expect(response.body).toHaveProperty('resource')
         expect(response.body.resource).toHaveProperty('_id')

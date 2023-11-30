@@ -4,7 +4,7 @@ import { Paginator } from "../../controller/controller"
 import { orderInput } from "./raw-data"
 
 export class DataAccess{
-    public createNewOrder = jest.fn(
+    public createNew = jest.fn(
         async(data: IOrder): Promise<HydratedOrderDoc> =>{
             return new Order(data)
     }) 

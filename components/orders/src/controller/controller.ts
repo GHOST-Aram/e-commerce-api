@@ -10,12 +10,12 @@ export class Controller{
         this.dal = dataAccess
     }
 
-    public addNewOrder = async(
+    public addNew = async(
         req: Request, res: Response, next: NextFunction) =>{
             const orderData: IOrder = req.body
 
             try {
-                const newOrder = await this.dal.createNewOrder(
+                const newOrder = await this.dal.createNew(
                     orderData)
 
                 this.respondWithCreatedResource(newOrder.id, res)
@@ -24,13 +24,33 @@ export class Controller{
             }
     }
 
+    public getOne = async(
+        req: Request, res: Response, next: NextFunction) =>{
+            const orderId = req.params.orderId
+
+            try {
+                const order = await this.dal.findById(orderId)
+                
+                if(order)
+                    this.respondWithFoundResource(order, res)
+                
+                this.respondWithNotFoundError(res)
+            } catch (error) {
+                next(error)
+            }
+    }
+
+    private respondWithNotFoundError = (res: Response) => {
+        res.status(404).json({ message: 'Resource not found.'})
+    }
+
     private respondWithCreatedResource = (
         resourceId: string, res:Response) =>{
             res.location(`/orders/${resourceId}`)
             res.status(201).json({ message: 'Created' })
     }
 
-    public getOrders = async(
+    public getMany = async(
         req: Request, res: Response, next: NextFunction)  =>{
             const paginator: Paginator = this.paginate(req)
 
@@ -70,27 +90,7 @@ export class Controller{
             res.status(200).json({ resource})
     }
 
-    public getOneOrder = async(
-        req: Request, res: Response, next: NextFunction) =>{
-            const orderId = req.params.orderId
-
-            try {
-                const order = await this.dal.findById(orderId)
-                
-                if(order)
-                    this.respondWithFoundResource(order, res)
-                
-                this.respondWithNotFoundError(res)
-            } catch (error) {
-                next(error)
-            }
-    }
-
-    private respondWithNotFoundError = (res: Response) => {
-        res.status(404).json({ message: 'Resource not found.'})
-    }
-
-    public updateOrder = async(
+    public updateOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const updateData: IOrder = req.body 
             const orderId = req.params.orderId
@@ -101,10 +101,10 @@ export class Controller{
                     orderId, updateData)
 
                 if(updatedOrder)
-                    this.respondWithChangedResource(
-                    orderId,'Updated', res)
+                    this.respondWithUpdatedResource(
+                    orderId, res)
                 else {
-                    const newOrder = await this.dal.createNewOrder(
+                    const newOrder = await this.dal.createNew(
                         updateData)
                     this.respondWithCreatedResource(newOrder.id, res)
                 }
@@ -113,9 +113,9 @@ export class Controller{
             }
     }
 
-    private respondWithChangedResource = (id: string, change: string, res: Response) =>{
+    private respondWithUpdatedResource = (id: string, res: Response) =>{
         res.location(`/orders/${id}`)
-        res.status(200).json({ message: change})
+        res.status(200).json({ message: 'Updated' })
     }
 
     public modifyOrder = async(
@@ -128,8 +128,7 @@ export class Controller{
                     orderId, patchDoc)
 
                 if(modifiedDoc)
-                    this.respondWithChangedResource(orderId, 
-                    'Modified', res)
+                    this.respondWithModifiedResource(orderId, res)
                 else
                     this.respondWithNotFoundError(res)
             } catch (error) {
@@ -137,7 +136,12 @@ export class Controller{
             }
     }
 
-    public deleteOrder = async(
+    private respondWithModifiedResource = (id: string, res: Response) =>{
+        res.location(`/orders/${id}`)
+        res.status(200).json({ message: 'Modified' })
+    }
+
+    public deleteOne = async(
         req: Request, res: Response, next: NextFunction) =>{
             const orderId = req.params.orderId
 
@@ -159,6 +163,7 @@ export class Controller{
     public respondWithDeletedResource = (id: string, res: Response) =>{
         res.status(200).json({ message: 'Deleted', id})
     }
+
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
             const errors = validationResult(req)
