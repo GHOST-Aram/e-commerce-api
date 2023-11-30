@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, request } from "express"
+import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HydratedCartDoc, ICart } from "../data-access/model"
 
