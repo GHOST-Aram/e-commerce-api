@@ -4,6 +4,7 @@ import {
     IUser, 
     User 
 } from "../../data-access/model"
+import { jest } from "@jest/globals"
 
 export class UsersDAL{
     public createNew = jest.fn(async(
