@@ -1,4 +1,4 @@
-import { Paginator } from "../../../../library/bases/controller"
+import { Paginator } from "../../z-library/bases/controller"
 import { 
     HydratedUserDoc, 
     IUser, 

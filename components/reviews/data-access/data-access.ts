@@ -1,5 +1,5 @@
-import { Paginator } from "../../../library/bases/controller"
-import { Accessible } from "../../../library/bases/accessible"
+import { Paginator } from "../z-library/bases/controller"
+import { Accessible } from "../z-library/bases/accessible"
 import { HydratedReviewDoc, IReview, Review } from "./model"
 
 export class ReviewDataAccess implements Accessible{

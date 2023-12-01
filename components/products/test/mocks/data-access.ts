@@ -1,3 +1,4 @@
+import { Paginator } from "../../z-library/bases/controller";
 import { jest } from "@jest/globals";
 import { 
     HydratedProductDoc, 
@@ -5,7 +6,6 @@ import {
     Product 
 } from "../../data-access/model";
 import { PriceRange } from "../../utils/formatter";
-import { Paginator } from "../../../../library/bases/controller";
 
 export class ProductsDAL {
 

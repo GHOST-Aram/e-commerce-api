@@ -1,5 +1,5 @@
-import { BaseController } from "../../../library/bases/controller"
-import { Controllable } from "../../../library/bases/controllable"
+import { BaseController } from "../z-library/bases/controller"
+import { Controllable } from "../z-library/bases/controllable"
 import { IReview } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { ReviewDataAccess } from "../data-access/data-access"

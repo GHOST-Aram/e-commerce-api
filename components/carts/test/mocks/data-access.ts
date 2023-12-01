@@ -1,4 +1,4 @@
-import { Paginator } from "../../../../library/bases/controller"
+import { Paginator } from "../../z-library/bases/controller"
 import { Cart, HydratedCartDoc, ICart } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { cartData } from "./raw-data"

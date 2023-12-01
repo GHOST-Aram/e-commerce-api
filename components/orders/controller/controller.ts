@@ -1,5 +1,5 @@
-import { Controllable } from "../../../library/bases/controllable"
-import { BaseController, Paginator } from "../../../library/bases/controller"
+import { Controllable } from "../z-library/bases/controllable"
+import { BaseController, Paginator } from "../z-library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { IOrder } from "../data-access/model"

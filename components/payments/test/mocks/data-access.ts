@@ -1,4 +1,4 @@
-import { Paginator } from "../../../../library/bases/controller"
+import { Paginator } from "../../z-library/bases/controller"
 import { HydratedPaymentDoc, IPayment, Payment } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { paymentInput } from "./raw-data"

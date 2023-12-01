@@ -1,5 +1,5 @@
-import { BaseController } from "../../../library/bases/controller";
-import { Controllable } from "../../../library/bases/controllable";
+import { BaseController } from "../z-library/bases/controller";
+import { Controllable } from "../z-library/bases/controllable";
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
