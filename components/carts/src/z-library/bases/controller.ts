@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from "express"
+import { Response, Request } from "express"
 import { HydratedDocument } from "mongoose"
 
 export class BaseController{
