@@ -1,5 +1,5 @@
 import { ValidationChain, body, param, validationResult } from "express-validator"
-import { formatter } from "./formatter"
+import { formatter } from "../formatting/formatter"
 import { Request, Response, NextFunction } from "express"
 
 export class Validator{

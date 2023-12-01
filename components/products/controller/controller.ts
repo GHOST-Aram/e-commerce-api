@@ -3,11 +3,11 @@ import { Controllable } from "../z-library/bases/controllable"
 import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
 import { IProduct } from "../data-access/model"
-import { PriceRange, formatter } from "../utils/formatter"
+import { PriceRange, formatter } from "../z-library/formatting/formatter"
 
 export class ProductsController extends BaseController implements Controllable{
 
-    private dataAccess
+    private dataAccess: ProductsDAL
 
     constructor(dataAccessLayer: ProductsDAL){
         super()

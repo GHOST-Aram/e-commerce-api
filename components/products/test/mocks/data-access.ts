@@ -5,7 +5,7 @@ import {
     IProduct, 
     Product 
 } from "../../data-access/model";
-import { PriceRange } from "../../utils/formatter";
+import { PriceRange } from "../../z-library/formatting/formatter";
 
 export class ProductsDAL {
 

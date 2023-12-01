@@ -1,7 +1,7 @@
 import Router from 'express'
 import { ReviewsController } from '../controller/controller'
-import * as middlewear from '../utils/middlewear'
-import { validator } from '../utils/validator'
+import * as middlewear from '../z-library/validation/middlewear'
+import { validator } from '../z-library/validation/validator'
 
 const router = Router()
 

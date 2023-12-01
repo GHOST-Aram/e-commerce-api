@@ -1,7 +1,7 @@
 import { UsersController } from "../controller/controller";
 import { Router } from "express";
-import * as middlewear from "../utils/middlewears";
-import { validator } from "../utils/validator";
+import * as middlewear from "../z-library/validation/middlewears";
+import { validator } from "../z-library/validation/validator";
 
 const router = Router()
 
