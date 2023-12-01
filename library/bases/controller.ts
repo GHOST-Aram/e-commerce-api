@@ -1,4 +1,4 @@
-import { Response, Request } from "express"
+import { Response, Request, NextFunction } from "express"
 import { HydratedDocument } from "mongoose"
 
 export class BaseController{
@@ -56,6 +56,19 @@ export class BaseController{
 
     public respondWithDeletedResource = (id: string, res: Response) =>{
         res.status(200).json({ message: 'Deleted',id })
+    }
+
+    public handleUnknownUrls = ( req: Request, res: Response, next: NextFunction ) =>{
+        this.respondWithNotFound(res)
+        
+    }
+
+    public handleServerErrors = ( 
+        err:Error, req: Request, res: Response, next: NextFunction) =>{
+            if(err){
+                res.status(500).json({ message : 'Unexpected server error.'})
+                console.log(err.message)
+            }
     }
 }
 

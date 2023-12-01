@@ -7,3 +7,8 @@ const dal = new ProductsDAL()
 const controller = new ProductsController(dal)
 
 app.use('/products', routesWrapper(controller))
+
+app.use(controller.handleUnknownUrls)
+app.use(controller.handleServerErrors)
+
+export { app }

@@ -5,3 +5,8 @@ import { UsersController } from "./controller/controller";
 
 const controller = new UsersController(usersDAL)
 app.use('/users',routesWrapper(controller))
+
+app.use(controller.handleUnknownUrls)
+app.use(controller.handleServerErrors)
+
+export { app }

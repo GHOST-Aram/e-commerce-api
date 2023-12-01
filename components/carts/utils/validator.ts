@@ -31,6 +31,7 @@ class Validator{
 
     public validateReferenceId = (paramName: string) =>{
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
+            .withMessage('Invalid reference Id')
     }
 
     public handleValidationErrors = (req: Request, res: Response, next: NextFunction
@@ -39,7 +40,7 @@ class Validator{
 
         if(!errors.isEmpty()){
             res.status(400).json({
-                    message: 'Invalid input',
+                    message: 'Invalid input or reference Id',
                     errors: errors.array()
                 })
         } else
