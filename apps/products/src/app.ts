@@ -5,6 +5,9 @@ import { ProductsDAL } from "./data-access/data-access";
 import { app } from "./config/config";
 import logger from "morgan"
 
+//Log requests
+app.use(logger('dev'))
+
 const dal = new ProductsDAL()
 const controller = new ProductsController(dal)
 
@@ -14,7 +17,5 @@ app.use('/products', routesWrapper(controller))
 app.use(httpErrors.handleUnknownUrls)
 app.use(httpErrors.handleServerErrors)
 
-//Log requests
-app.use(logger('dev'))
 
 export { app }
