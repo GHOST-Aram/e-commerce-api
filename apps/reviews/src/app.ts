@@ -1,12 +1,12 @@
-import { PayController } from "./controller/controller";
+import { ReviewsController } from "./controller/controller";
 import { dataAccess } from "./data-access/data-access";
 import { routesWrapper } from "./routes/urls";
-import { httpErrors } from "../../library/HTTP/http-errors";
+import { httpErrors } from "./z-library/HTTP/http-errors";
 import { app } from "./config/config";
 
-const controller = new PayController(dataAccess)
+const controller = new ReviewsController(dataAccess)
 
-app.use('/payments', routesWrapper(controller))
+app.use('/reviews', routesWrapper(controller))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)

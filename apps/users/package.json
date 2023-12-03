@@ -5,7 +5,9 @@
   "main": "index.ts",
   "scripts": {
     "test": "jest --watch",
-    "dev": "nodemon /bin/www"
+    "dev": "nodemon src/bin/www",
+    "build": "tsc",
+    "start": "node build/bin/www"
   },
   "keywords": [],
   "author": "",

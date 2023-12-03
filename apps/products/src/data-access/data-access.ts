@@ -1,6 +1,6 @@
 import { Paginator } from "../z-library/bases/controller"
 import { Accessible } from "../z-library/bases/accessible"
-import { PriceRange } from "../utils/formatter"
+import { PriceRange } from "../z-library/formatting/formatter"
 import { HydratedProductDoc, IProduct, Product } from "./model"
 
 export class ProductsDAL implements Accessible{

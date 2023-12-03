@@ -6,6 +6,10 @@ export interface ICart{
     createdAt?: Date
 }
 
+interface CartVirtuals{
+    count: number
+}
+
 type CartModel = Model<ICart, {}, {}>
 
 const cartSchema: Schema = new Schema
@@ -22,6 +26,10 @@ const cartSchema: Schema = new Schema
         type: Date,
         default: Date.now
     }
+})
+
+cartSchema.virtual('count').get(function():number{
+    return this.items.length
 })
 
 export type HydratedCartDoc = HydratedDocument<ICart>

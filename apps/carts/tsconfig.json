@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",                                  
     "module": "CommonJS",                               
-    "rootDir": "./",                                  
+    "rootDir": "./src",                                  
     "declaration": true,
     "sourceMap": true,
     "outDir": "./build",                                   
@@ -11,5 +11,5 @@
     "strict": true,                                      
     "skipLibCheck": true                                
   },
-  "include": ["./components", "z-library"],
+  "include": ["./src"],
 }

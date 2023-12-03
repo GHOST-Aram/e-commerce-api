@@ -1,6 +1,6 @@
 import { routesWrapper } from "./routes/urls";
 import { usersDAL } from "./data-access/data-access";
-import { httpErrors } from "../../library/HTTP/http-errors";
+import { httpErrors } from "./z-library/HTTP/http-errors";
 import { UsersController } from "./controller/controller";
 import { app } from "./config/config";
 

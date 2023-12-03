@@ -30,10 +30,10 @@ export class UsersDAL implements Accessible{
 
     public findByIdAndUpdate = async(userID: string, updateData: IUser
         ): Promise<HydratedUserDoc | null> =>{
-            return User.findByIdAndUpdate(userID, updateData)    
+            return await User.findByIdAndUpdate(userID, updateData)    
     }
 
-    public findByIdAndDelete = async(userId: string)=>{
+    public findByIdAndDelete = async(userId: string): Promise<HydratedUserDoc | null>=>{
             return await User.findByIdAndDelete(userId)
     }
 }

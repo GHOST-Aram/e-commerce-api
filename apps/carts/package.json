@@ -2,10 +2,11 @@
   "name": "e-commerce-api",
   "version": "1.0.0",
   "description": "A CRUD Backend API for a simple E-commerce application: Products Component",
-  "main": "index.ts",
   "scripts": {
     "test": "jest --watch",
-    "dev": "nodemon /bin/www"
+    "dev": "nodemon src/bin/www",
+    "start": "node build/bin/www",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
