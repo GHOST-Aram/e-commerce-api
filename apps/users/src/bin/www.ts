@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
 import { app } from "../app"
-import logger from "morgan"
 
 const MONGODB_URI = process.env.USERS_DB_URI
 
@@ -19,4 +18,3 @@ if(MONGODB_URI){
 
 const PORT = process.env.CARTS_PORT || 3600
 app.listen(PORT, () => console.log(`Running users on http://localhost:${PORT}`))
-app.use(logger('dev'))

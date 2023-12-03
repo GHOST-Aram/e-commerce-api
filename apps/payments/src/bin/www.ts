@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
 import { app } from "../app"
-import logger from "morgan"
 
 const MONGODB_URI = process.env.PAYMENTS_DB_URI
 
@@ -18,4 +17,3 @@ if(MONGODB_URI){
 
 const PORT = process.env.CARTS_PORT || 3300
 app.listen(PORT, () => console.log(`Running Payments on http://localhost:${PORT}`))
-app.use(logger('dev'))
