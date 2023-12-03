@@ -9,35 +9,40 @@
     "build:carts": "cd apps/carts && tsc",
     "dev:carts": "nodemon apps/carts/src/bin/www.ts",
     "start:carts": "node apps/carts/build/bin/www.js",
+    "install:carts": " cd apps/carts && npm install",
 
     "test:orders": "cd apps/orders && jest",
     "build:orders": "cd apps/orders && tsc",
     "dev:orders": "nodemon apps/orders/src/bin/www.ts",
     "start:orders": "node apps/orders/build/bin/www.js",
-
+    "install:orders": " cd apps/orders && npm install",
 
     "test:payments": "cd apps/payments && jest",
     "build:payments": "cd apps/payments && tsc",
     "dev:payments": "nodemon apps/payments/src/bin/www.ts",
     "start:payments": "node apps/payments/build/bin/www.js",
+    "install:payments": " cd apps/payments && npm install",
 
     
     "test:products": "cd apps/products && jest",
     "build:products": "cd apps/products && tsc",
     "dev:products": "nodemon apps/products/src/bin/www.ts",
     "start:products": "node apps/products/build/bin/www.js",
+    "install:products": " cd apps/products && npm install",
 
     
     "test:reviews": "cd apps/reviews && jest",
     "build:reviews": "cd apps/reviews && tsc",
     "dev:reviews": "nodemon apps/reviews/src/bin/www.ts",
     "start:reviews": "node apps/reviews/build/bin/www.js",
+    "install:reviews": " cd apps/reviews && npm install",
 
     
     "test:users": "cd apps/users && jest",
     "build:users": "cd apps/users && tsc",
     "dev:users": "nodemon apps/users/src/bin/www.ts",
-    "start:users": "node apps/users/build/bin/www.js"
+    "start:users": "node apps/users/build/bin/www.js",
+    "install:users": " cd apps/users && npm install"
   },
   "keywords": [],
   "author": "",
