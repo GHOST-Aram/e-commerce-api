@@ -1,0 +1,17 @@
+{
+  "name": "e-commerce-api",
+  "version": "1.0.0",
+  "description": "A CRUD Backend API for a simple E-commerce applicationm the microservice architecture.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "carts": "nodemon apps/carts/src/bin/www.ts",
+    "orders": "nodemon apps/orders/src/bin/www.ts",
+    "payments": "nodemon apps/payments/src/bin/www.ts",
+    "products": "nodemon apps/products/src/bin/www.ts",
+    "reviews": "nodemon apps/reviews/src/bin/www.ts",
+    "users": "nodemon apps/users/src/bin/www.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
