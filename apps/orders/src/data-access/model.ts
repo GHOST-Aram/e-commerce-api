@@ -7,7 +7,7 @@ export interface Item {
     quantity: number
 }
 
-export interface IOrder {
+export interface Order {
     items:Item[],
     delivered: boolean
     cancelled: boolean
@@ -21,9 +21,9 @@ interface OrderVirtuals {
     total: number
 }
 
-type OrderModel = Model<IOrder,{},{}, OrderVirtuals>
+type OrderModel = Model<Order,{},{}, OrderVirtuals>
 
-const orderSchema: Schema = new Schema<IOrder,OrderModel, 
+const orderSchema: Schema = new Schema<Order,OrderModel, 
 {}, {}, OrderVirtuals>({
     items:{
         type: [{
@@ -70,8 +70,8 @@ orderSchema.virtual('total').get(function(): number{
     )
 })
 
-export type HydratedOrderDoc = HydratedDocument<IOrder, 
+export type HydratedOrderDoc = HydratedDocument<Order, 
     OrderVirtuals>
 
-export const Order = model<IOrder, OrderModel> (
+export const Order = model<Order, OrderModel> (
     'Order', orderSchema)

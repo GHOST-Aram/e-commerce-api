@@ -1,11 +1,11 @@
 import { Paginator } from "../../z-library/bases/controller"
-import { HydratedOrderDoc, IOrder, Order } from "../../data-access/model"
+import { HydratedOrderDoc, Order } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { orderInput } from "./raw-data"
 
 export class DataAccess{
     public createNew = jest.fn(
-        async(data: IOrder): Promise<HydratedOrderDoc> =>{
+        async(data: Order): Promise<HydratedOrderDoc> =>{
             return new Order(data)
     }) 
 
@@ -33,7 +33,7 @@ export class DataAccess{
     }
 
     public findByIdAndUpdate = jest.fn(
-        async(orderId: string, updateDoc: IOrder
+        async(orderId: string, updateDoc: Order
         ): Promise<HydratedOrderDoc | null>  =>{
             if(orderId === '64c9e4f2df7dd072af2ac9e5'){
                 return new Order(updateDoc)

@@ -2,7 +2,7 @@ import { Controllable } from "../z-library/bases/controllable"
 import { BaseController, Paginator } from "../z-library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { IOrder } from "../data-access/model"
+import { Order } from "../data-access/model"
 
 export class OrdersController extends BaseController implements Controllable{
 
@@ -15,7 +15,7 @@ export class OrdersController extends BaseController implements Controllable{
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const orderData: IOrder = req.body
+        const orderData: Order = req.body
 
         try {
             const newOrder = await this.dal.createNew(orderData)
@@ -56,7 +56,7 @@ export class OrdersController extends BaseController implements Controllable{
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const updateData: IOrder = req.body 
+        const updateData: Order = req.body 
         const orderId = req.params.orderId
 
         try {
