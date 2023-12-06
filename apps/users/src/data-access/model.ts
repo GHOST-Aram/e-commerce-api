@@ -6,6 +6,7 @@ export interface IUser{
     last_name: string
     email: string
     password: string
+    isAdmin: boolean
 }
 
 interface UserMethods{
@@ -42,6 +43,10 @@ const userSchema = new Schema<IUser, UserModel, UserMethods,{}, UserVirtuals>({
         minlength: 8,
         maxlength: 24,
         required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 })
 

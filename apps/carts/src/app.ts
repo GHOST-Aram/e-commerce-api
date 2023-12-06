@@ -8,6 +8,10 @@ import logger from "morgan"
 //Log requests
 app.use(logger('dev'))
 
+//Authenticate
+
+
+
 
 const controller = new CartsController(dataAccess)
 app.use('/carts', routesWrapper(controller))
