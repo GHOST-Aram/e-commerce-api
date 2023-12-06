@@ -3,7 +3,7 @@ import { Controllable } from "../z-library/bases/controllable";
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
-import { IUser } from "../data-access/model";
+import { User } from "../data-access/model";
 
 export class UsersController extends BaseController implements Controllable{
 
@@ -83,7 +83,7 @@ export class UsersController extends BaseController implements Controllable{
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const userId = req.params.id
-        const patchData: IUser = req.body
+        const patchData: User = req.body
 
         try {
             const user = await this.dataAccess.findByIdAndUpdate(

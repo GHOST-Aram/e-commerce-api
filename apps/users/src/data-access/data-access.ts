@@ -1,10 +1,10 @@
 import { Paginator } from "../z-library/bases/controller"
 import { Accessible } from "../z-library/bases/accessible"
-import { HydratedUserDoc, IUser, User } from "./model"
+import { HydratedUserDoc, User } from "./model"
 
 export class UsersDAL implements Accessible{
 
-    public createNew = async(userData: IUser): Promise<HydratedUserDoc> =>{
+    public createNew = async(userData: User): Promise<HydratedUserDoc> =>{
         const user = new User(userData)
         const savedUser = await user.save()
 
@@ -28,7 +28,7 @@ export class UsersDAL implements Accessible{
         return users
     }
 
-    public findByIdAndUpdate = async(userID: string, updateData: IUser
+    public findByIdAndUpdate = async(userID: string, updateData: User
         ): Promise<HydratedUserDoc | null> =>{
             return await User.findByIdAndUpdate(userID, updateData)    
     }

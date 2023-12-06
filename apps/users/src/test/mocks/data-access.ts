@@ -1,14 +1,13 @@
 import { Paginator } from "../../z-library/bases/controller"
 import { 
     HydratedUserDoc, 
-    IUser, 
     User 
 } from "../../data-access/model"
 import { jest } from "@jest/globals"
 
 export class UsersDAL{
     public createNew = jest.fn(async(
-        userData: IUser): Promise<HydratedUserDoc> =>{
+        userData: User): Promise<HydratedUserDoc> =>{
         return new User(userData)  
     })
 

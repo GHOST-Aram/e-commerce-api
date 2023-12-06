@@ -1,6 +1,6 @@
-import { IUser } from '../../data-access/model'
+import { User } from '../../data-access/model'
 
-export const validUserData: IUser = {
+export const validUserData: User = {
     first_name: 'John',
     last_name: 'Doe',
     email: 'johndoe@gmail.com',
@@ -8,7 +8,7 @@ export const validUserData: IUser = {
     isAdmin: false
 }
 
-export const userWithExistingEmail: IUser = {
+export const userWithExistingEmail: User = {
     first_name: 'Existing',
     last_name: 'User',
     email: 'existingEmail@gmail.com',

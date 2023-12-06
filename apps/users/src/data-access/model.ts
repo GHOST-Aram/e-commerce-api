@@ -1,7 +1,7 @@
 import { compare, hash } from "bcrypt"
 import { HydratedDocument, Model, Schema, model } from "mongoose"
 
-export interface IUser{
+export interface User{
     first_name: string
     last_name: string
     email: string
@@ -17,9 +17,9 @@ interface UserVirtuals{
     name: string
 }
 
-type UserModel = Model<IUser,{}, UserMethods, UserVirtuals>
+type UserModel = Model<User,{}, UserMethods, UserVirtuals>
 
-const userSchema = new Schema<IUser, UserModel, UserMethods,{}, UserVirtuals>({
+const userSchema = new Schema<User, UserModel, UserMethods,{}, UserVirtuals>({
     first_name: {
         type: String,
         minlength: 2,
@@ -64,7 +64,7 @@ userSchema.pre('save', async function(){
     this.password = hashedPassword
 })
 
-export type HydratedUserDoc = HydratedDocument<IUser, UserMethods & UserVirtuals>
+export type HydratedUserDoc = HydratedDocument<User, UserMethods & UserVirtuals>
 
-export const User: UserModel = model<IUser, UserModel>(
+export const User: UserModel = model<User, UserModel>(
     'User', userSchema)
