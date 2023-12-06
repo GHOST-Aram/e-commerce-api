@@ -1,11 +1,11 @@
 import { Paginator } from "../z-library/bases/controller"
 import { Accessible } from "../z-library/bases/accessible"
 import { PriceRange } from "../z-library/formatting/formatter"
-import { HydratedProductDoc, IProduct, Product } from "./model"
+import { HydratedProductDoc, Product } from "./model"
 
 export class ProductsDAL implements Accessible{
     
-    public createNew = async( productData: IProduct): Promise<string> =>{
+    public createNew = async( productData: Product): Promise<string> =>{
         const product = new Product(productData)
         return (await product.save()).id
     }
@@ -65,7 +65,7 @@ export class ProductsDAL implements Accessible{
             return products
     }
     
-    public findByIdAndUpdate = async(productId: string, updateData: IProduct
+    public findByIdAndUpdate = async(productId: string, updateData: Product
         ): Promise<string | undefined> =>{
         const product = await Product.findByIdAndUpdate(productId, updateData)
 

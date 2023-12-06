@@ -2,7 +2,7 @@ import { BaseController } from "../z-library/bases/controller"
 import { Controllable } from "../z-library/bases/controllable"
 import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
-import { IProduct } from "../data-access/model"
+import { Product } from "../data-access/model"
 import { PriceRange, formatter } from "../z-library/formatting/formatter"
 
 export class ProductsController extends BaseController implements Controllable{
@@ -16,7 +16,7 @@ export class ProductsController extends BaseController implements Controllable{
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const productData: IProduct = req.body
+        const productData: Product = req.body
 
         try {
             const productId = await this.dataAccess.createNew(productData)
@@ -133,7 +133,7 @@ export class ProductsController extends BaseController implements Controllable{
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const productId = req.params.id
-        const productData: IProduct = req.body
+        const productData: Product = req.body
         
         try { 
             const id = await this.dataAccess.findByIdAndUpdate(productId, 

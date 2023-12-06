@@ -2,7 +2,6 @@ import { Paginator } from "../../z-library/bases/controller";
 import { jest } from "@jest/globals";
 import { 
     HydratedProductDoc, 
-    IProduct, 
     Product 
 } from "../../data-access/model";
 import { PriceRange } from "../../z-library/formatting/formatter";
@@ -10,7 +9,7 @@ import { PriceRange } from "../../z-library/formatting/formatter";
 export class ProductsDAL {
 
     public createNew = jest.fn(
-        async(productData : IProduct) =>{
+        async(productData : Product) =>{
             const product = new Product(productData)
             return product.id
     })
@@ -116,7 +115,7 @@ export class ProductsDAL {
     })
 
     public findByIdAndUpdate = jest.fn(
-        async(productId: string, updateData: IProduct) =>{
+        async(productId: string, updateData: Product) =>{
             if(productId === '64c9e4f2df7cc072af2ac9e4')
                 return productId
             

@@ -1,6 +1,6 @@
 import { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose"
 
-export interface IProduct{
+export interface Product{
     name?: string
     image_url?: string
     image_file?: Buffer
@@ -24,10 +24,10 @@ interface ProductVirtuals{
 
 
 
-export type ProductModel = Model<IProduct,{},{}, ProductVirtuals>
+export type ProductModel = Model<Product,{},{}, ProductVirtuals>
 
 const productSchema: Schema = new Schema<
-IProduct, ProductModel,{}, {}, ProductVirtuals>({
+Product, ProductModel,{}, {}, ProductVirtuals>({
     name: {
         type: String,
         required: true,
@@ -123,7 +123,7 @@ productSchema.virtual('percentage_discount').get(function():number{
     }
 })
 
-export type HydratedProductDoc = HydratedDocument<IProduct>
+export type HydratedProductDoc = HydratedDocument<Product>
 
-export const Product = model<IProduct, ProductModel>(
+export const Product = model<Product, ProductModel>(
     'Product', productSchema)
