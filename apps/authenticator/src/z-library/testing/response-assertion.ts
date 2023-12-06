@@ -81,6 +81,19 @@ export class ResponseAssertion{
         expect(response.body.id).toMatch(/^[a-fA-F0-9]{24}$/)
         expect(response.body.message).toMatch(/deleted/i)
     }
+
+    public respondsWithUnathorised = (response: Response) => {
+        expect(response.status).toEqual(401)
+        expect(response.headers['content-type']).toMatch(/JSON/i)
+        expect(response.body.message).toMatch(/Unauthorised/i)
+    }
+
+    public respondsWithToken = (response: Response) => {
+        expect(response.body).toHaveProperty('token')
+        expect(typeof response.body.token).toMatch(/string/i)
+        expect(response.body.token).toMatch(
+            /^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/)
+    }
 }
 
 export const assert = new ResponseAssertion
