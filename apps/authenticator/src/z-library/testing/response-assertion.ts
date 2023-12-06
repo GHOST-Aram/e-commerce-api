@@ -91,8 +91,7 @@ export class ResponseAssertion{
     public respondsWithToken = (response: Response) => {
         expect(response.body).toHaveProperty('token')
         expect(typeof response.body.token).toMatch(/string/i)
-        expect(response.body.token).toMatch(
-            /^[a-zA-Z0-9]+\.[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/)
+        expect(response.body.token).toMatch(/^eyJ[^\s]+\.[^\s]+\.[^\s]+$/)
     }
 }
 
