@@ -1,10 +1,10 @@
 import { Paginator } from "../z-library/bases/controller"
 import { Accessible } from "../z-library/bases/accessible"
-import { HydratedPaymentDoc, IPayment, Payment } from "./model"
+import { HydratedPaymentDoc, Payment } from "./model"
 
 export class DataAccess implements Accessible{
 
-    public createNew = async(data: IPayment): Promise<HydratedPaymentDoc> =>{
+    public createNew = async(data: Payment): Promise<HydratedPaymentDoc> =>{
         const payment = new Payment(data)
         return await payment.save()
     }
@@ -19,7 +19,7 @@ export class DataAccess implements Accessible{
                 .limit(paginator.limit)
     }
 
-    public findByIdAndUpdate = async(orderId: string, updateDoc: IPayment
+    public findByIdAndUpdate = async(orderId: string, updateDoc: Payment
         ): Promise<HydratedPaymentDoc | null > =>{
             return await Payment.findOneAndUpdate({ orderId }, updateDoc)
     }

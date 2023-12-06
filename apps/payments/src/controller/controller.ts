@@ -2,7 +2,7 @@ import { Controllable } from "../z-library/bases/controllable"
 import { BaseController } from "../z-library/bases/controller"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
-import { IPayment } from "../data-access/model"
+import { Payment } from "../data-access/model"
 
 export class PayController extends BaseController implements Controllable{
 
@@ -15,7 +15,7 @@ export class PayController extends BaseController implements Controllable{
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
         
-        const paymentData: IPayment = req.body
+        const paymentData: Payment = req.body
 
         try {
             const createdDoc = await this.dal.createNew(paymentData)
@@ -57,7 +57,7 @@ export class PayController extends BaseController implements Controllable{
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const referenceId =  req.params.orderId
-        const updateDoc: IPayment = req.body
+        const updateDoc: Payment = req.body
 
         try {
             const updatedPayment = await this.dal.findByIdAndUpdate(

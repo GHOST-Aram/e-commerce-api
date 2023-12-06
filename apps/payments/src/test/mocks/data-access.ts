@@ -1,5 +1,5 @@
 import { Paginator } from "../../z-library/bases/controller"
-import { HydratedPaymentDoc, IPayment, Payment } from "../../data-access/model"
+import { HydratedPaymentDoc, Payment } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { paymentInput } from "./raw-data"
 
@@ -39,7 +39,7 @@ export class DataAccess{
     }
 
     public findByIdAndUpdate = jest.fn(
-        async(orderId: string, updateDoc: IPayment
+        async(orderId: string, updateDoc: Payment
             ): Promise<HydratedPaymentDoc | null> =>{
                 if(orderId === '64c9e4f2df7cc072af2ac9e8'){
                     return new Payment(paymentInput)

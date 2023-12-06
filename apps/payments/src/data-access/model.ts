@@ -1,6 +1,6 @@
 import { HydratedDocument, Model, Schema, model } from "mongoose"
 
-export interface IPayment {
+export interface Payment {
     orderId: string
     processor: string
     amount: number
@@ -11,9 +11,9 @@ export interface IPayment {
     createdAt?:Date
 }
 
-type PaymentModel = Model<IPayment>
+type PaymentModel = Model<Payment>
 
-const paymentSchema = new Schema<IPayment, PaymentModel>({
+const paymentSchema = new Schema<Payment, PaymentModel>({
     orderId:{
         type: String,
         required: true
@@ -49,7 +49,7 @@ const paymentSchema = new Schema<IPayment, PaymentModel>({
     }
 })
 
-export type HydratedPaymentDoc = HydratedDocument<IPayment>
+export type HydratedPaymentDoc = HydratedDocument<Payment>
 
-export const Payment = model<IPayment, PaymentModel>('Payment', 
+export const Payment = model<Payment, PaymentModel>('Payment', 
     paymentSchema)
