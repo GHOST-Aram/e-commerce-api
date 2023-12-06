@@ -29,3 +29,8 @@ export const usersProxy = createProxyMiddleware({
     target: 'http://localhost:3600',
     changeOrigin: true
 })
+
+export const authProxy = createProxyMiddleware({
+    target: 'http://localhost:3700',
+    changeOrigin: true
+})
