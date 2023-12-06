@@ -1,10 +1,10 @@
 import { Accessible } from "../z-library/bases/accessible"
 import { Paginator } from "../z-library/bases/controller"
-import { Cart, HydratedCartDoc, ICart } from "./model"
+import { Cart, HydratedCartDoc } from "./model"
 
 export class DataAccess implements Accessible{
 
-    public createNew = async(data:ICart) =>{
+    public createNew = async(data:Cart) =>{
         const cart = new Cart({
             items: data.items,
             customer: data.customer

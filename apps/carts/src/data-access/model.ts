@@ -1,6 +1,6 @@
 import { Model, Schema, HydratedDocument, model } from "mongoose";
 
-export interface ICart{
+export interface Cart{
     customer: string,
     items: string[],
     createdAt?: Date
@@ -10,10 +10,10 @@ interface CartVirtuals{
     count: number
 }
 
-type CartModel = Model<ICart, {}, {}>
+type CartModel = Model<Cart, {}, {}>
 
 const cartSchema: Schema = new Schema
-<ICart,CartModel,{},{}>({
+<Cart,CartModel,{},{}>({
     customer: {
         type: String,
         required: true
@@ -32,6 +32,6 @@ cartSchema.virtual('count').get(function():number{
     return this.items.length
 })
 
-export type HydratedCartDoc = HydratedDocument<ICart>
+export type HydratedCartDoc = HydratedDocument<Cart>
 
-export const Cart = model<ICart, CartModel>('Cart', cartSchema)
+export const Cart = model<Cart, CartModel>('Cart', cartSchema)

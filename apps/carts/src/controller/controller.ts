@@ -1,6 +1,6 @@
 import { BaseController, Paginator } from "../z-library/bases/controller"
 import { Controllable } from "../z-library/bases/controllable"
-import { HydratedCartDoc, ICart } from "../data-access/model"
+import { HydratedCartDoc, Cart } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 
@@ -15,7 +15,7 @@ export class CartsController extends BaseController implements Controllable{
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const cartInfo: ICart = req.body
+        const cartInfo: Cart = req.body
 
         try {
             const existingCart: HydratedCartDoc| null = await this.dal
