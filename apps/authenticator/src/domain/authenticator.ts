@@ -12,7 +12,8 @@ export class Authenticator{
         return jwt.sign({
             email: user.email,
             first_name: user.first_name,
-            last_name: user.last_name
+            last_name: user.last_name,
+            isAdmin: user.isAdmin
         }, 
         secretOrkey, 
         
@@ -28,6 +29,7 @@ interface User{
     email: string
     first_name: string
     last_name: string
+    isAdmin: boolean
 }
 
 export const auth = new Authenticator

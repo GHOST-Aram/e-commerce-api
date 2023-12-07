@@ -1,7 +1,6 @@
 import { NextFunction, Response, Request } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { HttpResponse } from "../z-library/HTTP/http-response"
-import mongoose from "mongoose"
 import 'dotenv/config'
 import { auth } from "../domain/authenticator"
 
@@ -37,7 +36,8 @@ export class AuthController extends HttpResponse {
                     first_name: user?.first_name,
                     last_name: user?.last_name,
                     email: user.email,
-                    id: user?.id
+                    id: user?.id,
+                    isAdmin: user?.isAdmin
                 }, secretOrkey )
 
                 this.respondWithToken(token, res)  

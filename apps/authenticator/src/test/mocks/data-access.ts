@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals"
-import { hash, hashSync } from "bcrypt"
+import { hash } from "bcrypt"
 import mongoose, { HydratedDocument, Schema } from "mongoose"
 
 
@@ -14,7 +14,8 @@ export class DataAccess{
                 first_name: 'John',
                 last_name: 'Doe',
                 email: 'CorrectPassword2030',
-                password: hashedPassword
+                password: hashedPassword,
+
             })
         } else{
             return null
@@ -26,7 +27,11 @@ const User = mongoose.model('User', new Schema({
     first_name: String,
     last_name: String,
     email: String,
-    password: String
+    password: String,
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 }))
 
 export const dataAccess = new DataAccess()
