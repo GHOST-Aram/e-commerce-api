@@ -11,7 +11,7 @@ app.use(logger('dev'))
 
 const controller = new ReviewsController(dataAccess)
 
-app.use('/reviews',authenticator.authenticate(), routesWrapper(controller))
+app.use('/reviews', routesWrapper(controller))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)
