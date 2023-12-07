@@ -3,14 +3,14 @@ import { dataAccess } from "./data-access/data-access";
 import { routesWrapper } from "./test/config/urls";
 import { httpErrors } from "./z-library/HTTP/http-errors";
 import { app } from "./config/config";
-import passport from "passport";
-import 'dotenv/config'
+import { authenticator } from "./z-library/auth/auth";
 
 
 
 const controller = new CartsController(dataAccess)
+
 app.use('/carts', 
-    passport.authenticate('jwt', { session: false }), 
+    authenticator.authenticate(), 
     routesWrapper(controller)
 )
 

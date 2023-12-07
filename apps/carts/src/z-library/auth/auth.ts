@@ -1,4 +1,4 @@
-import { NextFunction, Response, Request } from 'express'
+import { NextFunction, Response, Request, Application } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
 import mongoose from "mongoose"
 import passport, { DoneCallback } from "passport"
@@ -8,7 +8,7 @@ import 'dotenv/config'
 
 class Authenticator{
     
-    public setUpAuthentication = (authDBUri: string, secretOrKey: string) =>{
+    public configureStrategy = (authDBUri: string, secretOrKey: string) =>{
         passport.use( new Strategy(
             {
                 secretOrKey: secretOrKey,
@@ -35,6 +35,14 @@ class Authenticator{
         
     }
 
+    public initialize = (app:Application) =>{
+        app.use(passport.initialize())
+    }
+
+    public authenticate = ( ) =>{
+        return passport.authenticate('jwt',{ session: false})
+    }
+
     public isAdminUser = (req: Request, res: Response, next: NextFunction) =>{
         const user:any = req.user
         if(user.isAdmin){
@@ -44,7 +52,7 @@ class Authenticator{
         }
     }
 
-    public respondWithForbidden = (res: Response) =>{
+    private respondWithForbidden = (res: Response) =>{
         res.status(403).json({ message: 'Forbidden. Access denied'})
     }
 }
