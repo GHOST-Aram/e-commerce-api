@@ -2,6 +2,7 @@ import Router from 'express'
 import { OrdersController } from '../controller/controller'
 import * as middlewear from '../z-library/validation/middlewear'
 import { validator } from '../z-library/validation/validator'
+import { authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 
@@ -13,7 +14,10 @@ export const routesWrapper = (controller: OrdersController) =>{
         controller.addNew
     )
 
-    router.get('/', controller.getMany)
+    router.get('/',
+        authenticator.isAdminUser,
+        controller.getMany
+    )
 
     router.get('/:orderId', 
         validator.validateReferenceId('orderId'),
@@ -39,7 +43,9 @@ export const routesWrapper = (controller: OrdersController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
 
-    router.delete('/:orderId', validator.validateReferenceId('orderId'),
+    router.delete('/:orderId', 
+        authenticator.isAdminUser,
+        validator.validateReferenceId('orderId'),
         validator.handleValidationErrors,
         controller.deleteOne
     )
