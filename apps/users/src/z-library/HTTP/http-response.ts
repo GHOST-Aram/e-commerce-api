@@ -1,7 +1,7 @@
 import { Response, Request } from "express"
 import { HydratedDocument } from "mongoose"
 
-export class BaseController{
+export class HttpResponse{
 
     public respondWithMethodNotAllowed = (req: Request, res: Response) =>{
         res.status(405).json({ message: 'Method not allowed' })

@@ -1,11 +1,11 @@
-import { BaseController } from "../z-library/bases/controller";
+import { HttpResponse} from "../z-library/HTTP/http-response";
 import { Controllable } from "../z-library/bases/controllable";
 import { Response, Request } from "express";
 import { UsersDAL } from "../data-access/data-access";
 import { NextFunction } from "connect";
 import { User } from "../data-access/model";
 
-export class UsersController extends BaseController implements Controllable{
+export class UsersController extends HttpResponse implements Controllable{
 
     private dataAccess: UsersDAL
 

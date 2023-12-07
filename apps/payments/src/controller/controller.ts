@@ -1,10 +1,10 @@
 import { Controllable } from "../z-library/bases/controllable"
-import { BaseController } from "../z-library/bases/controller"
+import { HttpResponse } from "../z-library/HTTP/http-response"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 import { Payment } from "../data-access/model"
 
-export class PayController extends BaseController implements Controllable{
+export class PayController extends HttpResponse implements Controllable{
 
     private dal: DataAccess
 

@@ -1,4 +1,4 @@
-import { Paginator } from "../z-library/bases/controller"
+import { Paginator } from "../z-library/HTTP/http-response"
 import { Accessible } from "../z-library/bases/accessible"
 import { PriceRange } from "../z-library/formatting/formatter"
 import { HydratedProductDoc, Product } from "./model"

@@ -1,11 +1,11 @@
-import { BaseController } from "../z-library/bases/controller"
+import { HttpResponse } from "../z-library/HTTP/http-response"
 import { Controllable } from "../z-library/bases/controllable"
 import { NextFunction, Request, Response } from "express"
 import { ProductsDAL } from "../data-access/data-access"
 import { Product } from "../data-access/model"
 import { PriceRange, formatter } from "../z-library/formatting/formatter"
 
-export class ProductsController extends BaseController implements Controllable{
+export class ProductsController extends HttpResponse implements Controllable{
 
     private dataAccess: ProductsDAL
 

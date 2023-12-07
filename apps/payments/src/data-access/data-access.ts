@@ -1,4 +1,4 @@
-import { Paginator } from "../z-library/bases/controller"
+import { Paginator } from "../z-library/HTTP/http-response"
 import { Accessible } from "../z-library/bases/accessible"
 import { HydratedPaymentDoc, Payment } from "./model"
 

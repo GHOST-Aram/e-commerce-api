@@ -1,10 +1,10 @@
-import { BaseController } from "../z-library/bases/controller"
+import { HttpResponse } from "../z-library/HTTP/http-response"
 import { Controllable } from "../z-library/bases/controllable"
 import { IReview } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { ReviewDataAccess } from "../data-access/data-access"
 
-export class ReviewsController extends BaseController implements Controllable{
+export class ReviewsController extends HttpResponse implements Controllable{
 
     private dataAccess: ReviewDataAccess
 

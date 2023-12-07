@@ -1,5 +1,5 @@
 import { Accessible } from "../z-library/bases/accessible"
-import { Paginator } from "../z-library/bases/controller"
+import { Paginator } from "../z-library/HTTP/http-response"
 import { HydratedOrderDoc, Order } from "./model"
 
 export class DataAccess implements Accessible{

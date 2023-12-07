@@ -1,10 +1,10 @@
-import { BaseController, Paginator } from "../z-library/bases/controller"
+import { HttpResponse, Paginator } from "../z-library/HTTP/http-response"
 import { Controllable } from "../z-library/bases/controllable"
 import { HydratedCartDoc, Cart } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { DataAccess } from "../data-access/data-access"
 
-export class CartsController extends BaseController implements Controllable{
+export class CartsController extends HttpResponse implements Controllable{
 
     private dal: DataAccess
 
