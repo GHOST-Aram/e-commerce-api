@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import { app } from "../app"
+import 'dotenv/config'
 
 const MONGODB_URI = process.env.ORDERS_DB_URI
 
