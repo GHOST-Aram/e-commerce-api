@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductsController } from "../controller/controller";
 import * as middlewears from "../z-library/validation/middlewears";
 import { validator } from "../z-library/validation/validator";
+import { authenticator } from "../z-library/auth/auth";
 
 const router = Router()
 
@@ -9,6 +10,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
+        authenticator.isAdminUser,
         middlewears.productValidators, 
         validator.handleValidationErrors,
         controller.addNew
@@ -72,6 +74,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
+        authenticator.isAdminUser,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
         controller.deleteOne
