@@ -10,6 +10,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
+        authenticator.authenticate(),
         authenticator.isAdminUser,
         middlewears.productValidators, 
         validator.handleValidationErrors,
@@ -57,6 +58,8 @@ const routesWrapper = (controller: ProductsController) =>{
     router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:id',
+        authenticator.authenticate(),
+        authenticator.isAdminUser,
         middlewears.productValidators, 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -66,6 +69,8 @@ const routesWrapper = (controller: ProductsController) =>{
     router.patch('/',controller.respondWithMethodNotAllowed)
 
     router.patch('/:id', 
+        authenticator.authenticate(),
+        authenticator.isAdminUser,
         middlewears.patchValidators,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -74,6 +79,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
+        authenticator.authenticate(),
         authenticator.isAdminUser,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
