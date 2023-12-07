@@ -1,3 +1,4 @@
+import { NextFunction, Response, Request } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
 import mongoose from "mongoose"
 import passport, { DoneCallback } from "passport"
@@ -32,6 +33,19 @@ class Authenticator{
             }
         ))
         
+    }
+
+    public isAdminUser = (req: Request, res: Response, next: NextFunction) =>{
+        const user:any = req.user
+        if(user.isAdmin){
+            next()
+        } else {
+            this.respondWithForbidden(res)
+        }
+    }
+
+    public respondWithForbidden = (res: Response) =>{
+        res.status(403).json({ message: 'Forbidden. Access denied'})
     }
 }
 

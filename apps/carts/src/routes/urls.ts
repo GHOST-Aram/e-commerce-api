@@ -2,6 +2,7 @@ import Router from 'express'
 import { CartsController } from '../controller/controller'
 import * as middlewear from '../z-library/validators/middlewear'
 import { validator } from '../z-library/validators/validator'
+import { authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 
@@ -16,7 +17,7 @@ export const routesWrapper = (controller: CartsController) =>{
         controller.respondWithMethodNotAllowed
     )
 
-    router.get('/', controller.getMany)
+    router.get('/', authenticator.isAdminUser ,controller.getMany)
     router.get('/:customerId',
         validator.validateReferenceId('customerId') ,
         validator.handleValidationErrors,
