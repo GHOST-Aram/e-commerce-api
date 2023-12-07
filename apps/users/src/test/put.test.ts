@@ -1,5 +1,5 @@
 import { assert} from "../z-library/testing/response-assertion";
-import { app } from "./lib/test.config";
+import { app } from "./config/app";
 import { describe, test } from "@jest/globals";
 import request from "supertest"
 import * as rawData from "./mocks/raw-data";
