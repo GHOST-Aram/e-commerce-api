@@ -1,4 +1,4 @@
-import { routesWrapper } from "./routes/urls";
+import { routesWrapper } from "./test/config/urls";
 import { httpErrors } from "./z-library/HTTP/http-errors";
 import { ProductsController } from "./controller/controller";
 import { ProductsDAL } from "./data-access/data-access";

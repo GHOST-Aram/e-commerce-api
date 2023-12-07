@@ -2,7 +2,7 @@ import { assert} from "../z-library/testing/response-assertion";
 import { describe, expect, test } from "@jest/globals"
 import request from "supertest"
 import { badData, productData } from "./mocks/raw-document"
-import { app } from "./lib/app.test.config"
+import { app } from "./config/app.test.config"
 
 describe('POST Products route', () =>{
 

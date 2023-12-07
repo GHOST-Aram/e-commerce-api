@@ -1,7 +1,7 @@
 import { assert} from "../z-library/testing/response-assertion";
 import { describe, test } from "@jest/globals"
 import request from "supertest"
-import { app } from "./lib/app.test.config"
+import { app } from "./config/app.test.config"
 
 
 describe('GET Products by brand', () =>{
