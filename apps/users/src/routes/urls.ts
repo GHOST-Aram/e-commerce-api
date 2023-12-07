@@ -2,6 +2,7 @@ import { UsersController } from "../controller/controller";
 import { Router } from "express";
 import * as middlewear from "../z-library/validation/middlewears";
 import { validator } from "../z-library/validation/validator";
+import { authenticator } from "../z-library/auth/auth";
 
 const router = Router()
 
@@ -14,8 +15,13 @@ export const routesWrapper = (controller: UsersController) =>{
         controller.addNew
     )
 
-    router.get('/', controller.getMany)
-    router.get('/:id', 
+    router.get('/', 
+        authenticator.authenticate(),
+        authenticator.isAdminUser,
+        controller.getMany
+    )
+    router.get('/:id',
+        authenticator.authenticate(), 
         validator.validateReferenceId('id'),
         validator.handleValidationErrors,
         controller.getOne
@@ -23,6 +29,7 @@ export const routesWrapper = (controller: UsersController) =>{
 
     router.put('/', controller.respondWithMethodNotAllowed)
     router.put('/:id', 
+        authenticator.authenticate(),
         validator.validateReferenceId('id'),
         middlewear.userValidators, 
         validator.handleValidationErrors,
@@ -31,6 +38,7 @@ export const routesWrapper = (controller: UsersController) =>{
     
     router.patch('/', controller.respondWithMethodNotAllowed)
     router.patch('/:id', 
+        authenticator.authenticate(),
         validator.validateReferenceId('id'),
         middlewear.patchValidators, 
         validator.handleValidationErrors,
@@ -39,6 +47,8 @@ export const routesWrapper = (controller: UsersController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
+        authenticator.authenticate(),
+        authenticator.isAdminUser,
         validator.validateReferenceId('id'),
         validator.handleValidationErrors,
         controller.deleteOne
