@@ -33,11 +33,8 @@ export class AuthController extends HttpResponse {
                 } 
                 
                 const token = auth.issueToken({
-                    first_name: user?.first_name,
-                    last_name: user?.last_name,
                     email: user.email,
                     id: user._id ? user._id.toString() : user.id,
-                    isAdmin: user?.isAdmin
                 }, secretOrkey )
 
                 this.respondWithToken(token, res)  
