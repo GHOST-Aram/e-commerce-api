@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { app } from "../app"
 
-const MONGODB_URI = process.env.ORDERS_DB_URI
+const MONGODB_URI = process.env.USERSDB_URI
 
 if(MONGODB_URI){
     mongoose.connect(MONGODB_URI).then(
