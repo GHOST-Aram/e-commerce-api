@@ -12,7 +12,7 @@ export class UsersDAL implements Accessible{
     }
 
     public findByReferenceId = async(userId: string): Promise<HydratedUserDoc | null> =>{
-        const user = await User.findById(userId)
+        const user = await User.findById(userId, '-password')
         return user
     }
     
