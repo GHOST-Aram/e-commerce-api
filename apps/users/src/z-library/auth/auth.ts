@@ -18,9 +18,7 @@ class Authenticator{
                     await mongoose.connect(authDBUri) 
 
                     const user = await mongoose.connection.db.collection('users')
-                        .findOne({ id: jwt_payload.sub})
-
-                
+                        .findOne({ email: jwt_payload.email})
 
                     if(!user){
                         return done(null, false)
