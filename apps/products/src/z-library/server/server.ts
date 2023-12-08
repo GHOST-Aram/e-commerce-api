@@ -1,6 +1,7 @@
 import express, { Application } from "express"
 import cors from 'cors'
 import helmet from "helmet"
+import mongoose from "mongoose"
 import morgan from 'morgan'
 
 export class Server{
@@ -26,6 +27,22 @@ export class Server{
 
     public logRequestsandResponses = () =>{
         this.app.use(morgan('dev'))
+    }
+
+    public connectToDB = (dbUri: string, dbName: string) =>{
+        mongoose.connect(dbUri).then(
+            (result: any) =>{
+                console.log(`Application connected to ${dbName} DB.`)
+            }
+        ).catch((error: any) =>{
+            console.log(`Error connecting to ${dbName} DB: `, error.message)
+        })
+    }
+
+    public listenToRequests = (port: number, appName: string) =>{
+        this.app.listen(port, () =>{
+            console.log(`Running ${appName} on http://localhost:${port}`)
+        })
     }
 
 }
