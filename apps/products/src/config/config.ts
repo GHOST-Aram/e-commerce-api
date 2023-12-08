@@ -2,6 +2,7 @@ import express, { Application } from "express"
 import { authenticator } from "../z-library/auth/auth"
 import { Server } from "../z-library/server/server"
 import 'dotenv/config'
+import { Connection } from "../z-library/db/connection"
 
 const app: Application = express()
 const server = new Server(app)
@@ -12,21 +13,29 @@ server.enforceSecurity()
 server.logRequestsandResponses()
 
 const dbUri = process.env.USERSDB_URI || ''
-server.connectToDB(dbUri, 'Authentication')
-
-
 const secretOrKey = process.env.TOKEN_SECRET
-if(secretOrKey){
-    authenticator.configureStrategy(secretOrKey)
-    authenticator.initialize(app)
-} else {
-    console.log(
-        'Secret Key is Undefined. '
-        +'Please provide all of them in enviroment variables')
+let connection: Connection
+
+try {
+    
+    connection = new Connection(dbUri)
+    
+    const authDbConnection = connection.getInitial()
+    
+    if(secretOrKey){
+        authenticator.configureStrategy(secretOrKey, authDbConnection)
+        authenticator.initialize(app)
+    } else {
+        console.log(
+            'Secret Key is Undefined. '
+            +'Please provide all of them in enviroment variables')
+    }
+} catch (error: any) {
+    console.log(error.message)
 }
 
 const PORT = Number(process.env.PRODUCTS_PORT) || 3400
 server.listenToRequests(PORT, 'Products')
 
-export { app }
+export { app, connection }
 

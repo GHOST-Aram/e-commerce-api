@@ -2,11 +2,11 @@ import { routesWrapper } from "./routes/urls";
 import { httpErrors } from "./z-library/HTTP/http-errors";
 import { ProductsController } from "./controller/controller";
 import { ProductsDAL } from "./data-access/data-access";
-import { app } from "./config/config";
+import { app, connection } from "./config/config";
 
 
-const dal = new ProductsDAL()
-const controller = new ProductsController(dal)
+const dataAccess = new ProductsDAL(connection.switch('e-commerce-products'))
+const controller = new ProductsController(dataAccess)
 
 app.use('/products', routesWrapper(controller))
 

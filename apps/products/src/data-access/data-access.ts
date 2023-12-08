@@ -1,13 +1,22 @@
+import mongoose from "mongoose"
 import { Paginator } from "../z-library/HTTP/http-response"
 import { Accessible } from "../z-library/bases/accessible"
 import { PriceRange } from "../z-library/formatting/formatter"
-import { HydratedProductDoc, Product } from "./model"
+import { HydratedProductDoc, Product, productSchema } from "./model"
 
 export class ProductsDAL implements Accessible{
+
+    private connection: mongoose.Connection
+
+    constructor(connection: mongoose.Connection){
+        this.connection = connection
+        this.connection.model('Product', productSchema)
+    }
     
     public createNew = async( productData: Product): Promise<string> =>{
-        const product = new Product(productData)
-        return (await product.save()).id
+        const createdProduct = await this.connection.db.collection('products')
+            .insertOne(productData)
+        return createdProduct.insertedId.toString()
     }
 
     public findByReferenceId = async(productId: string): Promise<HydratedProductDoc | null > =>{

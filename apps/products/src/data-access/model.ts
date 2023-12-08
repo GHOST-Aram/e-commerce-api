@@ -127,3 +127,5 @@ export type HydratedProductDoc = HydratedDocument<Product>
 
 export const Product = model<Product, ProductModel>(
     'Product', productSchema)
+
+export { productSchema }
