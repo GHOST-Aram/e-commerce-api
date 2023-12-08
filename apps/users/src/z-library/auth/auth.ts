@@ -17,8 +17,10 @@ class Authenticator{
                 try {
                     await mongoose.connect(authDBUri) 
 
-                    const user = mongoose.connection.db.collection('users')
+                    const user = await mongoose.connection.db.collection('users')
                         .findOne({ id: jwt_payload.sub})
+
+                
 
                     if(!user){
                         return done(null, false)
@@ -27,8 +29,6 @@ class Authenticator{
                     }
                 } catch (error) {
                     return done(error, false)   
-                } finally{
-                    mongoose.connection.close()
                 }
             }
         ))
