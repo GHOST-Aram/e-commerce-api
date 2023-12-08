@@ -1,5 +1,8 @@
 import { Paginator } from "../../z-library/HTTP/http-response";
 import { jest } from "@jest/globals";
+import mongoose from "mongoose";
+import { ProductModel, productSchema } from "../../data-access/model";
+
 import { 
     HydratedProductDoc, 
     Product 
@@ -7,6 +10,13 @@ import {
 import { PriceRange } from "../../z-library/formatting/formatter";
 
 export class ProductsDAL {
+
+    public Model: ProductModel
+
+    constructor(model: ProductModel){
+        this.Model = model
+        
+    }
 
     public createNew = jest.fn(
         async(productData : Product) =>{
