@@ -1,20 +1,20 @@
 import { HydratedDocument, Model, ObjectId, Schema, model } from "mongoose"
 
 export interface Product{
-    name?: string
-    image_url?: string
-    image_file?: Buffer
-    description?: string
-    brand?: string
-    manufacturer?: string
-    model?: string
-    category?: string
-    selling_price?: number
-    marked_price?: number
-    available_units?: number 
-    specifications?: string[]
-    ratings?: number[]
-    createdAt?: Date
+    name: string
+    image_url: string
+    image_file: Buffer
+    description: string
+    brand: string
+    manufacturer: string
+    model: string
+    category: string
+    selling_price: number
+    marked_price: number
+    available_units: number 
+    specifications: string[]
+    ratings: number[]
+    createdAt: Date
 }
 
 interface ProductVirtuals{
@@ -36,7 +36,7 @@ Product, ProductModel,{}, {}, ProductVirtuals>({
     },
     image_url: {
         type: String,
-        required: false,
+        required: true,
         default: undefined
     },
     description: {
@@ -62,7 +62,7 @@ Product, ProductModel,{}, {}, ProductVirtuals>({
         type: String,
         minlength: 2,
         maxlength: 100,
-        required: true
+        default: 'Generic'
     },
     category: {
         type: String,
@@ -86,7 +86,7 @@ Product, ProductModel,{}, {}, ProductVirtuals>({
     },
     specifications: {
         type: [String],
-        required: true
+        required: false
     },
     ratings: {
         type: [Number],
@@ -94,7 +94,7 @@ Product, ProductModel,{}, {}, ProductVirtuals>({
     },
     createdAt: {
         type: Date,
-        default: Date.now()
+        default: new Date()
     }
 })
 

@@ -20,8 +20,7 @@ export const productValidators = [
         .withMessage(`Manufacturer field is required`),
 
     validator.validateNameField('model')
-        .notEmpty()
-        .withMessage(`Model field is required`),
+        .optional(),
 
     validator.validateNameField('category')
         .notEmpty()
@@ -40,8 +39,7 @@ export const productValidators = [
         .withMessage(`Available units field is required`),
 
     validator.validateSpecificationsField('specifications')
-        .notEmpty()
-        .withMessage('Specifications field is required'),
+        .trim().optional().escape(),
 ]
 
 export const patchValidators = [
