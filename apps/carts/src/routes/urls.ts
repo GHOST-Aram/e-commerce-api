@@ -8,7 +8,7 @@ const router = Router()
 
 export const routesWrapper = (controller: CartsController) =>{
     router.post('/', 
-        middlewear.initialInputValidators, 
+        validator.validateObjectIDArray('items'), 
         validator.handleValidationErrors, 
         controller.addNew
     )

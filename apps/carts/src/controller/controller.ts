@@ -14,18 +14,25 @@ export class CartsController extends HttpResponse implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
-
-        const cartInfo: Cart = req.body
-
+        const { items } = req.body
+        const currentUser:any = req.user
+        
         try {
-            const existingCart: HydratedCartDoc| null = await this.dal
-                .findByReferenceId (cartInfo.customer)
-
-            if(existingCart== null){
-                const newCart: HydratedCartDoc = await this.dal.createNew(cartInfo)  
+            if(currentUser){
+                const currentUserId = currentUser?._id.toString()
+                const existingCart = await this.dal.findByReferenceId (
+                    currentUserId)
+                    
+                if(existingCart== null){
+                const cartData: Cart = { items, customer:currentUserId}
+                
+                const newCart = await this.dal.createNew(cartData)  
                 this.respondWithCreatedResource(newCart.customer, res)
+                } else {
+                    this.respondWithConflict(res)
+                }
             } else {
-                this.respondWithConflict(res)
+                this.respondWithUnauthorised(res)
             }
         } catch (error) {
             next(error)

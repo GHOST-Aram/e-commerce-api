@@ -57,6 +57,10 @@ export class HttpResponse{
     public respondWithDeletedResource = (id: string, res: Response) =>{
         res.status(200).json({ message: 'Deleted',id })
     }
+
+    public respondWithUnauthorised = (res: Response) =>{
+        res.status(401).json({ message: 'Unauthorised' })
+    }   
 }
 
 export interface Paginator{
