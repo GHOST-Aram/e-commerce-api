@@ -1,11 +1,17 @@
 import { Accessible } from "../z-library/bases/accessible"
 import { Paginator } from "../z-library/HTTP/http-response"
-import { Cart, HydratedCartDoc } from "./model"
+import { Cart, CartModel, HydratedCartDoc } from "./model"
 
 export class DataAccess implements Accessible{
 
+    public Model: CartModel
+
+    constructor(model: CartModel){
+        this.Model = model
+    }
+
     public createNew = async(data:Cart) =>{
-        const cart = new Cart({
+        const cart = new this.Model({
             items: data.items,
             customer: data.customer
         })
@@ -14,13 +20,13 @@ export class DataAccess implements Accessible{
 
     public findByReferenceId = async(
         customerId : string ): Promise<HydratedCartDoc | null> =>{
-            return await Cart.findOne({ customer: customerId })
+            return await this.Model.findOne({ customer: customerId })
     }
 
     public findCartAndAddItemId = async(
         customerId: string, itemId: string
         ): Promise<HydratedCartDoc | null > =>{
-            const modifiedCart = await Cart.findOneAndUpdate(
+            const modifiedCart = await this.Model.findOneAndUpdate(
                 { customer: customerId },
                 { $push: {items: itemId} }
             )
@@ -30,7 +36,7 @@ export class DataAccess implements Accessible{
     public findCartAndRemoveItemId = async(
         customerId: string, itemId: string
         ): Promise<HydratedCartDoc | null > =>{
-            const modifiedCart = await Cart.findOneAndUpdate(
+            const modifiedCart = await this.Model.findOneAndUpdate(
                 { customer: customerId },
                 { $pull: {items: itemId} }
             )
@@ -47,7 +53,7 @@ export class DataAccess implements Accessible{
     public findByIdAndUpdate = async(
         customerId: string, updateDoc: { items: string []}
         ): Promise<HydratedCartDoc | null > =>{
-            const updatedDoc = await Cart.findOneAndUpdate(
+            const updatedDoc = await this.Model.findOneAndUpdate(
                 { customer: customerId}, updateDoc)
             
             return updatedDoc 
@@ -56,8 +62,6 @@ export class DataAccess implements Accessible{
 
     public findByIdAndDelete = async(customerId: string
         ): Promise<HydratedCartDoc | null> =>{
-            return await Cart.findOneAndDelete({ customer: customerId })
+            return await this.Model.findOneAndDelete({ customer: customerId })
     }
 }
-
-export const dataAccess  = new DataAccess()

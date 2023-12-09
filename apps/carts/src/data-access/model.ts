@@ -10,9 +10,9 @@ interface CartVirtuals{
     count: number
 }
 
-type CartModel = Model<Cart, {}, {}>
+export type CartModel = Model<Cart, {}, {}>
 
-const cartSchema: Schema = new Schema
+export const cartSchema: Schema = new Schema
 <Cart,CartModel,{},{}>({
     customer: {
         type: String,

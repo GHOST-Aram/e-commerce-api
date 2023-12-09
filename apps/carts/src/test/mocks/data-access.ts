@@ -1,19 +1,25 @@
 import { Paginator } from "../../z-library/HTTP/http-response"
-import { Cart, HydratedCartDoc } from "../../data-access/model"
+import { Cart, CartModel, HydratedCartDoc } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { cartData } from "./raw-data"
 
 export class DataAccess{
 
+    public Model: CartModel
+
+    constructor(model: CartModel){
+        this.Model = model
+    }
+
     public createNew = jest.fn(
         async(data: Cart): Promise<HydratedCartDoc> =>{
-            return new Cart(data)
+            return new this.Model(data)
     })
 
     public findByReferenceId = jest.fn(async(
         customerId: string): Promise<HydratedCartDoc | null> =>{
             if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                return new Cart(cartData)
+                return new this.Model(cartData)
             }
             return null
     })
@@ -22,7 +28,7 @@ export class DataAccess{
         async(customerId: string, updateDoc: {items:string[]}
             ): Promise<HydratedCartDoc | null> =>{
                 if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                    return new Cart({
+                    return new this.Model({
                         customer: customerId,
                         items: updateDoc.items
                     })
@@ -35,7 +41,7 @@ export class DataAccess{
         async(customerId: string, itemId: string
             ): Promise<HydratedCartDoc| null> =>{
                 if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                    return new Cart({
+                    return new this.Model({
                         customer: customerId,
                         items: [itemId]
                     })
@@ -49,7 +55,7 @@ export class DataAccess{
         async(customerId: string, itemId: string
             ): Promise<HydratedCartDoc| null> =>{
                 if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                    return new Cart({
+                    return new this.Model({
                         customer: customerId,
                         items: []
                     })
@@ -69,7 +75,7 @@ export class DataAccess{
 
         let count = 0
         while(count < length){
-            carts.push(new Cart(cartData))
+            carts.push(new this.Model(cartData))
             count++
         }
 
@@ -79,12 +85,10 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(async(
         customerId: string): Promise<HydratedCartDoc | null> =>{
             if(customerId === '64c9e4f2df7cc072af2ac9e5'){
-                return new Cart({
+                return new this.Model({
                     customer: customerId,
                 })
             }
             return null
     })
 }
-
-export const dataAccess = new DataAccess()
