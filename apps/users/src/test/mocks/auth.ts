@@ -8,5 +8,6 @@ export const mockAuth = (req: Request, res: Response, next: NextFunction) =>{
         email: 'johndoe@gmail.com'
     })
     req.user = user
+    req.isAuthenticated = () =>Boolean(req.user)
     next()
 }

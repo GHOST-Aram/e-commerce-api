@@ -35,7 +35,7 @@ export class UsersController extends HttpResponse implements Controllable{
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUSer = req.user
 
-        if(currentUSer){
+        if(currentUSer && req.isAuthenticated()){
             const userId = req.params.id
             
             try {
@@ -56,7 +56,7 @@ export class UsersController extends HttpResponse implements Controllable{
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUSer = req.user
 
-        if(currentUSer){
+        if(currentUSer && req.isAuthenticated()){
             const pagination = this.paginate(req)
     
             try {
@@ -73,7 +73,7 @@ export class UsersController extends HttpResponse implements Controllable{
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUSer = req.user
 
-        if(currentUSer){
+        if(currentUSer && req.isAuthenticated()){
             const userId = req.params.id
             const userData = req.body
     
@@ -109,7 +109,7 @@ export class UsersController extends HttpResponse implements Controllable{
 
         const currentUSer = req.user
         
-        if(currentUSer){
+        if(currentUSer && req.isAuthenticated()){
             const userId = req.params.id
             const patchData: User = req.body
     
@@ -132,7 +132,7 @@ export class UsersController extends HttpResponse implements Controllable{
     public deleteOne = async(req: Request, res: Response,next: NextFunction) =>{
         const currentUSer = req.user
         
-        if(currentUSer){
+        if(currentUSer && req.isAuthenticated()){
             const userId = req.params.id
     
             try {
