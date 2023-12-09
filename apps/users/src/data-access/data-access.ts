@@ -1,27 +1,31 @@
 import { Paginator } from "../z-library/HTTP/http-response"
 import { Accessible } from "../z-library/bases/accessible"
-import { HydratedUserDoc, User } from "./model"
+import { HydratedUserDoc, User, UserModel } from "./model"
 
 export class UsersDAL implements Accessible{
+    public Model:UserModel
+    constructor (model : UserModel){
+        this.Model = model
+    }
 
     public createNew = async(userData: User): Promise<HydratedUserDoc> =>{
-        const user = new User(userData)
+        const user = new this.Model(userData)
         const savedUser = await user.save()
 
         return savedUser
     }
 
     public findByReferenceId = async(userId: string): Promise<HydratedUserDoc | null> =>{
-        const user = await User.findById(userId, '-password')
+        const user = await this.Model.findById(userId, '-password')
         return user
     }
     
     public findByEmail = async(email: string): Promise<HydratedUserDoc | null> =>{
-        return await User.findOne({ email })
+        return await this.Model.findOne({ email })
     }
 
     public findWithPagination = async(pagination: Paginator): Promise<HydratedUserDoc[]> =>{
-        const users = await User.find({}, '-password')
+        const users = await this.Model.find({}, '-password')
             .skip(pagination.skipDocs)
             .limit(pagination.limit)
         
@@ -30,13 +34,11 @@ export class UsersDAL implements Accessible{
 
     public findByIdAndUpdate = async(userID: string, updateData: User
         ): Promise<HydratedUserDoc | null> =>{
-            return await User.findByIdAndUpdate(userID, updateData)    
+            return await this.Model.findByIdAndUpdate(userID, updateData)    
     }
 
     public findByIdAndDelete = async(userId: string): Promise<HydratedUserDoc | null>=>{
-            return await User.findByIdAndDelete(userId)
+            return await this.Model.findByIdAndDelete(userId)
     }
 }
-
-export const usersDAL = new UsersDAL()
 

@@ -17,9 +17,9 @@ interface UserVirtuals{
     name: string
 }
 
-type UserModel = Model<User,{}, UserMethods, UserVirtuals>
+export type UserModel = Model<User,{}, UserMethods, UserVirtuals>
 
-const userSchema = new Schema<User, UserModel, UserMethods,{}, UserVirtuals>({
+export const userSchema = new Schema<User, UserModel, UserMethods,{}, UserVirtuals>({
     first_name: {
         type: String,
         minlength: 2,
