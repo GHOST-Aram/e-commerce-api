@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductsController } from "../../controller/controller";
 import * as middlewears from "../../z-library/validation/middlewears";
 import { validator } from "../../z-library/validation/validator";
+import { mockAuth } from "../mocks/auth";
 
 const router = Router()
 
@@ -9,6 +10,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
+        mockAuth,
         middlewears.productValidators, 
         validator.handleValidationErrors,
         controller.addNew
@@ -55,6 +57,7 @@ const routesWrapper = (controller: ProductsController) =>{
     router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:id',
+        mockAuth,
         middlewears.productValidators, 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -64,6 +67,7 @@ const routesWrapper = (controller: ProductsController) =>{
     router.patch('/',controller.respondWithMethodNotAllowed)
 
     router.patch('/:id', 
+        mockAuth,
         middlewears.patchValidators,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -72,6 +76,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
+        mockAuth,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
         controller.deleteOne

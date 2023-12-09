@@ -15,15 +15,21 @@ export class ProductsController extends HttpResponse implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
+        const currentUser:any = req.user
 
-        const productData: Product = req.body
-
-        try {
-            const productId = await this.dataAccess.createNew(productData)
-            this.respondWithCreatedResource(productId, res)
-        } catch (error) {
-            next(error)
+        if(currentUser && currentUser.isAdmin && req.isAuthenticated()){
+            const productData: Product = req.body
+    
+            try {
+                const productId = await this.dataAccess.createNew(productData)
+                this.respondWithCreatedResource(productId, res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithForbidden(res)
         }
+        
     }
     
     public getOne =async (req:Request, res: Response, next: NextFunction) => {
@@ -132,56 +138,74 @@ export class ProductsController extends HttpResponse implements Controllable{
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const productId = req.params.id
-        const productData: Product = req.body
-        
-        try { 
-            const id = await this.dataAccess.findByIdAndUpdate(productId, 
-                productData)
+        const currentUser:any = req.user
 
-            if(id){
-                this.respondWithUpdatedResource(id, res)
-            } else {
-                const newProductId = await this.dataAccess.createNew(productData)
-                this.respondWithCreatedResource(newProductId, res)
-            }                 
-        } catch (error) {
-            next(error)
-        }   
+        if(currentUser && currentUser.isAdmin && req.isAuthenticated()){
+            const productId = req.params.id
+            const productData: Product = req.body
+            
+            try { 
+                const id = await this.dataAccess.findByIdAndUpdate(productId, 
+                    productData)
+    
+                if(id){
+                    this.respondWithUpdatedResource(id, res)
+                } else {
+                    const newProductId = await this.dataAccess.createNew(productData)
+                    this.respondWithCreatedResource(newProductId, res)
+                }                 
+            } catch (error) {
+                next(error)
+            }   
+        } else {
+            this.respondWithForbidden(res)
+        }
     }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const productId = req.params.id
-        const patchData = req.body
+        const currentUser:any = req.user
 
-        try {
-            const id = await this.dataAccess.findByIdAndUpdate(productId, 
-                patchData)
-
-            if(id)
-                this.respondWithModifiedResource(id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
+        if(currentUser && currentUser.isAdmin && req.isAuthenticated()){
+            const productId = req.params.id
+            const patchData = req.body
+    
+            try {
+                const id = await this.dataAccess.findByIdAndUpdate(productId, 
+                    patchData)
+    
+                if(id)
+                    this.respondWithModifiedResource(id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithForbidden(res)
         }
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const productId = req.params.id
+        const currentUser:any = req.user
 
-        try {
-            const deletedProduct = await this.dataAccess.findByIdAndDelete(
-                productId)
-            
-            if(deletedProduct)
-                this.respondWithDeletedResource(deletedProduct.id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
+        if(currentUser && currentUser.isAdmin && req.isAuthenticated()){
+            const productId = req.params.id
+    
+            try {
+                const deletedProduct = await this.dataAccess.findByIdAndDelete(
+                    productId)
+                
+                if(deletedProduct)
+                    this.respondWithDeletedResource(deletedProduct.id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithForbidden(res)
         }
     }
 }

@@ -57,6 +57,10 @@ export class HttpResponse{
     public respondWithDeletedResource = (id: string, res: Response) =>{
         res.status(200).json({ message: 'Deleted',id })
     }
+
+    public respondWithForbidden = (res: Response) =>{
+        res.status(403).json({ message: 'Access denied' })
+    }
 }
 
 export interface Paginator{
