@@ -1,6 +1,7 @@
 import express, { Application } from "express"
 import cors from 'cors'
 import helmet from "helmet"
+import mongoose from "mongoose"
 import morgan from 'morgan'
 
 export class Server{
@@ -28,4 +29,11 @@ export class Server{
         this.app.use(morgan('dev'))
     }
 
+
+
+    public listenToRequests = (port: number, appName: string) =>{
+        this.app.listen(port, () =>{
+            console.log(`Running ${appName} on http://localhost:${port}`)
+        })
+    }
 }
