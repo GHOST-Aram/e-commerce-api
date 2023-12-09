@@ -15,7 +15,7 @@ export const routesWrapper = (controller: OrdersController) =>{
     )
 
     router.get('/',
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         controller.getMany
     )
 
@@ -44,7 +44,7 @@ export const routesWrapper = (controller: OrdersController) =>{
     router.delete('/', controller.respondWithMethodNotAllowed)
 
     router.delete('/:orderId', 
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         validator.validateReferenceId('orderId'),
         validator.handleValidationErrors,
         controller.deleteOne

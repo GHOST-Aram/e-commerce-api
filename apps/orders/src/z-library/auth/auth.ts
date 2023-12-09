@@ -44,7 +44,7 @@ class Authenticator{
         return passport.authenticate('jwt',{ session: false})
     }
 
-    public isAdminUser = (req: Request, res: Response, next: NextFunction) =>{
+    public allowAdminUser = (req: Request, res: Response, next: NextFunction) =>{
         const user:any = req.user
         if(user.isAdmin){
             next()
