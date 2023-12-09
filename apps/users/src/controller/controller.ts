@@ -33,94 +33,120 @@ export class UsersController extends HttpResponse implements Controllable{
     }
 
     public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const currentUSer = req.user
 
-        const userId = req.params.id
-
-        try {
-            const user = await this.dataAccess.findByReferenceId(userId)
+        if(currentUSer){
+            const userId = req.params.id
             
-            if(user === null)
-                this.respondWithNotFound(res)
-            else     
-                this.respondWithFoundResource(user, res)
-        } catch (error) {
-            next(error)
+            try {
+                const user = await this.dataAccess.findByReferenceId(userId)
+                
+                if(user === null)
+                    this.respondWithNotFound(res)
+                else     
+                    this.respondWithFoundResource(user, res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
     
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
+        const currentUSer = req.user
 
-        const pagination = this.paginate(req)
-
-        try {
-            const users = await this.dataAccess.findWithPagination(pagination)
-            this.respondWithFoundResource(users, res)
-        } catch (error) {
-            next(error)
+        if(currentUSer){
+            const pagination = this.paginate(req)
+    
+            try {
+                const users = await this.dataAccess.findWithPagination(pagination)
+                this.respondWithFoundResource(users, res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        const currentUSer = req.user
 
-        const userId = req.params.id
-        const userData = req.body
-
-        try {
-            const user = await this.dataAccess.findByIdAndUpdate(
-                userId, userData)
-            
-            if(user)
-                this.respondWithUpdatedResource(user.id, res)
-            
-            const userWithIncomingEmail = await this.dataAccess.findByEmail(userData.email)
-            if(userWithIncomingEmail){
-                const updatedUser = await this.dataAccess.findByIdAndUpdate(
-                    userWithIncomingEmail.id, userData
-                )
-
-                if(updatedUser)
-                    this.respondWithUpdatedResource(updatedUser.id, res)
-
-            } else {
-                const newUser = await this.dataAccess.createNew(userData)
-                this.respondWithCreatedResource(newUser.id, res)
+        if(currentUSer){
+            const userId = req.params.id
+            const userData = req.body
+    
+            try {
+                const user = await this.dataAccess.findByIdAndUpdate(
+                    userId, userData)
+                
+                if(user)
+                    this.respondWithUpdatedResource(user.id, res)
+                
+                const userWithIncomingEmail = await this.dataAccess.findByEmail(userData.email)
+                if(userWithIncomingEmail){
+                    const updatedUser = await this.dataAccess.findByIdAndUpdate(
+                        userWithIncomingEmail.id, userData
+                    )
+    
+                    if(updatedUser)
+                        this.respondWithUpdatedResource(updatedUser.id, res)
+    
+                } else {
+                    const newUser = await this.dataAccess.createNew(userData)
+                    this.respondWithCreatedResource(newUser.id, res)
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }   
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const userId = req.params.id
-        const patchData: User = req.body
-
-        try {
-            const user = await this.dataAccess.findByIdAndUpdate(
-                userId, patchData)
-            
-            if(user)
-                this.respondWithModifiedResource(user.id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
-        } 
+        const currentUSer = req.user
+        
+        if(currentUSer){
+            const userId = req.params.id
+            const patchData: User = req.body
+    
+            try {
+                const user = await this.dataAccess.findByIdAndUpdate(
+                    userId, patchData)
+                
+                if(user)
+                    this.respondWithModifiedResource(user.id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            } 
+        } else {
+            this.respondWithUnauthorised(res)
+        }
     }
 
     public deleteOne = async(req: Request, res: Response,next: NextFunction) =>{
-
-        const userId = req.params.id
-
-        try {
-            const deletedUser = await this.dataAccess.findByIdAndDelete(userId)
-
-            if(deletedUser)
-                this.respondWithDeletedResource(deletedUser.id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
+        const currentUSer = req.user
+        
+        if(currentUSer){
+            const userId = req.params.id
+    
+            try {
+                const deletedUser = await this.dataAccess.findByIdAndDelete(userId)
+    
+                if(deletedUser)
+                    this.respondWithDeletedResource(deletedUser.id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 }
