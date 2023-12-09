@@ -79,12 +79,11 @@ export class UsersController extends HttpResponse implements Controllable{
                 )
 
                 if(updatedUser)
-                this.respondWithUpdatedResource(updatedUser.id, res)
+                    this.respondWithUpdatedResource(updatedUser.id, res)
 
-                else{
-                    const newUser = await this.dataAccess.createNew(userData)
-                    this.respondWithCreatedResource(newUser.id, res)
-                }
+            } else {
+                const newUser = await this.dataAccess.createNew(userData)
+                this.respondWithCreatedResource(newUser.id, res)
             }
         } catch (error) {
             next(error)
