@@ -46,7 +46,7 @@ export class DataAccess implements Accessible{
     
     public findWithPagination = async(paginator: Paginator
         ): Promise<HydratedCartDoc[]> =>{
-            return Cart.find().skip(paginator.skipDocs)
+            return await this.Model.find().skip(paginator.skipDocs)
                 .limit(paginator.limit)
     }
 
