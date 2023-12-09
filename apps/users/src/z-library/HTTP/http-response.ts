@@ -8,7 +8,7 @@ export class HttpResponse{
     }
 
     public respondWithConflict = (res: Response) =>{
-        res.status(409).json({message: 'Cart already exists'})
+        res.status(409).json({message: 'Document already exists'})
     }
 
     public respondWithCreatedResource = (resourceId: string, res: Response) =>{
