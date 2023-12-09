@@ -1,6 +1,6 @@
 import { OrdersController } from "./controller/controller";
 import { DataAccess } from "./data-access/data-access";
-import { routesWrapper } from "./test/config/urls";
+import { routesWrapper } from "./routes/urls";
 import { httpErrors } from "./z-library/HTTP/http-errors";
 import { app, connection } from "./config/config";
 import { authenticator } from "./z-library/auth/auth";
