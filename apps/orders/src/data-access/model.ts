@@ -21,9 +21,9 @@ interface OrderVirtuals {
     total: number
 }
 
-type OrderModel = Model<Order,{},{}, OrderVirtuals>
+export type OrderModel = Model<Order,{},{}, OrderVirtuals>
 
-const orderSchema: Schema = new Schema<Order,OrderModel, 
+export const orderSchema: Schema = new Schema<Order,OrderModel, 
 {}, {}, OrderVirtuals>({
     items:{
         type: [{
