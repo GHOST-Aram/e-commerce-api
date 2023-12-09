@@ -17,11 +17,11 @@ export class ProductsDAL implements Accessible{
     }
 
     public findByReferenceId = async(productId: string): Promise<HydratedProductDoc | null > =>{
-        return await Product.findById(productId)
+        return await this.Model.findById(productId)
     }
 
     public findWithPagination = async( paginator: Paginator ): Promise<HydratedProductDoc[]> =>{
-        const products = await Product.find()
+        const products = await this.Model.find()
             .skip(paginator.skipDocs).limit(paginator.limit)
         
         return products
@@ -29,7 +29,7 @@ export class ProductsDAL implements Accessible{
 
     public findByPriceRange = async(priceRange: PriceRange, paginator: Paginator
         ): Promise<HydratedProductDoc[]> =>{
-        const products = Product.find({'selling_price': {
+        const products = await this.Model.find({'selling_price': {
                 $gte: priceRange.start, 
                 $lte: priceRange.end
             }
@@ -41,7 +41,7 @@ export class ProductsDAL implements Accessible{
 
     public findByCategory = async (categoryName: string, paginator:Paginator
         ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ category: categoryName })
+        const products = await this.Model.find({ category: categoryName })
             .skip(paginator.skipDocs).limit(paginator.limit)
 
         return products
@@ -49,7 +49,7 @@ export class ProductsDAL implements Accessible{
 
     public findByBrand = async (brandName: string, paginator: Paginator
         ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ brand: brandName})
+        const products = await this.Model.find({ brand: brandName})
             .skip(paginator.skipDocs).limit(paginator.limit)
 
         return products
@@ -57,7 +57,7 @@ export class ProductsDAL implements Accessible{
 
     public findBymanufacturer = async (manufacturerName: string, paginator:Paginator
         ): Promise<HydratedProductDoc[]> => {
-        const products = await Product.find({ manufacturer: manufacturerName})
+        const products = await this.Model.find({ manufacturer: manufacturerName})
             .skip(paginator.skipDocs).limit(paginator.limit)
 
         return products
@@ -65,7 +65,7 @@ export class ProductsDAL implements Accessible{
 
     public findByModelName = async (modelName: string, paginator: Paginator
         ): Promise<HydratedProductDoc[]> => {
-            const products = await Product.find({ model: modelName})
+            const products = await this.Model.find({ model: modelName})
                 .skip(paginator.skipDocs).limit(paginator.limit)
 
             return products
@@ -73,7 +73,7 @@ export class ProductsDAL implements Accessible{
     
     public findByIdAndUpdate = async(productId: string, updateData: Product
         ): Promise<string | undefined> =>{
-        const product = await Product.findByIdAndUpdate(productId, updateData)
+        const product  =  await this.Model.findByIdAndUpdate(productId, updateData)
 
         if(product === null)
             return undefined
@@ -83,7 +83,7 @@ export class ProductsDAL implements Accessible{
 
     public findByIdAndDelete = async(productId: string
         ): Promise<HydratedProductDoc | null > =>{
-        const deleted = await Product.findByIdAndDelete(productId)
+        const deleted  =  await this.Model.findByIdAndDelete(productId)
 
         return deleted
     }
