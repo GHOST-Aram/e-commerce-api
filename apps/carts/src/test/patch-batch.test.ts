@@ -10,7 +10,10 @@ describe('PATCH (Batch request) Carts Route', () => {
         ' Method not allowed', 
     async() =>{
         const response = await request(app).patch('/carts')
-            .send(data.validPatchData)
+            .send({
+                ...data.validPatchData, 
+                customer: '64c9e4f2df7cc072af2ac9e5'
+            })
         
        assert.respondsWithMethodNotAllowed(response)
     })

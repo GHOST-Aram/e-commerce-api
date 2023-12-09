@@ -11,7 +11,10 @@ describe('PATCH (Add one Item to cart) Carts Route', () => {
     async() =>{
         const  response = await request(app).patch(
             '/carts/25c9e4f2df7cc072af2ac9e5/add-item')
-            .send(data.validPatchData)
+            .send({
+                ...data.validPatchData, 
+                customer: '25c9e4f2df7cc072af2ac9e5'
+            })
 
         assert.respondsWithNotFound(response)
     })
@@ -21,7 +24,10 @@ describe('PATCH (Add one Item to cart) Carts Route', () => {
     async() =>{
         const response = await request(app).patch(
             '/carts/64c9e4f2df7cc072af2ac9e5/add-item')
-            .send(data.invalidPatchData)
+            .send({
+                ...data.invalidPatchData, 
+                customer: '64c9e4f2df7cc072af2ac9e5'
+            })
 
             assert.respondsWithBadRequest(response)
             assert.respondsWithValidationErrors(response)
@@ -32,7 +38,10 @@ describe('PATCH (Add one Item to cart) Carts Route', () => {
     async() =>{
         const response = await request(app).patch(
             '/carts/64c9e4f2dc9e5/add-item')
-            .send(data.invalidUpdateInput)
+            .send({
+                ...data.invalidUpdateInput,
+                customer: '64c9e4f2df7cc072af2ac9e5'
+            })
 
             assert.respondsWithBadRequest(response)
             assert.respondsWithValidationErrors(response)
@@ -43,7 +52,10 @@ describe('PATCH (Add one Item to cart) Carts Route', () => {
     async() =>{
         const  response = await request(app).patch(
             '/carts/64c9e4f2df7cc072af2ac9e5/add-item')
-            .send(data.validPatchData)
+            .send({
+                ...data.validPatchData,
+                customer: '64c9e4f2df7cc072af2ac9e5'
+            })
 
         assert.respondsWithSuccess(response)
         assert.respondsWithModifedResource(response)    

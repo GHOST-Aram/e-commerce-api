@@ -8,16 +8,16 @@ describe('DELETE Cart routes', () =>{
         ' Method not allowed', 
         async() =>{
             const response = await request(app).delete('/carts')
+                .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
             
             assert.respondsWithMethodNotAllowed(response)
         }
     )
 
-    test('Responds  validation errors, status 400: '+
-        ' Invalid reference Id (customet Id).',  
+    test('Responds  validation errors, status 400: Invalid reference Id (customet Id).',  
     async() =>{
-        const response = await request(app).delete(
-            '/carts/64c9e4f2dc9e5')
+        const response = await request(app).delete('/carts/64c9e4f2dc9e5')
+            .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
 
         assert.respondsWithBadRequest(response)
         assert.respondsWithValidationErrors(response)
@@ -27,6 +27,7 @@ describe('DELETE Cart routes', () =>{
         async() =>{
             const  response = await request(app).delete(
                 '/carts/25c9e4f2df7cc072af2ac9e5')
+                .send({ customer: '25c9e4f2df7cc072af2ac9e5'})
 
             assert.respondsWithNotFound(response)
         }
@@ -37,6 +38,7 @@ describe('DELETE Cart routes', () =>{
         async() =>{
             const response = await request(app).delete(
                 '/carts/64c9e4f2df7cc072af2ac9e5')
+                .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
             
             assert.respondsWithSuccess(response)
             assert.respondsWithDeletedResource(response)
