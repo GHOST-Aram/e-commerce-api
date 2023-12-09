@@ -16,7 +16,7 @@ export class CartsController extends HttpResponse implements Controllable{
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUser:any = req.user
         
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const { items } = req.body
 
             try {
@@ -44,7 +44,7 @@ export class CartsController extends HttpResponse implements Controllable{
 
         const currentUser:any = req.user
         
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const customerId = currentUser._id.toString()
 
             try {
@@ -65,7 +65,7 @@ export class CartsController extends HttpResponse implements Controllable{
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUser:any = req.user
 
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const paginator: Paginator = this.paginate(req)
 
             try {
@@ -82,7 +82,7 @@ export class CartsController extends HttpResponse implements Controllable{
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUser:any = req.user
 
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const customerId = currentUser._id.toString()
             const updateDoc: {items: string[]} = req.body
     
@@ -110,7 +110,7 @@ export class CartsController extends HttpResponse implements Controllable{
     public addtoCart = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUser:any = req.user
 
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const customerId = currentUser._id.toString()
             const itemId: string = req.body.item
     
@@ -137,7 +137,7 @@ export class CartsController extends HttpResponse implements Controllable{
 
         const currentUser:any = req.user
 
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const customerId = currentUser._id.toString()
             const itemId: string = req.body.item
     
@@ -162,7 +162,7 @@ export class CartsController extends HttpResponse implements Controllable{
     public deleteOne = async(req: Request, res: Response, next:NextFunction) =>{
         const currentUser:any = req.user
 
-        if(currentUser){
+        if(currentUser && req.isAuthenticated()){
             const customerId = currentUser._id.toString()
     
             try {
