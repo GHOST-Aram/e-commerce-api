@@ -2,7 +2,7 @@ import { OrdersController } from "../../controller/controller";
 import { Order } from "../../data-access/model";
 import { mockAuth } from "../mocks/auth";
 import { DataAccess } from "../mocks/data-access";
-import { routesWrapper } from "./urls";
+import { routesWrapper } from "../../routes/urls";
 import express from 'express'
 
 const dataAccess = new DataAccess(Order)
