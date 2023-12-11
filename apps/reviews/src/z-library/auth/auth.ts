@@ -7,18 +7,19 @@ import 'dotenv/config'
 
 
 class Authenticator{
-    
-    public configureStrategy = (authDBUri: string, secretOrKey: string) =>{
+   
+
+    public configureStrategy = (
+        secretOrKey: string, authDbConnection: mongoose.Connection) =>{
         passport.use( new Strategy(
             {
                 secretOrKey: secretOrKey,
                 jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
             }, async(jwt_payload: JwtPayload, done: DoneCallback) =>{
                 try {
-                    await mongoose.connect(authDBUri) 
 
-                    const user = await mongoose.connection.db.collection('users')
-                        .findOne({ email: jwt_payload.email})
+                    const user = await authDbConnection.db.collection('users')
+                    .findOne({ email: jwt_payload.email})
 
                     if(!user){
                         return done(null, false)
@@ -43,7 +44,7 @@ class Authenticator{
         return passport.authenticate('jwt',{ session: false})
     }
 
-    public isAdminUser = (req: Request, res: Response, next: NextFunction) =>{
+    public allowAdminUser = (req: Request, res: Response, next: NextFunction) =>{
         const user:any = req.user
         if(user.isAdmin){
             next()
