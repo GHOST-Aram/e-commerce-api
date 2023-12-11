@@ -9,7 +9,8 @@ const router = Router()
 export const routesWrapper = (controller: OrdersController) =>{
     router.post('/:orderId', controller.respondWithMethodNotAllowed)
 
-    router.post('/', middlewear.orderDataValidators,
+    router.post('/', 
+        middlewear.orderDataValidators,
         validator.handleValidationErrors,
         controller.addNew
     )

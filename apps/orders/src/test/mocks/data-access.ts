@@ -1,18 +1,23 @@
 import { Paginator } from "../../z-library/HTTP/http-response"
-import { HydratedOrderDoc, Order } from "../../data-access/model"
+import { HydratedOrderDoc, Order, OrderModel} from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { orderInput } from "./raw-data"
 
 export class DataAccess{
+    public Model: OrderModel
+
+    constructor(model: OrderModel){
+        this.Model = model
+    }
     public createNew = jest.fn(
         async(data: Order): Promise<HydratedOrderDoc> =>{
-            return new Order(data)
+            return new this.Model(data)
     }) 
 
     public findByReferenceId = jest.fn(
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8')
-                return new Order(orderInput)
+                return new this.Model(orderInput)
             else return null
     })
 
@@ -25,7 +30,7 @@ export class DataAccess{
         const orders: HydratedOrderDoc[] = []
         let count = 0
         while (count < length ){
-            orders.push(new Order(orderInput))
+            orders.push(new this.Model(orderInput))
             count ++
         }
 
@@ -36,7 +41,7 @@ export class DataAccess{
         async(orderId: string, updateDoc: Order
         ): Promise<HydratedOrderDoc | null>  =>{
             if(orderId === '64c9e4f2df7dd072af2ac9e5'){
-                return new Order(updateDoc)
+                return new this.Model(updateDoc)
                 
             }
             else return null
@@ -45,11 +50,9 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
-                return new Order(orderInput)
+                return new this.Model(orderInput)
                 
             }
             else return null
     })
 }
-
-export const dataAccess = new DataAccess()
