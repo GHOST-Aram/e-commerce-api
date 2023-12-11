@@ -16,7 +16,7 @@ export class OrdersController extends HttpResponse implements Controllable{
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
         const currentUser:any = req.user
-        console.log("Items: ", req.body)
+
         if(currentUser && req.isAuthenticated()){
             
             const orderData: Order = req.body
@@ -27,7 +27,7 @@ export class OrdersController extends HttpResponse implements Controllable{
                         placedBy: currentUser._id.toString()
                     }
                 )
-                console.log('NEW ORDER: ', newOrder)
+    
                 this.respondWithCreatedResource(newOrder.id, res)
             } catch (error) {
                 next(error)
@@ -79,35 +79,6 @@ export class OrdersController extends HttpResponse implements Controllable{
         }
     }
 
-    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
-
-        const currentUser:any = req.user
-
-        if(currentUser && req.isAuthenticated()){
-
-            const updateData: Order = req.body 
-            const orderId = req.params.orderId
-    
-            try {
-                const updatedOrder = await this.dataAcess.findByIdAndUpdate(orderId, 
-                    {
-                        ...updateData, 
-                        placedBy: currentUser._id.toString()
-                    })
-    
-                if(updatedOrder)
-                    this.respondWithUpdatedResource(orderId, res)
-                else {
-                    const newOrder = await this.dataAcess.createNew(updateData)
-                    this.respondWithCreatedResource(newOrder.id, res)
-                }
-            } catch (error) {
-                next(error)
-            }
-        } else {
-            this.respondWithUnathorised(res)
-        }
-    }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 

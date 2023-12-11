@@ -28,12 +28,7 @@ export const routesWrapper = (controller: OrdersController) =>{
 
     router.put('/', controller.respondWithMethodNotAllowed)
 
-    router.put('/:orderId', 
-        validator.validateReferenceId('orderId'),
-        middlewear.validateOrderInput,
-        validator.handleValidationErrors,
-        controller.updateOne
-    )
+    router.put('/:orderId', controller.respondWithMethodNotAllowed)
 
     router.patch('/', controller.respondWithMethodNotAllowed)
 
