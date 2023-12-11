@@ -31,7 +31,7 @@ export class ReviewsController extends HttpResponse implements Controllable{
         }
     }
 
-    public getOne = async(req: Request, res: Response, next: NextFunction) =>{
+    public getProductReviews = async(req: Request, res: Response, next: NextFunction) =>{
 
         const productId = req.params.productId
 

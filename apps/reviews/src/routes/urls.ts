@@ -30,7 +30,7 @@ export const routesWrapper = (
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
-        controller.getOne
+        controller.getProductReviews
     )
 
     router.put('/', authenticator.authenticate(),
