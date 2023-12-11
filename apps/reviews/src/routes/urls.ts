@@ -1,12 +1,14 @@
-import Router from 'express'
+import Router, { NextFunction, Response, Request } from 'express'
 import { ReviewsController } from '../controller/controller'
 import * as middlewear from '../z-library/validation/middlewear'
 import { validator } from '../z-library/validation/validator'
-import { authenticator } from '../z-library/auth/auth'
+import { Authenticatable, Authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 
-export const routesWrapper = (controller: ReviewsController) =>{
+export const routesWrapper = (
+    controller: ReviewsController, authenticator: Authenticator | Authenticatable
+    ) =>{
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/', 
@@ -27,7 +29,8 @@ export const routesWrapper = (controller: ReviewsController) =>{
         controller.getOne
     )
 
-    router.put('/', controller.respondWithMethodNotAllowed)
+    router.put('/', authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed)
     router.put('/:reviewId', 
         authenticator.authenticate(),
         middlewear.newReviewInputValidators,
