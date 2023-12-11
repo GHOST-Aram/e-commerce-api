@@ -2,6 +2,7 @@ import Router from 'express'
 import { PayController } from '../controller/controller'
 import * as middlewear from '../z-library/validators/middlewear'
 import { validator } from '../z-library/validators/validator'
+import { authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 
@@ -13,8 +14,11 @@ export const routesWrapper = (controller: PayController) =>{
         controller.addNew
     )
 
-    router.get('/',controller.getMany)
-    router.get('/:orderId', 
+    router.get('/',
+    authenticator.allowAdminUser, 
+    controller.getMany)
+
+    router.get('/:orderId',
         middlewear.referenceIdValidator,
         validator.handleValidationErrors,
         controller.getOne
