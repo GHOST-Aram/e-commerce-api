@@ -32,6 +32,7 @@ export const routesWrapper = (controller: PayController) =>{
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:orderId', 
+        authenticator.allowAdminUser,
         middlewear.referenceIdValidator,
         validator.handleValidationErrors,
         controller.deleteOne
