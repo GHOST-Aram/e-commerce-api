@@ -10,7 +10,10 @@ export const routesWrapper = (
     controller: ReviewsController, authenticator: Authenticator | Authenticatable
     ) =>{
 
-    router.post('/:id', controller.respondWithMethodNotAllowed)
+    router.post('/:id', 
+        authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed)
+
     router.post('/', 
         authenticator.authenticate(),
         middlewear.newReviewInputValidators ,
@@ -23,6 +26,7 @@ export const routesWrapper = (
         authenticator.allowAdminUser,
         controller.getMany
     )
+    
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
@@ -37,7 +41,10 @@ export const routesWrapper = (
         controller.respondWithMethodNotAllowed
     )
 
-    router.patch('/', controller.respondWithMethodNotAllowed)
+    router.patch('/', 
+        authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed)
+
     router.patch('/:reviewId', 
         authenticator.authenticate(),
         validator.validateReferenceId('reviewId'),
@@ -46,7 +53,9 @@ export const routesWrapper = (
         controller.modifyOne
     )
 
-    router.delete('/', controller.respondWithMethodNotAllowed )
+    router.delete('/', authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed )
+
     router.delete('/:reviewId', 
         authenticator.authenticate(),
         authenticator.allowAdminUser,
