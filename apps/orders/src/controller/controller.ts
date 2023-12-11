@@ -110,7 +110,7 @@ export class OrdersController extends HttpResponse implements Controllable{
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const currentUser = req.user
+        const currentUser:any = req.user
 
         if(currentUser && req.isAuthenticated()){
 
@@ -119,7 +119,7 @@ export class OrdersController extends HttpResponse implements Controllable{
     
             try {
                 const modifiedDoc = await this.dal.findByIdAndUpdate(orderId, 
-                    patchDoc)
+                    {...patchDoc, placedBy: currentUser._id.toString()})
     
                 if(modifiedDoc)
                     this.respondWithModifiedResource(orderId, res)

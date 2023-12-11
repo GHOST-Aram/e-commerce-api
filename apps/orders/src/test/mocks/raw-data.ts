@@ -1,12 +1,13 @@
+import { Order } from "../../data-access/model"
 
 export const orderInput = {
-    item: {
+    items: [{
         productId: '64c9e4f2df7cc072af2ac9e8',
         name: 'Samsung A10S',
         price: 13000,
         quantity: 4
-    },
-    placedBy: '87c9e4f2df7cc072af2ac9e8'
+    }],
+    pickupStation: 'Xyz street',
 }
 // items:Item[],
 // delivered: boolean
@@ -20,8 +21,10 @@ export const invalidOrderInput = {
         name: 'Samsung A10S',
         price: 13000,
     },
-    placedBy: '87c9e4f2df7cc07'
+    placedBy: '87c9e4f2df7cc07',
+    delivered: 56
 }
+
 
 export const validPatchData = {
     delivered: true,

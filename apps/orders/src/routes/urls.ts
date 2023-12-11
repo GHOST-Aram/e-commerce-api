@@ -10,7 +10,7 @@ export const routesWrapper = (controller: OrdersController) =>{
     router.post('/:orderId', controller.respondWithMethodNotAllowed)
 
     router.post('/', 
-        middlewear.orderDataValidators,
+        middlewear.validateOrderInput,
         validator.handleValidationErrors,
         controller.addNew
     )
@@ -29,7 +29,8 @@ export const routesWrapper = (controller: OrdersController) =>{
     router.put('/', controller.respondWithMethodNotAllowed)
 
     router.put('/:orderId', 
-        middlewear.updateValidators,
+        validator.validateReferenceId('orderId'),
+        middlewear.validateOrderInput,
         validator.handleValidationErrors,
         controller.updateOne
     )
@@ -37,7 +38,8 @@ export const routesWrapper = (controller: OrdersController) =>{
     router.patch('/', controller.respondWithMethodNotAllowed)
 
     router.patch('/:orderId',
-        middlewear.updateValidators,
+        validator.validateReferenceId('orderId'),
+        middlewear.validatePatchInput,
         validator.handleValidationErrors,
         controller.modifyOne
     )
