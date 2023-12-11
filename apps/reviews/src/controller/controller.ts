@@ -55,11 +55,11 @@ export class ReviewsController extends HttpResponse implements Controllable{
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const reviewId = req.params.reviewId
-        const updateDoc: IReview = req.body
+        const content: string = req.body.content
 
         try {
             const updatedReview = await this.dataAccess.findByIdAndUpdate(
-                reviewId, updateDoc)
+                reviewId, { content })
 
             if(updatedReview)
                 this.respondWithModifiedResource(updatedReview.id, res)

@@ -7,9 +7,5 @@ export const newReviewInputValidators = [
 ]
 
 export const patchInputValidators = [
-    validator.validateOptionalField('author').isLength({ min: 24, max: 24})
-        .optional(),
-    validator.validateOptionalField('product').isLength({ min: 24, max: 24})
-        .optional(),
     validator.validateRequiredField('content'),
 ]

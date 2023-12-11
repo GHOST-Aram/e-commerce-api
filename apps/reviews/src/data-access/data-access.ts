@@ -31,7 +31,7 @@ export class ReviewDataAccess implements Accessible{
             .limit(paginator.limit)
     }
 
-    public findByIdAndUpdate = async(id: string, updateDoc: IReview
+    public findByIdAndUpdate = async(id: string, updateDoc: {content: string }
         ): Promise<HydratedReviewDoc | null> =>{
             return await this.Model.findByIdAndUpdate(
                 id, updateDoc, { new: true })
