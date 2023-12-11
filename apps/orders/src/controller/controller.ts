@@ -87,11 +87,18 @@ export class OrdersController extends HttpResponse implements Controllable{
         if(currentUser && req.isAuthenticated()){
 
             const orderId = req.params.orderId
-            const patchDoc = req.body
+            const incomingData:any = req.body
+
+            const updateData = {
+                pickupStation: incomingData.pickupStation,
+                delivered: incomingData.delivered,
+                cancelled: incomingData.cancelled,
+                ETA: incomingData.ETA
+            }
     
             try {
                 const modifiedDoc = await this.dataAcess.findByIdAndUpdate(orderId, 
-                    {...patchDoc, placedBy: currentUser._id.toString()})
+                    {... updateData})
     
                 if(modifiedDoc)
                     this.respondWithModifiedResource(orderId, res)

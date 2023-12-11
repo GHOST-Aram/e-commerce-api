@@ -23,7 +23,7 @@ export class DataAccess implements Accessible{
             .limit(paginator.limit)
     }  
     
-    public findByIdAndUpdate = (orderId: string, updateDoc: Order
+    public findByIdAndUpdate = (orderId: string, updateDoc: any
         ): Promise<HydratedOrderDoc | null> =>{
             return this.Model.findByIdAndUpdate(orderId, updateDoc)
     }
