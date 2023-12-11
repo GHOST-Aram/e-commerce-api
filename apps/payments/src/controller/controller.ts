@@ -14,31 +14,43 @@ export class PayController extends HttpResponse implements Controllable{
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
-        
-        const paymentData: Payment = req.body
 
-        try {
-            const createdDoc = await this.dal.createNew(paymentData)
-            this.respondWithCreatedResource(createdDoc.orderId, res)
-        } catch (error) {
-            next(error)
+        const currentUser = req.user
+
+        if(currentUser && req.isAuthenticated()){
+            const paymentData: Payment = req.body
+    
+            try {
+                const createdDoc = await this.dal.createNew(paymentData)
+                this.respondWithCreatedResource(createdDoc.orderId, res)
+            } catch (error) {
+                next(error)
+            }
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 
     public getOne = async(req: Request, res:Response, next: NextFunction) =>{
 
-        const referenceId =  req.params.orderId
+        const currentUser = req.user
 
-        try {
-            const payment = await this.dal.findByReferenceId(referenceId)
-
-            if(payment){
-                this.respondWithFoundResource(payment, res)
-            } else {
-                this.respondWithNotFound(res)
+        if(currentUser && req.isAuthenticated()){
+            const referenceId =  req.params.orderId
+    
+            try {
+                const payment = await this.dal.findByReferenceId(referenceId)
+    
+                if(payment){
+                    this.respondWithFoundResource(payment, res)
+                } else {
+                    this.respondWithNotFound(res)
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 
@@ -55,46 +67,61 @@ export class PayController extends HttpResponse implements Controllable{
     }
 
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+         
+        const currentUser = req.user
 
-        const referenceId =  req.params.orderId
-        const updateDoc: Payment = req.body
-
-        try {
-            const updatedPayment = await this.dal.findByIdAndUpdate(
-                referenceId, updateDoc)
-
-            if(updatedPayment){
-                this.respondWithUpdatedResource( updatedPayment.orderId, res)
-            } else {
-                const newPayment = await this.dal.createNew(updateDoc)
-                this.respondWithCreatedResource(newPayment.orderId, res)
+        if(currentUser && req.isAuthenticated()){
+            const referenceId =  req.params.orderId
+            const updateDoc: Payment = req.body
+    
+            try {
+                const updatedPayment = await this.dal.findByIdAndUpdate(
+                    referenceId, updateDoc)
+    
+                if(updatedPayment){
+                    this.respondWithUpdatedResource( updatedPayment.orderId, res)
+                } else {
+                    const newPayment = await this.dal.createNew(updateDoc)
+                    this.respondWithCreatedResource(newPayment.orderId, res)
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
     
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
+         
+        const currentUser = req.user
 
-        const referenceId = req.params.orderId
-        const updateDoc = req.body
-
-        try {
-            const modifiedPayment = await this.dal.findByIdAndUpdate(
-                referenceId, updateDoc)
-                
-            if(modifiedPayment){
-                this.respondWithModifiedResource(modifiedPayment.orderId, res)
-            } else {
-                this.respondWithNotFound(res)
+        if(currentUser && req.isAuthenticated()){
+            const referenceId = req.params.orderId
+            const updateDoc = req.body
+    
+            try {
+                const modifiedPayment = await this.dal.findByIdAndUpdate(
+                    referenceId, updateDoc)
+                    
+                if(modifiedPayment){
+                    this.respondWithModifiedResource(modifiedPayment.orderId, res)
+                } else {
+                    this.respondWithNotFound(res)
+                }
+            } catch (error) {
+                next(error)
             }
-        } catch (error) {
-            next(error)
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
+         
+        const currentUser = req.user
 
+        if(currentUser && req.isAuthenticated()){
         const referenceId = req.params.orderId
 
         try {
@@ -108,6 +135,9 @@ export class PayController extends HttpResponse implements Controllable{
             
         } catch (error) {
             next(error)
+        }
+        } else {
+            this.respondWithUnauthorised(res)
         }
     }
 }
