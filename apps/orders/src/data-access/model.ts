@@ -42,7 +42,6 @@ export const orderSchema: Schema = new Schema<Order,OrderModel,
     pickupStation: {
         type: String,
         required: true,
-        default: undefined
     },
     delivered: {
         type: Boolean,
