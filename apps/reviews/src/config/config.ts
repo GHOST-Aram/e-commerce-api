@@ -1,6 +1,8 @@
 import express, { Application } from "express"
 import { authenticator } from "../z-library/auth/auth"
 import { Server } from "../z-library/server/server"
+import 'dotenv/config'
+import { Connection } from "../z-library/db/connection"
 
 const app: Application = express()
 const server = new Server(app)
@@ -10,21 +12,30 @@ server.allowCrossOriginResourceSharing()
 server.enforceSecurity()
 server.logRequestsandResponses()
 
-//Authenticate
+const dbUri = process.env.USERSDB_URI || ''
 const secretOrKey = process.env.TOKEN_SECRET
-const usersDBString = process.env.USERSDB_URI
+let connection: Connection
+
 try {
-    if(secretOrKey && usersDBString){
-        authenticator.configureStrategy(usersDBString, secretOrKey)
+    
+    connection = new Connection(dbUri)
+    
+    const authDbConnection = connection.getInitial()
+    
+    if(secretOrKey){
+        authenticator.configureStrategy(secretOrKey, authDbConnection)
         authenticator.initialize(app)
     } else {
-        throw new Error(
-            'Secret Key or User auth DB connection string is Undefined. '
+        console.log(
+            'Secret Key is Undefined. '
             +'Please provide all of them in enviroment variables')
     }
 } catch (error: any) {
     console.log(error.message)
 }
 
-export { app }
+const PORT = Number(process.env.REVIEWS_PORT) || 3500
+server.listenToRequests(PORT, 'Payments')
+
+export { app, connection }
 
