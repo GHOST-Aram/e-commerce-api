@@ -1,11 +1,10 @@
 import { body } from 'express-validator' 
 
 export const validateOrderInput = [
-    body('items').trim().notEmpty()
+    body('items').notEmpty()
         .withMessage('Items field is required.')
         .isArray({ min: 1})
-        .withMessage('Items must be an array.')
-        .escape(),
+        .withMessage('Items must be an array.'),
 
     body('ETA').optional().isDate().escape(),
 
