@@ -44,7 +44,7 @@ export const routesWrapper = (controller: ReviewsController) =>{
     router.delete('/', controller.respondWithMethodNotAllowed )
     router.delete('/:reviewId', 
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         validator.validateReferenceId('reviewId'),
         validator.handleValidationErrors,
         controller.deleteOne
