@@ -26,7 +26,7 @@ export const routesWrapper = (
         authenticator.allowAdminUser,
         controller.getMany
     )
-    
+
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,

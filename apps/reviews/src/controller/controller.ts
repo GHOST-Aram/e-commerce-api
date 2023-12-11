@@ -14,13 +14,20 @@ export class ReviewsController extends HttpResponse implements Controllable{
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const reviewData = req.body
+        const currentUser:any = req.user
 
-        try {
-            const reviewDoc = await this.dataAccess.createNew(reviewData)
-            this.respondWithCreatedResource(reviewDoc.id, res)
-        } catch (error) {
-            next(error)
+        if(currentUser && req.isAuthenticated()){
+
+            const reviewData = req.body
+    
+            try {
+                const reviewDoc = await this.dataAccess.createNew(reviewData)
+                this.respondWithCreatedResource(reviewDoc.id, res)
+            } catch (error) {
+                next(error)
+            }
+        } else{
+            this.respondWithUnauthorised(res)
         }
     }
 
@@ -41,47 +48,68 @@ export class ReviewsController extends HttpResponse implements Controllable{
 
     public getMany = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const paginator = this.paginate(req)
+        const currentUser:any = req.user
 
-        try {
-            const reviews = await this.dataAccess.findWithPagination(paginator)
-            this.respondWithFoundResource(reviews, res)
-        } catch (error) {
-            next(error)
+        if(currentUser && req.isAuthenticated() && currentUser.isAdmin){
+
+            const paginator = this.paginate(req)
+    
+            try {
+                const reviews = await this.dataAccess.findWithPagination(paginator)
+                this.respondWithFoundResource(reviews, res)
+            } catch (error) {
+                next(error)
+            }
+        } else{
+            this.respondWithForbidden(res)
         }
     }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
-        const reviewId = req.params.reviewId
-        const content: string = req.body.content
+        const currentUser:any = req.user
 
-        try {
-            const updatedReview = await this.dataAccess.findByIdAndUpdate(
-                reviewId, { content })
+        if(currentUser && req.isAuthenticated()){
 
-            if(updatedReview)
-                this.respondWithModifiedResource(updatedReview.id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
+            const reviewId = req.params.reviewId
+            const content: string = req.body.content
+    
+            try {
+                const updatedReview = await this.dataAccess.findByIdAndUpdate(
+                    reviewId, { content })
+    
+                if(updatedReview)
+                    this.respondWithModifiedResource(updatedReview.id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            }
+        } else{
+            this.respondWithUnauthorised(res)
         }
     }
 
     public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{
 
-        const reviewId = req.params.reviewId
-        
-        try {
-            const deletedReview = await this.dataAccess.findByIdAndDelete(reviewId)
+        const currentUser:any = req.user
 
-            if(deletedReview)
-                this.respondWithDeletedResource( deletedReview.id, res)
-            else
-                this.respondWithNotFound(res)
-        } catch (error) {
-            next(error)
-        }    
+        if(currentUser && req.isAuthenticated() && currentUser.isAdmin){
+
+            const reviewId = req.params.reviewId
+            
+            try {
+                const deletedReview = await this.dataAccess.findByIdAndDelete(reviewId)
+    
+                if(deletedReview)
+                    this.respondWithDeletedResource( deletedReview.id, res)
+                else
+                    this.respondWithNotFound(res)
+            } catch (error) {
+                next(error)
+            }    
+        } else{
+            this.respondWithForbidden(res)
+        }
     }
 }
