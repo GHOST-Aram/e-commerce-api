@@ -31,12 +31,10 @@ export const routesWrapper = (
 
     router.put('/', authenticator.authenticate(),
         controller.respondWithMethodNotAllowed)
+        
     router.put('/:reviewId', 
         authenticator.authenticate(),
-        middlewear.newReviewInputValidators,
-        validator.validateReferenceId('reviewId'),
-        validator.handleValidationErrors,
-        controller.updateOne
+        controller.respondWithMethodNotAllowed
     )
 
     router.patch('/', controller.respondWithMethodNotAllowed)

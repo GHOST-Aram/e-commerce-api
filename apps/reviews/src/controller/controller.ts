@@ -52,26 +52,6 @@ export class ReviewsController extends HttpResponse implements Controllable{
         }
     }
 
-    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
-
-        const reviewId = req.params.reviewId
-        const updateDoc: IReview = req.body
-
-        try {
-            const updatedReview = await this.dataAccess.findByIdAndUpdate(
-                reviewId, updateDoc)
-
-            if(updatedReview)
-                this.respondWithUpdatedResource(updatedReview.id,res)
-            else{
-                const newReview = await this.dataAccess.createNew(updateDoc)
-                this.respondWithCreatedResource(newReview.id, res)
-            }
-        } catch (error) {
-            next(error)
-        }
-    }
-
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const reviewId = req.params.reviewId
