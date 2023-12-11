@@ -6,27 +6,28 @@ import { Order } from "../data-access/model"
 
 export class OrdersController extends HttpResponse implements Controllable{
 
-    private dal: DataAccess
+    private dataAcess: DataAccess
 
     constructor(dataAccess: DataAccess){
         super()
-        this.dal = dataAccess
+        this.dataAcess = dataAccess
     }
 
     public addNew = async(req: Request, res: Response, next: NextFunction) =>{
 
         const currentUser:any = req.user
-
+        console.log("Items: ", req.body)
         if(currentUser && req.isAuthenticated()){
             
             const orderData: Order = req.body
     
             try {
-                const newOrder = await this.dal.createNew(
+                const newOrder = await this.dataAcess.createNew(
                     {   ...orderData, 
                         placedBy: currentUser._id.toString()
                     }
                 )
+                console.log('NEW ORDER: ', newOrder)
                 this.respondWithCreatedResource(newOrder.id, res)
             } catch (error) {
                 next(error)
@@ -45,7 +46,7 @@ export class OrdersController extends HttpResponse implements Controllable{
             const orderId = req.params.orderId
     
             try {
-                const order = await this.dal.findByReferenceId(orderId)
+                const order = await this.dataAcess.findByReferenceId(orderId)
                 
                 if(order)
                     this.respondWithFoundResource(order, res)
@@ -68,7 +69,7 @@ export class OrdersController extends HttpResponse implements Controllable{
             const paginator: Paginator = this.paginate(req)
     
             try {
-                const orders = await this.dal.findWithPagination(paginator)
+                const orders = await this.dataAcess.findWithPagination(paginator)
                 this.respondWithFoundResource(orders, res)
             } catch (error) {
                 next(error)
@@ -88,7 +89,7 @@ export class OrdersController extends HttpResponse implements Controllable{
             const orderId = req.params.orderId
     
             try {
-                const updatedOrder = await this.dal.findByIdAndUpdate(orderId, 
+                const updatedOrder = await this.dataAcess.findByIdAndUpdate(orderId, 
                     {
                         ...updateData, 
                         placedBy: currentUser._id.toString()
@@ -97,7 +98,7 @@ export class OrdersController extends HttpResponse implements Controllable{
                 if(updatedOrder)
                     this.respondWithUpdatedResource(orderId, res)
                 else {
-                    const newOrder = await this.dal.createNew(updateData)
+                    const newOrder = await this.dataAcess.createNew(updateData)
                     this.respondWithCreatedResource(newOrder.id, res)
                 }
             } catch (error) {
@@ -118,7 +119,7 @@ export class OrdersController extends HttpResponse implements Controllable{
             const patchDoc = req.body
     
             try {
-                const modifiedDoc = await this.dal.findByIdAndUpdate(orderId, 
+                const modifiedDoc = await this.dataAcess.findByIdAndUpdate(orderId, 
                     {...patchDoc, placedBy: currentUser._id.toString()})
     
                 if(modifiedDoc)
@@ -142,7 +143,7 @@ export class OrdersController extends HttpResponse implements Controllable{
             const orderId = req.params.orderId
     
             try {
-                const deletedOrder = await this.dal.findByIdAndDelete(orderId)
+                const deletedOrder = await this.dataAcess.findByIdAndDelete(orderId)
     
                 if(deletedOrder){
                     this.respondWithDeletedResource(deletedOrder.id, res)
