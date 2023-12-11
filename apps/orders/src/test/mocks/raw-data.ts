@@ -1,5 +1,3 @@
-import { Order } from "../../data-access/model"
-
 export const orderInput = {
     items: [{
         productId: '64c9e4f2df7cc072af2ac9e8',
@@ -9,12 +7,7 @@ export const orderInput = {
     }],
     pickupStation: 'Xyz street',
 }
-// items:Item[],
-// delivered: boolean
-// cancelled: boolean
-// pickupStation: string
-// ETA: Date
-// placedBy: string,
+
 export const invalidOrderInput = {
     item: {
         productId: '64c9e4f2df7',
