@@ -11,9 +11,9 @@ export interface Payment {
     createdAt?:Date
 }
 
-type PaymentModel = Model<Payment>
+export type PaymentModel = Model<Payment>
 
-const paymentSchema = new Schema<Payment, PaymentModel>({
+export const paymentSchema = new Schema<Payment, PaymentModel>({
     orderId:{
         type: String,
         required: true

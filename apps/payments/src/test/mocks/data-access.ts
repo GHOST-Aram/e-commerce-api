@@ -1,18 +1,23 @@
 import { Paginator } from "../../z-library/HTTP/http-response"
-import { HydratedPaymentDoc, Payment } from "../../data-access/model"
+import { HydratedPaymentDoc, Payment, PaymentModel } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { paymentInput } from "./raw-data"
 
 export class DataAccess{
+    public Model: PaymentModel
+
+    constructor(model: PaymentModel){
+        this.Model = model
+    }
     public createNew = jest.fn(
         async(): Promise<HydratedPaymentDoc> =>{
-            return new Payment(paymentInput)
+            return new this.Model(paymentInput)
     })
 
     public findByReferenceId = jest.fn(
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
-                return new Payment(paymentInput)
+                return new this.Model(paymentInput)
             } else {
                 return null
             }
@@ -31,10 +36,10 @@ export class DataAccess{
 
             let count = 0
             while(count < length){
-                payments.push(new Payment(paymentInput))
+                payments.push(new this.Model(paymentInput))
                 count ++
             }
-
+            
             return payments
     }
 
@@ -42,7 +47,7 @@ export class DataAccess{
         async(orderId: string, updateDoc: Payment
             ): Promise<HydratedPaymentDoc | null> =>{
                 if(orderId === '64c9e4f2df7cc072af2ac9e8'){
-                    return new Payment(paymentInput)
+                    return new this.Model(paymentInput)
                 } else {
                     return null
                 }
@@ -51,11 +56,9 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
-                return new Payment(paymentInput)
+                return new this.Model(paymentInput)
             } else {
                 return null
             }
     })
 }
-
-export const dataAccess = new DataAccess()

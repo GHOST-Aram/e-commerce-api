@@ -1,11 +1,18 @@
 import { PayController } from "./controller/controller";
-import { dataAccess } from "./data-access/data-access";
-import { routesWrapper } from "./test/config/urls";
+import { DataAccess } from "./data-access/data-access";
+import { routesWrapper } from "./routes/urls";
 import { httpErrors } from "./z-library/HTTP/http-errors";
-import { app } from "./config/config";
+import { app, connection } from "./config/config";
 import { authenticator } from "./z-library/auth/auth";
+import { DB } from "./z-library/db/db";
+import { paymentSchema } from "./data-access/model";
 
 
+const dbConnection = connection.switch('e-commerce-payments')
+const db = new DB(dbConnection)
+const PaymentModel = db.createModel('Payment', paymentSchema)
+
+const dataAccess = new DataAccess(PaymentModel)
 const controller = new PayController(dataAccess)
 
 app.use('/payments', authenticator.authenticate(), routesWrapper(controller))
