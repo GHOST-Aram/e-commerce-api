@@ -16,7 +16,11 @@ export const routesWrapper = (controller: ReviewsController) =>{
         controller.addNew
     )
 
-    router.get('/', controller.getMany)
+    router.get('/', 
+        authenticator.authenticate(),
+        authenticator.allowAdminUser,
+        controller.getMany
+    )
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
