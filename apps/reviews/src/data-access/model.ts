@@ -7,9 +7,9 @@ export interface IReview{
     createdAt: Date
 }
 
-type ReviewModel = Model<IReview>
+export type ReviewModel = Model<IReview>
 
-const reviewSchema = new Schema<IReview,ReviewModel>({
+export const reviewSchema = new Schema<IReview,ReviewModel>({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User',

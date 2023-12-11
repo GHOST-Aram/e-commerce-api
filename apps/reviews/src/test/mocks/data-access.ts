@@ -1,15 +1,28 @@
 import { jest } from '@jest/globals'
-import { HydratedReviewDoc, IReview, Review } from '../../data-access/model'
+import { 
+        HydratedReviewDoc, 
+        IReview, 
+        Review, 
+        ReviewModel 
+} from '../../data-access/model'
 import { Paginator } from '../../z-library/HTTP/http-response'
 import { reviewData } from './raw-data'
+
 export class DataAccess{
+
+    public Model: ReviewModel
+
+    constructor(model: ReviewModel){
+        this.Model = model
+    }
+
     public createNew = jest.fn(async(input: IReview) =>{
-        return new Review(input)
+        return new this.Model(input)
     })
 
     public findByReferenceId = jest.fn(async(id: string
         ): Promise<HydratedReviewDoc | null> =>{
-            return new Review(reviewData)
+            return new this.Model(reviewData)
     })
     
     public findByProductId = jest.fn(async(
@@ -29,7 +42,7 @@ export class DataAccess{
             let count = 0
             const reviews: HydratedReviewDoc[] = []
             while (count < length){
-                reviews.push(new Review(reviewData))
+                reviews.push(new this.Model(reviewData))
                 count++
             }
 
@@ -44,7 +57,7 @@ export class DataAccess{
     public findByIdAndUpdate = jest.fn(
         async(id: string): Promise<HydratedReviewDoc | null> =>{
             if(id === '64c9e4f2df7cc072af2ac9e4')
-                return new Review(reviewData)
+                return new this.Model(reviewData)
 
             return null
     })
@@ -52,12 +65,9 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
         async(id: string): Promise<HydratedReviewDoc | null> =>{
             if(id === '64c9e4f2df7cc072af2ac9e4')
-                return new Review(reviewData)
+                return new this.Model(reviewData)
     
             return null
         }
     )
 }
-
-
-export const dataAccess = new DataAccess()
