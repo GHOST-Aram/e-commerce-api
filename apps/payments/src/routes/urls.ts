@@ -25,20 +25,10 @@ export const routesWrapper = (controller: PayController) =>{
     )
 
     router.put('/', controller.respondWithMethodNotAllowed)
-    router.put('/:orderId',
-        middlewear.postValidators,
-        middlewear.referenceIdValidator,
-        validator.handleValidationErrors,
-        controller.updateOne
-    )
+    router.put('/:orderId', controller.respondWithMethodNotAllowed)
 
     router.patch('/', controller.respondWithMethodNotAllowed)
-    router.patch('/:orderId',
-        middlewear.patchValidators,
-        middlewear.referenceIdValidator,
-        validator.handleValidationErrors,
-        controller.modifyOne
-    )
+    router.patch('/:orderId',controller.respondWithMethodNotAllowed)
 
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:orderId', 
