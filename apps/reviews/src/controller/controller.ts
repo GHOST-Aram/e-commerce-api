@@ -1,6 +1,5 @@
 import { HttpResponse } from "../z-library/HTTP/http-response"
 import { Controllable } from "../z-library/bases/controllable"
-import { IReview } from "../data-access/model"
 import { NextFunction, Request, Response } from "express"
 import { ReviewDataAccess } from "../data-access/data-access"
 

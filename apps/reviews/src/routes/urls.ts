@@ -1,4 +1,4 @@
-import Router, { NextFunction, Response, Request } from 'express'
+import Router from 'express'
 import { ReviewsController } from '../controller/controller'
 import * as middlewear from '../z-library/validation/middlewear'
 import { validator } from '../z-library/validation/validator'
@@ -31,7 +31,7 @@ export const routesWrapper = (
 
     router.put('/', authenticator.authenticate(),
         controller.respondWithMethodNotAllowed)
-        
+
     router.put('/:reviewId', 
         authenticator.authenticate(),
         controller.respondWithMethodNotAllowed
