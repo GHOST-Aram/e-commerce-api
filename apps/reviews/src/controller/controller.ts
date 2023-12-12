@@ -2,6 +2,7 @@ import { HttpResponse } from "../z-library/HTTP/http-response"
 import { Controllable } from "../z-library/bases/controllable"
 import { NextFunction, Request, Response } from "express"
 import { ReviewDataAccess } from "../data-access/data-access"
+import { HydratedReviewDoc } from "../data-access/model"
 
 export class ReviewsController extends HttpResponse implements Controllable{
 
@@ -75,19 +76,42 @@ export class ReviewsController extends HttpResponse implements Controllable{
             const content: string = req.body.content
     
             try {
-                const updatedReview = await this.dataAccess.findByIdAndUpdate(
-                    reviewId, { content })
-    
-                if(updatedReview !== null)
-                    this.respondWithModifiedResource(updatedReview.id, res)
-                else
+                const toBeModified = await this.dataAccess.findByReferenceId(reviewId)
+               
+                if(toBeModified === null)
                     this.respondWithNotFound(res)
+                else {
+                    this.handleForbiddenRequest(toBeModified, currentUser, res)
+                }
+                //Allow users to modify only the reviews that they authored   
+                await this.handleUpdate(reviewId, { content }, res) 
             } catch (error) {
                 next(error)
             }
         } else {
             this.respondWithUnauthorised(res)
         }
+    }
+
+    private handleForbiddenRequest = (
+        toBeModified: HydratedReviewDoc, currentUser:any, res: Response) =>{
+        const authorIsCurrentUser = toBeModified.author.toString() === 
+            currentUser._id.toString()
+                
+        if(!authorIsCurrentUser)
+            this.respondWithForbidden(res)
+        else
+            return
+    }
+
+    private handleUpdate = async(updateId: string, updateDoc:any, res: Response) =>{
+        const updatedReview = await this.dataAccess.findByIdAndUpdate(
+            updateId, updateDoc)
+
+        if(updatedReview !== null)
+            this.respondWithModifiedResource(updatedReview.id, res)    
+        else
+            this.respondWithNotFound(res)
     }
 
     public deleteOne = async (req: Request, res: Response, next: NextFunction) =>{

@@ -6,8 +6,7 @@ import request from "supertest"
 
 describe('PATCH reviews (By Review ID)', () =>{
 
-    test('Rejects patch-all requests, (status 405): '+
-        ' Method not allowed.', 
+    test('Rejects patch-all requests, (status 405): Method not allowed.', 
         async() =>{
             const response = await request(app).patch('/reviews')
                 .send(data.patchData)
@@ -16,8 +15,7 @@ describe('PATCH reviews (By Review ID)', () =>{
         }
     )
 
-    test('Responds with validation errors, (status 400): '+
-        'Invalid reference Id.', 
+    test('Responds with validation errors, (status 400): Invalid reference Id.', 
         async() =>{
             const response = await request(app).patch(
                 '/reviews/64c9e4f2df7').send(data.patchData)
@@ -27,8 +25,7 @@ describe('PATCH reviews (By Review ID)', () =>{
         }
     )
     
-    test('Responds with Not Found (status 404): '+
-        'Target does not exist.', 
+    test('Responds with Not Found (status 404): Target does not exist.', 
         async() =>{
             const response = await request(app).patch(
                 '/reviews/64c9e4f2df7cc072af2ac8e4')
@@ -38,8 +35,7 @@ describe('PATCH reviews (By Review ID)', () =>{
         }
     )
     
-    test('Responds with validation errors (status 400): '+
-        'Invalid input.', 
+    test('Responds with validation errors (status 400): Invalid input.', 
         async() =>{
             const response = await request(app).patch(
                 '/reviews/64c9e4f2df7cc072af2ac9e4')
@@ -50,8 +46,18 @@ describe('PATCH reviews (By Review ID)', () =>{
         }
     )
 
-    test('Responds with modified resource URI, (status 200): '+
-        ' Patch Operation success.',
+    test('Responds with Forbidden (status 403): User requesting to PATCH is not '+
+    'the original author of the review: Permission denied.',
+        async() =>{
+            const response = await request(app).patch(
+                '/reviews/99c9e4f2df7cc072af2ac9e4')
+                .send(data.patchData)
+
+            assert.respondsWithForbidden(response)
+        }
+    )
+
+    test('Responds with modified resource URI, (status 200): Patch Operation success.',
         async() =>{
             const response = await request(app).patch(
                 '/reviews/64c9e4f2df7cc072af2ac9e4')

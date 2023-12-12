@@ -81,6 +81,12 @@ export class ResponseAssertion{
         expect(response.body.id).toMatch(/^[a-fA-F0-9]{24}$/)
         expect(response.body.message).toMatch(/deleted/i)
     }
-}
+
+    public respondsWithForbidden = (response: Response) =>{
+        expect(response.status).toEqual(403)
+        expect(response.body.message).toMatch(/forbidden/i)
+        expect(response.headers['content-type']).toMatch(/json/i)
+    }
+}   
 
 export const assert = new ResponseAssertion

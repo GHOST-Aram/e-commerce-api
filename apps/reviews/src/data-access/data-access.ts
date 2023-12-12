@@ -13,7 +13,7 @@ export class ReviewDataAccess implements Accessible{
         return await doc.save()
     }
 
-    public findByReferenceId = async(refId: string): Promise<any> => {
+    public findByReferenceId = async(refId: string): Promise<any | null> => {
         return await this.Model.findById(refId)
     }
 
