@@ -78,14 +78,14 @@ export class ReviewsController extends HttpResponse implements Controllable{
                 const updatedReview = await this.dataAccess.findByIdAndUpdate(
                     reviewId, { content })
     
-                if(updatedReview)
+                if(updatedReview !== null)
                     this.respondWithModifiedResource(updatedReview.id, res)
                 else
                     this.respondWithNotFound(res)
             } catch (error) {
                 next(error)
             }
-        } else{
+        } else {
             this.respondWithUnauthorised(res)
         }
     }
@@ -99,9 +99,10 @@ export class ReviewsController extends HttpResponse implements Controllable{
             const reviewId = req.params.reviewId
             
             try {
-                const deletedReview = await this.dataAccess.findByIdAndDelete(reviewId)
+                const deletedReview = await this.dataAccess.findByIdAndDelete(
+                    reviewId)
     
-                if(deletedReview)
+                if(deletedReview !== null)
                     this.respondWithDeletedResource( deletedReview.id, res)
                 else
                     this.respondWithNotFound(res)
