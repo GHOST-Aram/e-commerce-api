@@ -14,7 +14,7 @@ const allowAdminUser = (req: Request, res: Response, next: NextFunction) =>{
     const user:any = req.user
     if(user.isAdmin){
         next()
-    } else{ res.status(401).json({message: 'Unauthorised'})}
+    } else{ res.status(403).json({message: 'Forbidden'})}
 }
 
 export const authenticator = { authenticate, allowAdminUser}
