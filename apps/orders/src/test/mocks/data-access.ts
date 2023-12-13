@@ -3,6 +3,8 @@ import { HydratedOrderDoc, Order, OrderModel} from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { orderInput } from "./raw-data"
 
+const ID_OF_AVAILABLE_ORDER = '64c9e4f2df7cc072af2ac9e8'
+
 export class DataAccess{
     public Model: OrderModel
 
@@ -22,9 +24,7 @@ export class DataAccess{
 
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
 
-            const idOfAvailableOrder = '64c9e4f2df7cc072af2ac9e8'
-
-            if(orderId === idOfAvailableOrder){
+            if(orderId === ID_OF_AVAILABLE_ORDER){
 
                 const mockFoundOrder =  new this.Model(orderInput)
                 return mockFoundOrder
@@ -59,9 +59,7 @@ export class DataAccess{
 
         async(orderId: string, updateDoc: Order): Promise<HydratedOrderDoc | null>=>{
 
-            const idOfAvailableOrder = '64c9e4f2df7cc072af2ac9e8'
-
-            if(orderId === idOfAvailableOrder){
+            if(orderId === ID_OF_AVAILABLE_ORDER){
                 
                 const mockUpdatedOrder =  new this.Model(updateDoc)
                 return mockUpdatedOrder  
@@ -73,10 +71,8 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
 
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
-            
-            const idOfAvailableOrder =  '64c9e4f2df7cc072af2ac9e8'
 
-            if(orderId === idOfAvailableOrder ){
+            if(orderId === ID_OF_AVAILABLE_ORDER){
 
                 const mockDeletedOrder =  new this.Model(orderInput)
                 return mockDeletedOrder
