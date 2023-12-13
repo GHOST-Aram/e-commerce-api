@@ -49,7 +49,7 @@ describe('PATCH Orders routes', () =>{
     test(' Responds with modified resource URI, status 200: Patch request success.', 
         async() =>{
             const response = await request(app).patch(
-                '/orders/64c9e4f2df7dd072af2ac9e5')
+                '/orders/64c9e4f2df7cc072af2ac9e8')
                 .send(data.orderInput)
 
             assert.respondsWithSuccess(response)
