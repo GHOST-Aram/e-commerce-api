@@ -5,6 +5,6 @@ export interface Controller{
     getOne: (req: Request, res: Response, next: NextFunction) => Promise<void>
     getMany: (req: Request, res: Response, next: NextFunction) => Promise<void>
     updateOne: (req: Request, res: Response, next: NextFunction) => Promise<void>
-    modifyOne?: (req: Request, res: Response, next: NextFunction) => Promise<void>
+    modifyOne: (req: Request, res: Response, next: NextFunction) => Promise<void>
     deleteOne: (req: Request, res: Response, next: NextFunction) => Promise<void>
 }
