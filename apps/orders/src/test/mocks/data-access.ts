@@ -11,19 +11,23 @@ export class DataAccess{
     }
     public createNew = jest.fn(
         async(data: Order): Promise<HydratedOrderDoc> =>{
-            return new this.Model(data)
+            const mockOrder =  new this.Model(data)
+            return mockOrder
     }) 
 
     public findByReferenceId = jest.fn(
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
-            if(orderId === '64c9e4f2df7cc072af2ac9e8')
-                return new this.Model(orderInput)
+            if(orderId === '64c9e4f2df7cc072af2ac9e8'){
+                const mockFoundOrder =  new this.Model(orderInput)
+                return mockFoundOrder
+            }
             else return null
     })
 
     public findWithPagination = jest.fn(
         async(paginator: Paginator): Promise<HydratedOrderDoc[]> =>{
-            return this.createFakeOrdersArray(paginator.limit)
+            const mockOrders = this.createFakeOrdersArray(paginator.limit)
+            return mockOrders
     })
 
     private createFakeOrdersArray = (length: number) =>{
@@ -41,8 +45,8 @@ export class DataAccess{
         async(orderId: string, updateDoc: Order
         ): Promise<HydratedOrderDoc | null>  =>{
             if(orderId === '64c9e4f2df7dd072af2ac9e5'){
-                return new this.Model(updateDoc)
-                
+                const mockUpdatedOrder =  new this.Model(updateDoc)
+                return mockUpdatedOrder  
             }
             else return null
     })
@@ -50,8 +54,8 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
             if(orderId === '64c9e4f2df7cc072af2ac9e8'){
-                return new this.Model(orderInput)
-                
+                const mockDeletedOrder =  new this.Model(orderInput)
+                return mockDeletedOrder
             }
             else return null
     })
