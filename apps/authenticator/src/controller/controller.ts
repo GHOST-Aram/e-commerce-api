@@ -47,13 +47,4 @@ export class AuthController extends HttpResponse {
             console.log(error)
         } 
     }
-
-    private respondWithUnauthorised = (res: Response) =>{
-        res.status(401).json({message: 'Unauthorised'})
-    }
-
-    private respondWithToken = (token: string, res: Response) =>{
-        res.status(200).json({ token })
-    }
-    
 }
