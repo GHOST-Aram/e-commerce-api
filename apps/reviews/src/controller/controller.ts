@@ -32,6 +32,10 @@ export class ReviewsController extends HttpResponse implements Controllable{
         }
     }
 
+    public getOne = async(req: Request, res: Response, next: NextFunction) => {
+        this.respondWithMethodNotAllowed(req, res)
+    }
+
     public getProductReviews = async(req: Request, res: Response, next: NextFunction) =>{
 
         const productId = req.params.productId
@@ -64,6 +68,10 @@ export class ReviewsController extends HttpResponse implements Controllable{
         } else{
             this.respondWithForbidden(res)
         }
+    }
+
+    public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
+        this.respondWithMethodNotAllowed(req, res)
     }
 
     public modifyOne = async(req: Request, res: Response, next: NextFunction) =>{

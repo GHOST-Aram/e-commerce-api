@@ -26,7 +26,8 @@ export const routesWrapper = (
         authenticator.allowAdminUser,
         controller.getMany
     )
-
+    
+    
     router.get('/:productId', 
         validator.validateReferenceId('productId'),
         validator.handleValidationErrors,
@@ -38,7 +39,7 @@ export const routesWrapper = (
 
     router.put('/:reviewId', 
         authenticator.authenticate(),
-        controller.respondWithMethodNotAllowed
+        controller.updateOne
     )
 
     router.patch('/', 
