@@ -33,7 +33,7 @@ export const routesWrapper = (
          controller.respondWithMethodNotAllowed)
 
     router.put('/:orderId', authenticator.authenticate(), 
-        controller.respondWithMethodNotAllowed)
+        controller.updateOne)
 
     router.patch('/', authenticator.authenticate(),
         controller.respondWithMethodNotAllowed)

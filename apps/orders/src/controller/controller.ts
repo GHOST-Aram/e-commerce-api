@@ -112,6 +112,10 @@ export class OrdersController extends HttpResponse implements Controllable{
         }
     }
 
+    updateOne = async(req: Request, res: Response, next: NextFunction) => {
+        this.respondWithMethodNotAllowed(req, res)
+    }
+
     public deleteOne = async(req: Request, res: Response, next: NextFunction) =>{
 
         const currentUser:any = req.user
