@@ -15,13 +15,38 @@ export class DataAccess{
         this.Model = model
     }
 
-    public createNew = jest.fn(async(input: IReview) =>{
-        return new this.Model(input)
+    public createNew = jest.fn(async(input: IReview): Promise<HydratedReviewDoc> =>{
+        const mockReview =  new this.Model(input)
+        return mockReview
     })
 
     public findByReferenceId = jest.fn(async(id: string
         ): Promise<HydratedReviewDoc | null> =>{
-            if( id === '99c9e4f2df7cc072af2ac9e4'){ 
+            /**
+             * this mock funtion returns two kinds of documents or null
+             * Document 1 - A review document that is  was authored by current  user
+             * Document 2- A random review documents that was not authored by 
+             * current user. This is because we are searching for a review document
+             * by review ID. 
+             * 
+             * One user may have written several reiviews and a product
+             * can have many reivews too. So the only remaining unique identifier 
+             * in the review document is the reiview ID.
+             * 
+             * This mock function cares about the current user ID because we need to
+             * test that our controller methods allows users to modify only the
+             * reviews that they created. Because many reviews can be presented under a product
+             * including the ones that were not written by current user, we need to ensure
+             * that the current user cannot modify the revews they did not create.
+             */
+            const expectedCurrentUserId =  '64c9e4f2df7cc072af2ac9e4'
+            const notCurrentUserId = '99c9e4f2df7cc072af2ac9e4'
+
+            if( id === notCurrentUserId){ 
+                /**
+                 * This value will be used to test that current user is not 
+                 * permitted to edit random reviews that they did not create.
+                 */
                 const notAuthoredByCurrentUser = new this.Model({
                     author: '77c6e4f2df7cc072af2ac9e8',//Not current user
                     product: '64c9e4f2df7cc072af2ac9e8',
@@ -29,52 +54,57 @@ export class DataAccess{
                 })
                 
                 return notAuthoredByCurrentUser
-            } else if(id === '64c9e4f2df7cc072af2ac9e4'){ 
+            } else if(id === expectedCurrentUserId){ 
+                /**
+                 * This value is used to test that the current user is allowed to
+                 * modify the reviews that they created.
+                 */
                 const authoredByCUrrentUser =  new this.Model({
                     author: '64c9e4f2df7cc072af2ac9e8',//Current user Id
                     product: '64c9e4f2df7cc072af2ac9e8',
                     content: 'Lorem ipsol'
                 })
                 return authoredByCUrrentUser
-            } else if (id === '64c9e4f2df7cc072af2ac8e4'){//404 id
-                return null
-            }
-
-            return new this.Model(reviewData)
+            } else
+            /**
+             * This retun value is used to test that the client will receive a 404
+             * response if they are requesting does not exist in the db.
+             */
+                return null 
     })
     
     public findByProductId = jest.fn(async(
-        productId: string, 
-        paginator: Paginator
+        productId: string, paginator: Paginator
         ): Promise<HydratedReviewDoc[]> =>{
-            let reviews: HydratedReviewDoc[] = []
+            let mockReviews: HydratedReviewDoc[] = []
 
             if(productId === '64c9e4f2df7cc072af2ac9e4')
-                reviews = this.createDocumentsArray(paginator.limit)
+                mockReviews = this.createMockReviewsArray(paginator.limit)
 
-            return reviews
+            return mockReviews
     })
 
-    private createDocumentsArray = (length: number
+    private createMockReviewsArray = (length: number
         ): HydratedReviewDoc[] =>{
             let count = 0
-            const reviews: HydratedReviewDoc[] = []
+            const mockReviews: HydratedReviewDoc[] = []
             while (count < length){
-                reviews.push(new this.Model(reviewData))
+                mockReviews.push(new this.Model(reviewData))
                 count++
             }
 
-            return reviews
+            return mockReviews
     }
 
     public findWithPagination = jest.fn(async(
         paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
-            return this.createDocumentsArray(paginator.limit)
+            return this.createMockReviewsArray(paginator.limit)
     })
 
     public findByIdAndUpdate = jest.fn(
         async(id: string): Promise<HydratedReviewDoc | null> =>{
-            if(id === '64c9e4f2df7cc072af2ac9e4'){
+            const expectedCurrentUserId = '64c9e4f2df7cc072af2ac9e4'
+            if(id === expectedCurrentUserId){
                 const authoredByCUrrentUser =  new this.Model({
                     author: '64c9e4f2df7cc072af2ac9e8',//Current user Id
                     product: '64c9e4f2df7cc072af2ac9e8',
