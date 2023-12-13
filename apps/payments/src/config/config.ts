@@ -34,7 +34,7 @@ try {
     console.log(error.message)
 }
 
-const PORT = Number(process.env.PAYMENTS_PORT) || 3200
+const PORT = Number(process.env.PAYMENTS_PORT) || 3300
 server.listenToRequests(PORT, 'Payments')
 
 export { app, connection }

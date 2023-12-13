@@ -15,7 +15,7 @@ const PaymentModel = db.createModel('Payment', paymentSchema)
 const dataAccess = new DataAccess(PaymentModel)
 const controller = new PayController(dataAccess)
 
-app.use('/payments', authenticator.authenticate(), routesWrapper(controller))
+app.use('/payments', routesWrapper(controller, authenticator))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)

@@ -6,7 +6,7 @@ import {ExtractJwt, Strategy, } from 'passport-jwt'
 import 'dotenv/config'
 
 
-class Authenticator{
+export class Authenticator{
    
 
     public configureStrategy = (
@@ -60,3 +60,7 @@ class Authenticator{
 
 
 export const authenticator = new Authenticator()
+export interface Authenticatable{
+    authenticate: Function, 
+    allowAdminUser: (req: Request, res: Response, next: NextFunction) => void
+}
