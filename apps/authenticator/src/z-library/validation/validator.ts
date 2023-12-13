@@ -1,17 +1,16 @@
-import { body, param } from "express-validator"
-import { isValidObjectId } from "mongoose"
+import { body } from "express-validator"
 import { validationResult } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 
 class Validator{
     
-    public validateEmail = () =>{
-        return body('email').trim().notEmpty().withMessage('Email is required')
+    public validateEmail = (field: string) =>{
+        return body(field).trim().notEmpty().withMessage('Email is required')
             .escape()
     }
 
-    public validatePassword = () =>{
-        return body('password').trim()
+    public validatePassword = (field: string) =>{
+        return body(field).trim()
             .notEmpty().withMessage('Password is required')
             .isAlphanumeric().withMessage('Password must be alphanumerice')
             .isLength({ min: 8, max: 24 }).withMessage('Password must be 8 - 24 chars long')
