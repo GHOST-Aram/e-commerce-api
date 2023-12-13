@@ -1,13 +1,13 @@
 import { Paginator } from "../../z-library/HTTP/http-response";
 import { jest } from "@jest/globals";
-import mongoose from "mongoose";
-import { ProductModel, productSchema } from "../../data-access/model";
-
+import { ProductModel } from "../../data-access/model";
 import { 
     HydratedProductDoc, 
     Product 
 } from "../../data-access/model";
 import { PriceRange } from "../../z-library/formatting/formatter";
+
+const ID_OF_AVAILABLE_PRODUCT = '64c9e4f2df7cc072af2ac9e4'
 
 export class ProductsDAL {
 
@@ -31,9 +31,7 @@ export class ProductsDAL {
         
         async(productId: string): Promise<HydratedProductDoc|null> =>{
 
-            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
-
-            if(productId === idOfAvailableproduct){
+            if(productId === ID_OF_AVAILABLE_PRODUCT){
 
                 const mockFoundProduct =  new Product({
                     name: 'New Product',
@@ -161,8 +159,7 @@ export class ProductsDAL {
 
         async(productId: string, updateData: Product): Promise<string | undefined> =>{
 
-            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
-            if(productId === idOfAvailableproduct){
+            if(productId === ID_OF_AVAILABLE_PRODUCT){
 
                 const mockUpdatedProductId = productId
                 return mockUpdatedProductId
@@ -175,9 +172,7 @@ export class ProductsDAL {
 
         async( productId: string ): Promise<HydratedProductDoc | null> =>{
             
-            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
-
-            if(productId === idOfAvailableproduct){
+            if(productId === ID_OF_AVAILABLE_PRODUCT){
 
                 const mockDeletedProduct = new Product({
                     name: 'Deleted product'
