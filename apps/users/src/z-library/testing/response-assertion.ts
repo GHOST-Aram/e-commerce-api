@@ -82,15 +82,22 @@ export class ResponseAssertion{
         expect(response.body.message).toMatch(/deleted/i)
     }
 
-    public respondWithUnAuthorised = (response: Response) =>{
-        expect(response.status).toEqual(401)
-        expect(response.body.message).toMatch(/Unauthorised/i)
-        expect(response.headers['content-type']).toMatch(/json/i)
-    }
-
-    public respondsWithAccessToken = (response: Response) => {
+    public respondsWithToken = (response: Response) => {
         expect(response.body).toHaveProperty('token')
-        expect(typeof response.body.token).toBe('string')
+        expect(typeof response.body.token).toMatch(/string/i)
+        expect(response.body.token).toMatch(/^eyJ[^\s]+\.[^\s]+\.[^\s]+$/)
+    }
+    
+    public respondsWithUnathorised = (response: Response) => {
+        expect(response.status).toEqual(401)
+        expect(response.headers['content-type']).toMatch(/JSON/i)
+        expect(response.body.message).toMatch(/Unauthorised/i)
+    }
+    
+    public respondsWithForbidden = (response: Response) =>{
+        expect(response.status).toEqual(403)
+        expect(response.body.message).toMatch(/forbidden/i)
+        expect(response.headers['content-type']).toMatch(/json/i)
     }
 }
 
