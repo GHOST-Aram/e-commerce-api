@@ -15,7 +15,7 @@ const OrderModel = db.createModel('Order', orderSchema)
 const dataAccess  = new DataAccess(OrderModel)
 const controller = new OrdersController(dataAccess)
 
-app.use('/orders',authenticator.authenticate(), routesWrapper(controller))
+app.use('/orders', routesWrapper(controller, authenticator))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)

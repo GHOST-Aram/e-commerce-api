@@ -2,46 +2,53 @@ import Router from 'express'
 import { OrdersController } from '../controller/controller'
 import * as middlewear from '../z-library/validation/middlewear'
 import { validator } from '../z-library/validation/validator'
-import { authenticator } from '../z-library/auth/auth'
+import { Authenticatable, Authenticator, authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 
-export const routesWrapper = (controller: OrdersController) =>{
-    router.post('/:orderId', controller.respondWithMethodNotAllowed)
+export const routesWrapper = (
+    controller: OrdersController, authenticator: Authenticator | Authenticatable) =>{
 
-    router.post('/', 
+    router.post('/:orderId', authenticator.authenticate(), 
+        controller.respondWithMethodNotAllowed)
+
+    router.post('/', authenticator.authenticate(),
         middlewear.validateOrderInput,
         validator.handleValidationErrors,
         controller.addNew
     )
 
-    router.get('/',
+    router.get('/', authenticator.authenticate(),
         authenticator.allowAdminUser,
         controller.getMany
     )
 
-    router.get('/:orderId', 
+    router.get('/:orderId', authenticator.authenticate(),
         validator.validateReferenceId('orderId'),
         validator.handleValidationErrors,
         controller.getOne
     )
 
-    router.put('/', controller.respondWithMethodNotAllowed)
+    router.put('/',authenticator.authenticate(),
+         controller.respondWithMethodNotAllowed)
 
-    router.put('/:orderId', controller.respondWithMethodNotAllowed)
+    router.put('/:orderId', authenticator.authenticate(), 
+        controller.respondWithMethodNotAllowed)
 
-    router.patch('/', controller.respondWithMethodNotAllowed)
+    router.patch('/', authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed)
 
-    router.patch('/:orderId',
+    router.patch('/:orderId',authenticator.authenticate(),
         validator.validateReferenceId('orderId'),
         middlewear.validatePatchInput,
         validator.handleValidationErrors,
         controller.modifyOne
     )
 
-    router.delete('/', controller.respondWithMethodNotAllowed)
+    router.delete('/', authenticator.authenticate(),
+        controller.respondWithMethodNotAllowed)
 
-    router.delete('/:orderId', 
+    router.delete('/:orderId', authenticator.authenticate(),
         authenticator.allowAdminUser,
         validator.validateReferenceId('orderId'),
         validator.handleValidationErrors,
