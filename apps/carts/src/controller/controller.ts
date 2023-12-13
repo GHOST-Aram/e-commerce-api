@@ -79,6 +79,10 @@ export class CartsController extends HttpResponse implements Controllable{
         }
     }
 
+    public modifyOne = async(req: Request, res: Response, next: NextFunction) => {
+        this.respondWithMethodNotAllowed(req, res)
+    }
+
     public updateOne = async(req: Request, res: Response, next: NextFunction) =>{
         const currentUser:any = req.user
 

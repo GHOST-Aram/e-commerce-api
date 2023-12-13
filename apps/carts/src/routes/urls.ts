@@ -38,7 +38,7 @@ export const routesWrapper = (
     )
 
     router.patch('/', authenticator.authenticate(),
-        controller.respondWithMethodNotAllowed
+        controller.modifyOne
     )
     router.patch('/:customerId/add-item', authenticator.authenticate(),
         middlewear.patchDataValidator,
