@@ -3,6 +3,8 @@ import { Cart, CartModel, HydratedCartDoc } from "../../data-access/model"
 import { jest } from "@jest/globals"
 import { cartData } from "./raw-data"
 
+const CUSTOMER_ID_OF_AVAILABLE_CART = '64c9e4f2df7cc072af2ac9e5'
+
 export class DataAccess{
 
     public Model: CartModel
@@ -24,9 +26,7 @@ export class DataAccess{
 
         async(customerId: string): Promise<HydratedCartDoc | null> =>{
 
-            const customerIdOfAvailableCart =  '64c9e4f2df7cc072af2ac9e5'
-
-            if(customerId === customerIdOfAvailableCart){
+            if(customerId === CUSTOMER_ID_OF_AVAILABLE_CART){
 
                 const mockCart =  new this.Model(cartData)
                 return mockCart
@@ -40,9 +40,7 @@ export class DataAccess{
         async(customerId: string, updateDoc: {items:string[]}
             ): Promise<HydratedCartDoc | null> =>{
 
-            const customerIdOfAvailableCart =  '64c9e4f2df7cc072af2ac9e5'
-
-            if(customerId === customerIdOfAvailableCart){
+            if(customerId === CUSTOMER_ID_OF_AVAILABLE_CART){
 
                 const mockUpdatedCart =  new this.Model({
                     customer: customerId,
@@ -59,9 +57,7 @@ export class DataAccess{
 
         async(customerId: string, itemId: string): Promise<HydratedCartDoc| null> =>{
 
-            const customerIdOfAvailableCart = '64c9e4f2df7cc072af2ac9e5'
-
-            if(customerId === customerIdOfAvailableCart){
+            if(customerId === CUSTOMER_ID_OF_AVAILABLE_CART){
 
                 const mockModifiedCart =  new this.Model({
                     customer: customerId,
@@ -78,9 +74,7 @@ export class DataAccess{
 
         async(customerId: string, itemId: string): Promise<HydratedCartDoc| null> =>{
             
-            const customerIdOfAvailableCart = '64c9e4f2df7cc072af2ac9e5'
-
-            if(customerId === customerIdOfAvailableCart){
+            if(customerId === CUSTOMER_ID_OF_AVAILABLE_CART){
                 const mockModifiedCart = new this.Model({
                     customer: customerId,
                     items: []
@@ -116,9 +110,8 @@ export class DataAccess{
     public findByIdAndDelete = jest.fn(
         
         async(customerId: string): Promise<HydratedCartDoc | null> =>{
-            const customerIdOfAvailableCart = '64c9e4f2df7cc072af2ac9e5'
 
-            if(customerId === customerIdOfAvailableCart){
+            if(customerId === CUSTOMER_ID_OF_AVAILABLE_CART){
 
                 const deletedMockCart =  new this.Model({
                     customer: customerId,
