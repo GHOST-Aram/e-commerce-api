@@ -9,9 +9,10 @@ describe('PUT Carts Routes', () => {
     test('Rejects update-all requests, status 405: Method not allowed', 
         async() =>{
             const response = await request(app).put('/carts')
-                .send(data.cartData).send({ customer: '64c9e4f2df7cc072af2ac9e5' })
+                .send(data.cartData)
+                .send({ customer: '64c9e4f2df7cc072af2ac9e5' })
             
-        assert.respondsWithMethodNotAllowed(response)
+            assert.respondsWithMethodNotAllowed(response)
         }
     )
 
@@ -43,17 +44,15 @@ describe('PUT Carts Routes', () => {
         }
     )
 
-    test('Responds with created resource URI, status 201: '+
-        ' Target not found, new document created.',
+    test('Responds with created resource URI, status 201: Target not found, '+
+        'new document created.',
         async() =>{
             const response = await request(app).put(
                 '/carts/64c9e4f8df7cc072af2ac9e5')
-                .send(
-                    {
-                        ...data.validUpdateInput, 
-                        customer: '64c9e4f8df7cc072af2ac9e5'
-                    }
-                )
+                .send({
+                    ...data.validUpdateInput, 
+                    customer: '64c9e4f8df7cc072af2ac9e5'
+                })
 
             assert.respondsWithCreatedResource(response)
         }
@@ -63,12 +62,10 @@ describe('PUT Carts Routes', () => {
         async() =>{
             const  response = await request(app).put(
                 '/carts/64c9e4f2df7cc072af2ac9e5')
-                .send(
-                    {
-                        ...data.validUpdateInput,
-                        customer: '64c9e4f2df7cc072af2ac9e5'
-                    }
-                )
+                .send({
+                    ...data.validUpdateInput,
+                    customer: '64c9e4f2df7cc072af2ac9e5'
+                })
 
             assert.respondsWithSuccess(response)   
             assert.respondsWithUpdatedResource(response)

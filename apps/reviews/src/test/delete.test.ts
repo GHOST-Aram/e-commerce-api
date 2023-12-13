@@ -6,8 +6,7 @@ import request from "supertest"
 
 describe('DELETE reviews (By Review ID)', () =>{
 
-    test('Rejects delete-all requests, (status 405):'+
-        ' Method not allowed.', 
+    test('Rejects delete-all requests, (status 405): Method not allowed.', 
         async() =>{
             const response = await request(app).delete('/reviews')
             
@@ -15,8 +14,8 @@ describe('DELETE reviews (By Review ID)', () =>{
         }
     )
 
-    test('Responds with validation errors, (status 400): '+
-        'Bad request -- Invalid reference Id.', 
+    test('Responds with validation errors, (status 400): Bad request '+
+        'Invalid reference Id.', 
         async() =>{
             const response = await request(app).delete(
                 '/reviews/64c9e4f2')
@@ -35,8 +34,7 @@ describe('DELETE reviews (By Review ID)', () =>{
         }
     )
 
-    test('Responds with deleted resource Id, (status 200): '+
-        ' Delete operation success.',
+    test('Responds with deleted resource Id, (status 200): Delete operation success.',
         async() =>{
             const response = await request(app).delete(
                 '/reviews/64c9e4f2df7cc072af2ac9e4')

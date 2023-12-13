@@ -24,6 +24,4 @@ describe('PUT reviews (By Review ID)', () =>{
             assert.respondsWithMethodNotAllowed(response)
         }
     )
-
-   
 })

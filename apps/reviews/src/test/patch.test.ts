@@ -18,7 +18,8 @@ describe('PATCH reviews (By Review ID)', () =>{
     test('Responds with validation errors, (status 400): Invalid reference Id.', 
         async() =>{
             const response = await request(app).patch(
-                '/reviews/64c9e4f2df7').send(data.patchData)
+                '/reviews/64c9e4f2df7')
+                .send(data.patchData)
             
             assert.respondsWithBadRequest(response)
             assert.respondsWithValidationErrors(response)
@@ -47,7 +48,7 @@ describe('PATCH reviews (By Review ID)', () =>{
     )
 
     test('Responds with Forbidden (status 403): User requesting to PATCH is not '+
-    'the original author of the review: Permission denied.',
+        'the original author of the review: Permission denied.',
         async() =>{
             const response = await request(app).patch(
                 '/reviews/99c9e4f2df7cc072af2ac9e4')

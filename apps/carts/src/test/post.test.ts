@@ -6,8 +6,7 @@ import * as data from "./mocks/raw-data";
 
 describe('Cart POST routes', () =>{
 
-	test('Rejects requests with client defined ID, (status 405): ' +
-		'Method not allowed', 
+	test('Rejects requests with client defined ID, (status 405): Method not allowed', 
 		async() =>{
 			const response = await request(app).post(
 				'/carts/64c9e4f2df7cc072af2ac9e4')

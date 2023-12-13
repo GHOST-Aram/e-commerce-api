@@ -4,8 +4,7 @@ import { test, describe } from "@jest/globals"
 import request from "supertest"
 
 describe('DELETE Cart routes', () =>{
-    test('Rejects delete all carts request with status 405:'+
-        ' Method not allowed', 
+    test('Rejects delete all carts request with status 405: Method not allowed', 
         async() =>{
             const response = await request(app).delete('/carts')
                 .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
@@ -15,13 +14,14 @@ describe('DELETE Cart routes', () =>{
     )
 
     test('Responds  validation errors, status 400: Invalid reference Id (customet Id).',  
-    async() =>{
-        const response = await request(app).delete('/carts/64c9e4f2dc9e5')
-            .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
+        async() =>{
+            const response = await request(app).delete('/carts/64c9e4f2dc9e5')
+                .send({ customer: '64c9e4f2df7cc072af2ac9e5'})
 
-        assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrors(response)
-    })
+            assert.respondsWithBadRequest(response)
+            assert.respondsWithValidationErrors(response)
+        }
+    )
 
     test('Responds with Not Found, status 404: Target doesn\'t exist', 
         async() =>{
@@ -33,8 +33,7 @@ describe('DELETE Cart routes', () =>{
         }
     )
 
-    test('Responds deleted resource Id, status 200:  '+
-        'Delete operation success.', 
+    test('Responds deleted resource Id, status 200:  Delete operation success.', 
         async() =>{
             const response = await request(app).delete(
                 '/carts/64c9e4f2df7cc072af2ac9e5')

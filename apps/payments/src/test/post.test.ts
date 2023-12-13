@@ -6,32 +6,32 @@ import request from "supertest"
 
 describe('POST Payments route', () =>{
 
-   test('Rejects requests with client defined Ids, (status 405):'+
-      'Method not allowed.', 
-   async() =>{
-      const response = await request(app).post(
-         '/payments/64c9e4f2df7cc072af2ac9e8')
-         .send(data.paymentInput)
+   test('Rejects requests with client defined Ids, (status 405): Method not allowed.', 
+		async() =>{
+			const response = await request(app).post(
+				'/payments/64c9e4f2df7cc072af2ac9e8')
+				.send(data.paymentInput)
 
-      assert.respondsWithMethodNotAllowed(response)
-   })
+			assert.respondsWithMethodNotAllowed(response)
+		}
+	)
 
-   test('Responds with validation errors, (status 400): '+
-      'Bad request -- Invalid input.',
-   async() =>{
-      const response = await request(app).post('/payments')
-         .send(data.invalidInput)
+   test('Responds with validation errors, (status 400): Bad request -- Invalid input.',
+		async() =>{
+			const response = await request(app).post('/payments')
+				.send(data.invalidInput)
 
-      assert.respondsWithBadRequest(response)
-      assert.respondsWithValidationErrors(response)
-   })
+			assert.respondsWithBadRequest(response)
+			assert.respondsWithValidationErrors(response)
+		}
+	)
 
-   test('Responds with created resource location URI (status 201): '+
-      'Post operation success.', 
-   async() =>{
-      const response = await request(app).post('/payments')
-         .send(data.paymentInput)
+  	test('Responds with created resource location URI (status 201): Post op success.', 
+		async() =>{
+			const response = await request(app).post('/payments')
+				.send(data.paymentInput)
 
-      assert.respondsWithCreatedResource(response)
-   })
+			assert.respondsWithCreatedResource(response)
+		}
+	)
 })

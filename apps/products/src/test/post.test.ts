@@ -6,32 +6,32 @@ import { app } from "./config/app.test.config"
 
 describe('POST Products route', () =>{
 
-    test('Rejects requests with client defined Ids, status 405: '+ 
-        'Method not allowed.', 
-    async() =>{
-        const response =  await request(app).post(
-            '/products/64c9e4f2df7cc072af2ac9e4')
-            .send(productData)
+    test('Rejects requests with client defined Ids, status 405: Method not allowed.', 
+        async() =>{
+            const response =  await request(app).post(
+                '/products/64c9e4f2df7cc072af2ac9e4')
+                .send(productData)
 
-        assert.respondsWithMethodNotAllowed(response)
-    })
+            assert.respondsWithMethodNotAllowed(response)
+        }
+    )
 
-    test('Responds with validation errors, status 400: '+ 
-        'Invalid Input', 
-    async() =>{
-        const response =  await request(app).post('/products')
-            .send(badData)
+    test('Responds with validation errors, status 400: Invalid Input', 
+        async() =>{
+            const response =  await request(app).post('/products')
+                .send(badData)
 
-        assert.respondsWithBadRequest(response)
-        assert.respondsWithValidationErrors(response)
-    })
+            assert.respondsWithBadRequest(response)
+            assert.respondsWithValidationErrors(response)
+        }
+    )
 
-    test('Responds with created resource URI, status 201: '+ 
-        'Post operation success.', 
-    async() =>{
-        const response =  await request(app).post('/products')
-            .send(productData)
+    test('Responds with created resource URI, status 201: Post operation success.', 
+        async() =>{
+            const response =  await request(app).post('/products')
+                .send(productData)
 
-       assert.respondsWithCreatedResource(response)
-    } )
+            assert.respondsWithCreatedResource(response)
+        } 
+    )
 })    

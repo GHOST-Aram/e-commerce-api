@@ -47,8 +47,8 @@ describe('PATCH (Remove one Item from cart) Carts Route', () => {
         }
     )
 
-    test('Responds with modified resource URI, status 200: '+
-        'Itme succeffully removed from cart.', 
+    test('Responds with modified resource URI, status 200: Item succeffully removed '+
+        'from cart.', 
         async() =>{
             const  response = await request(app).patch(
                 '/carts/64c9e4f2df7cc072af2ac9e5/remove-item')
@@ -57,8 +57,8 @@ describe('PATCH (Remove one Item from cart) Carts Route', () => {
                     customer: '64c9e4f2df7cc072af2ac9e5'
                 })
 
-        assert.respondsWithSuccess(response)  
-        assert.respondsWithModifedResource(response)
+            assert.respondsWithSuccess(response)  
+            assert.respondsWithModifedResource(response)
         }
     )
 })
