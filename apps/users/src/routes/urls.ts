@@ -2,11 +2,12 @@ import { UsersController } from "../controller/controller";
 import { Router } from "express";
 import * as middlewear from "../z-library/validation/middlewears";
 import { validator } from "../z-library/validation/validator";
-import { authenticator } from "../z-library/auth/auth";
+import { Authenticatable, Authenticator } from "../z-library/auth/auth";
 
 const router = Router()
 
-export const routesWrapper = (controller: UsersController) =>{
+export const routesWrapper = (
+    controller: UsersController, authenticator: Authenticator | Authenticatable ) =>{
     
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/', 
@@ -17,7 +18,7 @@ export const routesWrapper = (controller: UsersController) =>{
 
     router.get('/', 
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         controller.getMany
     )
     router.get('/:id',
@@ -48,7 +49,7 @@ export const routesWrapper = (controller: UsersController) =>{
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         validator.validateReferenceId('id'),
         validator.handleValidationErrors,
         controller.deleteOne
