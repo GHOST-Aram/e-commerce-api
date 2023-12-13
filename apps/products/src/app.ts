@@ -5,6 +5,7 @@ import { ProductsDAL } from "./data-access/data-access";
 import { app, connection } from "./config/config";
 import { productSchema } from "./data-access/model";
 import { DB } from "./z-library/db/db";
+import { authenticator } from "./z-library/auth/auth";
 
 const dbConnection = connection.switch('e-commerce-products')
 const db = new DB(dbConnection)
@@ -13,7 +14,7 @@ const Product = db.createModel('Product', productSchema)
 const dataAccess = new ProductsDAL(Product)
 const controller = new ProductsController(dataAccess)
 
-app.use('/products', routesWrapper(controller))
+app.use('/products', routesWrapper(controller, authenticator))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)

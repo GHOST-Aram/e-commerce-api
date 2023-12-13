@@ -2,16 +2,19 @@ import { Router } from "express";
 import { ProductsController } from "../controller/controller";
 import * as middlewears from "../z-library/validation/middlewears";
 import { validator } from "../z-library/validation/validator";
-import { authenticator } from "../z-library/auth/auth";
+import { Authenticatable, Authenticator } from "../z-library/auth/auth";
 
 const router = Router()
 
-const routesWrapper = (controller: ProductsController) =>{
+const routesWrapper = (
+    controller: ProductsController, 
+    authenticator: Authenticator | Authenticatable
+    ) =>{
 
     router.post('/:id', controller.respondWithMethodNotAllowed)
     router.post('/',
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         middlewears.productValidators, 
         validator.handleValidationErrors,
         controller.addNew
@@ -59,7 +62,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.put('/:id',
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         middlewears.productValidators, 
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -70,7 +73,7 @@ const routesWrapper = (controller: ProductsController) =>{
 
     router.patch('/:id', 
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         middlewears.patchValidators,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
@@ -80,7 +83,7 @@ const routesWrapper = (controller: ProductsController) =>{
     router.delete('/', controller.respondWithMethodNotAllowed)
     router.delete('/:id', 
         authenticator.authenticate(),
-        authenticator.isAdminUser,
+        authenticator.allowAdminUser,
         middlewears.validateReferenceId,
         validator.handleValidationErrors,
         controller.deleteOne
