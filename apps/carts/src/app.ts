@@ -14,10 +14,7 @@ const CartModel = db.createModel('Cart', cartSchema)
 const dataAccess  = new DataAccess(CartModel)
 const controller = new CartsController(dataAccess)
 
-app.use('/carts', 
-    authenticator.authenticate(), 
-    routesWrapper(controller)
-)
+app.use('/carts', routesWrapper(controller, authenticator))
 
 //Handle errors -- Unknown path
 app.use(httpErrors.handleUnknownUrls)
