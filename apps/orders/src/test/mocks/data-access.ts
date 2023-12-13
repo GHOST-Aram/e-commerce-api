@@ -10,28 +10,42 @@ export class DataAccess{
         this.Model = model
     }
     public createNew = jest.fn(
+
         async(data: Order): Promise<HydratedOrderDoc> =>{
+            
             const mockOrder =  new this.Model(data)
             return mockOrder
-    }) 
+        }
+    ) 
 
     public findByReferenceId = jest.fn(
+
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
-            if(orderId === '64c9e4f2df7cc072af2ac9e8'){
+
+            const idOfAvailableOrder = '64c9e4f2df7cc072af2ac9e8'
+
+            if(orderId === idOfAvailableOrder){
+
                 const mockFoundOrder =  new this.Model(orderInput)
                 return mockFoundOrder
-            }
-            else return null
-    })
+
+            } else return null
+        }
+    )
 
     public findWithPagination = jest.fn(
+
         async(paginator: Paginator): Promise<HydratedOrderDoc[]> =>{
+
             const mockOrders = this.createFakeOrdersArray(paginator.limit)
             return mockOrders
-    })
+        }
+    )
 
     private createFakeOrdersArray = (length: number) =>{
+
         const orders: HydratedOrderDoc[] = []
+
         let count = 0
         while (count < length ){
             orders.push(new this.Model(orderInput))
@@ -42,21 +56,32 @@ export class DataAccess{
     }
 
     public findByIdAndUpdate = jest.fn(
-        async(orderId: string, updateDoc: Order
-        ): Promise<HydratedOrderDoc | null>  =>{
-            if(orderId === '64c9e4f2df7dd072af2ac9e5'){
+
+        async(orderId: string, updateDoc: Order): Promise<HydratedOrderDoc | null>=>{
+
+            const idOfAvailableOrder = '64c9e4f2df7dd072af2ac9e5'
+
+            if(orderId === idOfAvailableOrder){
+                
                 const mockUpdatedOrder =  new this.Model(updateDoc)
                 return mockUpdatedOrder  
-            }
-            else return null
-    })
+
+            } else return null
+        }
+    )
 
     public findByIdAndDelete = jest.fn(
+
         async(orderId: string): Promise<HydratedOrderDoc | null> =>{
-            if(orderId === '64c9e4f2df7cc072af2ac9e8'){
+            
+            const idOfAvailableOrder =  '64c9e4f2df7cc072af2ac9e8'
+
+            if(orderId === idOfAvailableOrder ){
+
                 const mockDeletedOrder =  new this.Model(orderInput)
                 return mockDeletedOrder
-            }
-            else return null
-    })
+
+            } else return null
+        }
+    )
 }

@@ -15,13 +15,18 @@ export class DataAccess{
         this.Model = model
     }
 
-    public createNew = jest.fn(async(input: IReview): Promise<HydratedReviewDoc> =>{
-        const mockReview =  new this.Model(input)
-        return mockReview
-    })
+    public createNew = jest.fn(
 
-    public findByReferenceId = jest.fn(async(id: string
-        ): Promise<HydratedReviewDoc | null> =>{
+        async(input: IReview): Promise<HydratedReviewDoc> =>{
+
+            const mockReview =  new this.Model(input)
+            return mockReview
+        }
+    )
+
+    public findByReferenceId = jest.fn(
+
+        async(id: string): Promise<HydratedReviewDoc | null> =>{
             /**
              * this mock funtion returns two kinds of documents or null
              * Document 1 - A review document that is  was authored by current  user
@@ -54,6 +59,7 @@ export class DataAccess{
                 })
                 
                 return notAuthoredByCurrentUser
+
             } else if(id === expectedCurrentUserId){ 
                 /**
                  * This value is used to test that the current user is allowed to
@@ -64,65 +70,87 @@ export class DataAccess{
                     product: '64c9e4f2df7cc072af2ac9e8',
                     content: 'Lorem ipsol'
                 })
+
                 return authoredByCUrrentUser
-            } else
-            /**
-             * This retun value is used to test that the client will receive a 404
-             * response if they are requesting does not exist in the db.
-             */
-                return null 
-    })
+                
+            } else {
+                /**
+                 * This return value is used to test that the client will receive a 404
+                 * response if they are requesting does not exist in the db.
+                 */
+                    return null 
+            }
+        }
+    )
     
-    public findByProductId = jest.fn(async(
-        productId: string, paginator: Paginator
-        ): Promise<HydratedReviewDoc[]> =>{
+    public findByProductId = jest.fn(
+
+        async( productId: string, paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
+
+            const idOfProductWithReviews = '64c9e4f2df7cc072af2ac9e4'
             let mockReviews: HydratedReviewDoc[] = []
 
-            if(productId === '64c9e4f2df7cc072af2ac9e4')
+            if(productId === idOfProductWithReviews)
                 mockReviews = this.createMockReviewsArray(paginator.limit)
 
             return mockReviews
-    })
+        }
+    )
 
-    private createMockReviewsArray = (length: number
-        ): HydratedReviewDoc[] =>{
-            let count = 0
-            const mockReviews: HydratedReviewDoc[] = []
-            while (count < length){
-                mockReviews.push(new this.Model(reviewData))
-                count++
-            }
+    private createMockReviewsArray = (length: number ): HydratedReviewDoc[] =>{
 
-            return mockReviews
+        let count = 0
+        const mockReviews: HydratedReviewDoc[] = []
+        
+        while (count < length){
+            mockReviews.push(new this.Model(reviewData))
+            count++
+        }
+
+        return mockReviews
     }
 
-    public findWithPagination = jest.fn(async(
-        paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
-            return this.createMockReviewsArray(paginator.limit)
-    })
+    public findWithPagination = jest.fn(
+
+        async(paginator: Paginator): Promise<HydratedReviewDoc[]> =>{
+
+            const mockFoundReviews =  this.createMockReviewsArray(paginator.limit)
+            return mockFoundReviews
+        }
+    )
 
     public findByIdAndUpdate = jest.fn(
+
         async(id: string): Promise<HydratedReviewDoc | null> =>{
+
             const expectedCurrentUserId = '64c9e4f2df7cc072af2ac9e4'
+
             if(id === expectedCurrentUserId){
+
                 const authoredByCUrrentUser =  new this.Model({
                     author: '64c9e4f2df7cc072af2ac9e8',//Current user Id
                     product: '64c9e4f2df7cc072af2ac9e8',
                     content: 'Lorem ipsis'
                 })
+
                 return authoredByCUrrentUser
-            } 
-                       
-            return null   //Not Found
+
+            } else return null   //Not Found
             
     })
 
     public findByIdAndDelete = jest.fn(
+
         async(id: string): Promise<HydratedReviewDoc | null> =>{
-            if(id === '64c9e4f2df7cc072af2ac9e4')
-                return new this.Model(reviewData)
-    
-            return null
+
+            const idOfAvailableReview = '64c9e4f2df7cc072af2ac9e4'
+
+            if(id === idOfAvailableReview){
+
+                const mockdeletedReview =  new this.Model(reviewData)
+                return mockdeletedReview
+
+            } else return null
         }
     )
 }

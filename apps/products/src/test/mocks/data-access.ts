@@ -19,15 +19,22 @@ export class ProductsDAL {
     }
 
     public createNew = jest.fn(
-        async(productData : Product) =>{
+
+        async(productData : Product) => {
+
             const mockProduct = new Product(productData)
             return mockProduct.id
-    })
+        }
+    )
 
     public findByReferenceId = jest.fn(
-        async(productId: string
-        ): Promise<HydratedProductDoc|null> =>{
-            if(productId === '64c9e4f2df7cc072af2ac9e4'){
+        
+        async(productId: string): Promise<HydratedProductDoc|null> =>{
+
+            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
+
+            if(productId === idOfAvailableproduct){
+
                 const mockFoundProduct =  new Product({
                     name: 'New Product',
                     selling_price: 600,
@@ -35,114 +42,150 @@ export class ProductsDAL {
                 })
 
                 return mockFoundProduct
-            } else return null         
-    })
 
-    public findWithPagination = jest.fn(async( paginator:Paginator
-        ): Promise<HydratedProductDoc[]> =>{
+            } else return null         
+        }
+    )
+
+    public findWithPagination = jest.fn(
+
+        async( paginator:Paginator): Promise<HydratedProductDoc[]> =>{
+
             const mockProducts  = this.createFakeProductsArray(paginator.limit)
             return mockProducts
-    })
+        }
+    )
 
-    public findByPriceRange = jest.fn(async( 
-        priceRange: PriceRange, paginator: Paginator
-        ): Promise<HydratedProductDoc[]> =>{
-            let mockFoundProducts: HydratedProductDoc[] = []
+    public findByPriceRange = jest.fn(
+        async( priceRange: PriceRange, paginator: Paginator
+            ): Promise<HydratedProductDoc[]> =>{
 
-            if(priceRange.start === 200 && priceRange.end === 800)
-                mockFoundProducts = this.createFakeProductsArray(paginator.limit)
+            const isAvailableRange = priceRange.start === 200 && 
+                priceRange.end === 800
+            const numberToBeRetrieved = paginator.limit
 
-            return mockFoundProducts
-    })
+            if(isAvailableRange){
+                const mockFoundProducts = this.createFakeProductsArray(
+                    numberToBeRetrieved)
 
-    public findByCategory = jest.fn(async (
-        categoryName: string, 
-        paginator:Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            let mockFoundProducts: HydratedProductDoc[] = []
+                return mockFoundProducts
 
-            if(categoryName === 'phones'){
-                mockFoundProducts = this.createFakeProductsArray(
+            } else return []
+        }
+    )
+
+    public findByCategory = jest.fn(
+
+        async ( categoryName: string, paginator:Paginator
+            ): Promise<HydratedProductDoc[]> => {
+
+            const availableCategory = 'phones'
+
+            if(categoryName === availableCategory ){
+                const mockFoundProducts = this.createFakeProductsArray(
                     paginator.limit)
-            }
-            return mockFoundProducts
+
+                return mockFoundProducts
+
+            } else return []
         })
 
-    private createFakeProductsArray = (paginationLimit: number
-        ): HydratedProductDoc[] =>{
-            let mockProducts: HydratedProductDoc[] = []
-            let productCount = 0
+    private createFakeProductsArray = (paginationLimit: number): HydratedProductDoc[] =>{
 
-            while(productCount < paginationLimit){
-                mockProducts.push(new Product({
-                    name: 'Product 10',
-                    brand: 'Samsung',
-                    manufacturer: 'Samsung',
-                    category: 'phones'
-                }))
-                productCount ++
-            }
-            return mockProducts
+        let mockProducts: HydratedProductDoc[] = []
+        let productCount = 0
+
+        while(productCount < paginationLimit){
+            mockProducts.push(new Product({
+                name: 'Product 10',
+                brand: 'Samsung',
+                manufacturer: 'Samsung',
+                category: 'phones'
+            }))
+            productCount ++
+        }
+        return mockProducts
     }
 
-    public findByBrand =jest.fn(async (brandName: string, paginator:Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            let mockFoundProducts: HydratedProductDoc[] = []
+    public findByBrand =jest.fn(
 
-            if(brandName === 'samsung')
-                mockFoundProducts = this.createFakeProductsArray(
+        async (brandName: string, paginator:Paginator): Promise<HydratedProductDoc[]> => {
+
+            const availableBrandName = 'samsung'
+        
+            if(brandName === availableBrandName){
+
+                const mockFoundProducts = this.createFakeProductsArray(
                     paginator.limit)
+                
+                return mockFoundProducts
 
-            return mockFoundProducts
-    })
+            } else return []
+        }
+    )
 
     public findBymanufacturer = jest.fn(
-        async (manufacturerName: string, paginator:Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            let mockFoundProducts: HydratedProductDoc[] = []
 
-            if(manufacturerName === 'samsung')
-                mockFoundProducts = this.createFakeProductsArray(
+        async (manufacturerName: string, paginator:Paginator): Promise<HydratedProductDoc[]> => {
+            
+            const availabeManufacturerName = 'samsung'
+
+            if(manufacturerName === availabeManufacturerName){
+                const mockFoundProducts = this.createFakeProductsArray(
                     paginator.limit)
 
-            return mockFoundProducts
+                return mockFoundProducts
+
+            } else return []
         }
     )
 
     public findByModelName = jest.fn(
-        async ( modelName: string, paginator: Paginator
-        ): Promise<HydratedProductDoc[]> => {
-            let mockFoundProducts: HydratedProductDoc[] = []
 
-            if(modelName === 'A10S')
-                mockFoundProducts = this.createFakeProductsArray(
+        async ( modelName: string, paginator: Paginator): Promise<HydratedProductDoc[]> => {
+
+            const availableModelName = 'A10S'
+
+            if(modelName === availableModelName){
+
+                const mockFoundProducts = this.createFakeProductsArray(
                     paginator.limit)
-            
-            return mockFoundProducts
+
+                return mockFoundProducts
+
+            } else return []     
         }
     )
 
     public findByIdAndUpdate = jest.fn(
+
         async(productId: string, updateData: Product): Promise<string | undefined> =>{
-            if(productId === '64c9e4f2df7cc072af2ac9e4'){
+
+            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
+            if(productId === idOfAvailableproduct){
+
                 const mockUpdatedProductId = productId
                 return mockUpdatedProductId
-            }
-            
-            return undefined
-    })
 
-    public findByIdAndDelete = jest.fn(async(
-        productId: string
-        ): Promise<HydratedProductDoc | null> =>{
-            if(productId === '64c9e4f2df7cc072af2ac9e4'){
+            } else return undefined
+        }
+    )
+
+    public findByIdAndDelete = jest.fn(
+
+        async( productId: string ): Promise<HydratedProductDoc | null> =>{
+            
+            const idOfAvailableproduct = '64c9e4f2df7cc072af2ac9e4'
+
+            if(productId === idOfAvailableproduct){
+
                 const mockDeletedProduct = new Product({
                     name: 'Deleted product'
                 })
 
                 return mockDeletedProduct
-            }
-
-            return null
-    })
+                
+            } else return null
+        }
+    )
 }

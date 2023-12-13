@@ -12,14 +12,18 @@ export class UsersDAL{
     constructor(model: UserModel){
         this.Model= model
     }
-    public createNew = jest.fn(async(userData: User): Promise<HydratedUserDoc> =>{
-        
-        const mockUser = new this.Model(userData)  
-        return mockUser
-    })
+    public createNew = jest.fn(
 
-    public findByReferenceId = jest.fn(async(userID: string
-        ): Promise<HydratedUserDoc | null> =>{
+        async(userData: User): Promise<HydratedUserDoc> =>{
+
+            const mockUser = new this.Model(userData)  
+            return mockUser
+        }
+    )
+
+    public findByReferenceId = jest.fn(
+
+        async(userID: string): Promise<HydratedUserDoc | null> =>{
 
             const availableDocumentID = '64c9e4f2df7cc072af2ac9e4'
 
@@ -31,34 +35,39 @@ export class UsersDAL{
                 })
 
                 return mockFoundUser
-            }
 
-            return null
-    })
+            } else return null
+        }
+    )
 
-    public findByEmail = jest.fn(async(email: string): Promise<HydratedUserDoc | null> =>{
+    public findByEmail = jest.fn(
 
-        const existingDocumentEmail = 'existingEmail@gmail.com'
+        async(email: string): Promise<HydratedUserDoc | null> =>{
 
-        if(email === existingDocumentEmail){
+            const existingDocumentEmail = 'existingEmail@gmail.com'
 
-            const mockDocumentWithExistingEmail =  new this.Model({
-                last_name: 'John',
-                first_name: 'Does',
-                email: 'existingEmail@gmail.com'
-            })
+            if(email === existingDocumentEmail){
 
-            return mockDocumentWithExistingEmail
+                const mockDocumentWithExistingEmail =  new this.Model({
+                    last_name: 'John',
+                    first_name: 'Does',
+                    email: 'existingEmail@gmail.com'
+                })
 
-        } else return null
-    })
+                return mockDocumentWithExistingEmail
+
+            } else return null
+        }
+    )
     
-    public findWithPagination = jest.fn(async(
-        pagination: Paginator): Promise<HydratedUserDoc[]> =>{
+    public findWithPagination = jest.fn(
+        
+        async( pagination: Paginator): Promise<HydratedUserDoc[]> =>{
 
             const mockUsers =  this.createMockUsersArray(pagination.limit)
             return mockUsers
-    })
+        }
+    )
 
     private createMockUsersArray = (limit: number) =>{
 
@@ -79,6 +88,7 @@ export class UsersDAL{
     }
    
     public findByIdAndDelete = jest.fn(
+
         async(userId: string): Promise<HydratedUserDoc | null> =>{
 
             const existingDocumentId = '64c9e4f2df7cc072af2ac9e4'
@@ -93,9 +103,11 @@ export class UsersDAL{
                 return mockDeletedUserDoc
 
             } else return null
-    })
+        }
+    )
 
     public findByIdAndUpdate = jest.fn(
+
         async(userId: string): Promise<HydratedUserDoc | null> =>{
 
             const existingDocumentId = '64c9e4f2df7cc072af2ac9e4'
@@ -110,5 +122,6 @@ export class UsersDAL{
                 return mockUpdatedUserDoc
 
             } else return null
-    })  
+        }
+    )  
 }
