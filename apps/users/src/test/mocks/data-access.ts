@@ -6,6 +6,8 @@ import {
 } from "../../data-access/model"
 import { jest } from "@jest/globals"
 
+const ID_OF_EXISTING_DOCUMENT = '64c9e4f2df7cc072af2ac9e4'
+
 export class UsersDAL{
     public Model: UserModel
 
@@ -25,9 +27,7 @@ export class UsersDAL{
 
         async(userID: string): Promise<HydratedUserDoc | null> =>{
 
-            const availableDocumentID = '64c9e4f2df7cc072af2ac9e4'
-
-            if(userID === availableDocumentID){
+            if(userID === ID_OF_EXISTING_DOCUMENT){
                 const mockFoundUser = new this.Model({
                     last_name: 'John',
                     first_name: 'Does',
@@ -91,9 +91,7 @@ export class UsersDAL{
 
         async(userId: string): Promise<HydratedUserDoc | null> =>{
 
-            const existingDocumentId = '64c9e4f2df7cc072af2ac9e4'
-
-            if(userId === existingDocumentId){
+            if(userId === ID_OF_EXISTING_DOCUMENT){
                 const mockDeletedUserDoc =  new this.Model({
                     first_name: 'John', 
                     last_name: 'Doe',
@@ -110,9 +108,7 @@ export class UsersDAL{
 
         async(userId: string): Promise<HydratedUserDoc | null> =>{
 
-            const existingDocumentId = '64c9e4f2df7cc072af2ac9e4'
-
-            if(userId === existingDocumentId){
+            if(userId === ID_OF_EXISTING_DOCUMENT){
                 const mockUpdatedUserDoc =  new this.Model({
                     first_name: 'John', 
                     last_name: 'Doe',
