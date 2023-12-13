@@ -3,6 +3,8 @@ import { HydratedPaymentDoc, Payment, PaymentModel } from "../../data-access/mod
 import { jest } from "@jest/globals"
 import { paymentInput } from "./raw-data"
 
+const ORDER_ID_OF_AVAILABLE_PAYMENT = '64c9e4f2df7cc072af2ac9e8'
+
 export class DataAccess{
     public Model: PaymentModel
 
@@ -22,9 +24,7 @@ export class DataAccess{
 
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
 
-            const orderIdOfAvailablePayment = '64c9e4f2df7cc072af2ac9e8'
-
-            if(orderId === orderIdOfAvailablePayment){
+            if(orderId === ORDER_ID_OF_AVAILABLE_PAYMENT){
 
                 const mockFoundPayment =  new this.Model(paymentInput)
                 return mockFoundPayment
@@ -56,10 +56,8 @@ export class DataAccess{
     public findByIdAndUpdate = jest.fn(
 
         async(orderId: string, updateDoc: Payment): Promise<HydratedPaymentDoc | null> =>{
-
-            const orderIdOfAvailablePayment = '64c9e4f2df7cc072af2ac9e8'
             
-            if(orderId === orderIdOfAvailablePayment){
+            if(orderId === ORDER_ID_OF_AVAILABLE_PAYMENT){
 
                 const mockUpdatedPayment =  new this.Model(paymentInput)
                 return mockUpdatedPayment
@@ -72,9 +70,7 @@ export class DataAccess{
 
         async(orderId: string): Promise<HydratedPaymentDoc | null> =>{
 
-            const orderIdOfAvailablePayment = '64c9e4f2df7cc072af2ac9e8'
-
-            if(orderId === orderIdOfAvailablePayment){
+            if(orderId === ORDER_ID_OF_AVAILABLE_PAYMENT){
 
                 const mockDeletedPayment =  new this.Model(paymentInput)
                 return mockDeletedPayment
