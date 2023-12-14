@@ -4,6 +4,23 @@ import { validationResult, ValidationChain } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 
 class Validator{
+
+    public validateRequiredField = (field: string) =>{
+        return body(field).trim()
+            .notEmpty()
+            .withMessage(`${field} field is required.`)
+            .escape()
+    }
+
+    public validateOptionalField = (field: string) =>{
+        return body(field).optional().escape()
+    }
+
+    public validateOptionalBooleanField = (field: string) =>{
+        return body(field).isBoolean()
+            .withMessage(`${field} field must be boolean`)
+            .optional()
+    }
     
     public validateObjectId = (fieldName: string) =>{
         return body(fieldName).trim().escape()
@@ -29,8 +46,8 @@ class Validator{
             
     }
 
-    public validateItems = (): ValidationChain =>{
-        return body('items').notEmpty()
+    public validateItems = (field: string): ValidationChain =>{
+        return body(field).notEmpty()
         .withMessage('Items field is required.')
         .isArray({ min: 1})
         .withMessage('Items must be an array.')
@@ -45,6 +62,7 @@ class Validator{
             }
         })
     }
+
 
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
