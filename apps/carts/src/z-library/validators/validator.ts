@@ -2,7 +2,7 @@ import { body, param, validationResult } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 import { isValidObjectId } from "mongoose"
 
-class Validator{
+export class Validator{
     private message = 'must be an hexadecimal of length 24'
 
     public validateObjectId = (fieldName: string) =>{
@@ -20,6 +20,7 @@ class Validator{
             .withMessage(
                 `${fieldName} ${this.message} array`)
     }
+
     private validateIds = (objectIds:string[]) =>{
         if(!Array.isArray(objectIds))
             return false
@@ -47,5 +48,3 @@ class Validator{
             next()
     }
 }
-
-export const validator = new Validator()

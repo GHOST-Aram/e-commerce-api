@@ -1,4 +1,4 @@
-import { validator } from "../z-library/validators/validator";
+import { validator } from "../utils/validator";
 
 export const initialInputValidators = [
     validator.validateObjectId('customer'),
