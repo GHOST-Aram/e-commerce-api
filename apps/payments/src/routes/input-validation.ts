@@ -25,7 +25,7 @@ export const postValidators = [
 ]
 
 export const referenceIdValidator = [
-    validator.validateReferencId('orderId')
+    validator.validateReferenceId('orderId')
 ]
 
 export const patchValidators = [

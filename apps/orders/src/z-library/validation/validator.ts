@@ -1,19 +1,99 @@
-import { body, param } from "express-validator"
+import { body, param, validationResult, ValidationChain } from "express-validator"
 import { isValidObjectId } from "mongoose"
-import { validationResult, ValidationChain } from "express-validator"
+import { formatter } from "../formatting/formatter"
 import { Response, Request, NextFunction } from "express"
 
 export class Validator{
+    
 
-    public validateRequiredField = (field: string) =>{
-        return body(field).trim()
-            .notEmpty()
-            .withMessage(`${field} field is required.`)
+    private nameLengthValidationMsg = 'must be string btw 2 to 100 characters long'
+    private numberValiditionMessage = 'must be numeric'
+    private objectIdMessage = 'must be an hexadecimal of length 24'
+
+    
+    public validateObjectId = (fieldName: string) =>{
+        return body(fieldName).notEmpty()
+            .withMessage(`${fieldName} is required`)
+            .matches(/[a-fA-F0-9]{24}/)
+            .withMessage(
+                `${fieldName} ${this.objectIdMessage}`)
+    }
+
+    public validateObjectIDArray = (fieldName: string) =>{
+        return body(fieldName).notEmpty()
+            .withMessage(`${fieldName} is required`)
+            .custom(this.validateIds)
+            .withMessage(
+                `${fieldName} ${this.objectIdMessage} array`)
+    }
+
+    private validateIds = (objectIds:string[]) =>{
+        if(!Array.isArray(objectIds))
+            return false
+
+        return objectIds.every(id =>{
+            return isValidObjectId(id)
+        })
+    }
+
+    public validateReferenceId = (paramName: string) =>{
+        return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
+            .withMessage('Invalid reference Id')
+    }
+
+    public validateName = (fieldName: string) =>{
+        return body(fieldName).trim()
+            .isLength({ min: 2, max: 100})
+            .withMessage(
+                `${fieldName} ${this.nameLengthValidationMsg}`)
             .escape()
     }
 
-    public validateOptionalField = (field: string) =>{
-        return body(field).optional().escape()
+    public validateNumber = (fieldName: string) =>{
+        return body(fieldName).isNumeric()
+            .withMessage(
+                `${fieldName} ${this.numberValiditionMessage}`)
+    }
+
+    public validateRequiredField = (fieldName: string): ValidationChain =>{
+        return body(fieldName).trim()
+            .escape().notEmpty()
+            .withMessage(`${fieldName} field is required`)
+    }
+
+    public validateOptionalField = (fieldName: string): ValidationChain =>{
+        return body(fieldName).trim()
+            .escape().optional()
+    }
+
+    public validateReferenceName = (paramName: string) =>{
+        return param(paramName)
+            .matches(/^[a-z0-9]{2,100}$/i)
+            .withMessage(`${paramName} must be a 2-50 characters long`)
+            .trim()
+            .escape()
+    }
+   
+    public validateNameField(fieldName: string): ValidationChain{
+        const formattedName = formatter.formatFieldName(fieldName)
+
+        return body(fieldName)
+            .matches(/^.{2,100}$/)
+            .withMessage(`${formattedName} must be a 2-50 characters long`)
+            .trim()
+            .escape()
+    }
+
+    public validateNumberField(fieldName: string):ValidationChain{
+        const formattedName = formatter.formatFieldName(fieldName)
+
+        return body(fieldName)
+            .trim()
+            .escape()
+            .custom((value) =>{
+                return Number(value) > 1
+            })
+            .withMessage(`${formattedName} must be greater than 1`)
     }
 
     public validateOptionalBooleanField = (field: string) =>{
@@ -21,42 +101,19 @@ export class Validator{
             .withMessage(`${field} field must be boolean`)
             .optional()
     }
-    
-    public validateObjectId = (fieldName: string) =>{
-        return body(fieldName).trim().escape()
-            .matches(/^[a-fA-F0-9]{24}$/)
-            
-    }
 
-    public validateName = (fieldName: string) =>{
-        return body(fieldName).trim().escape()
-            .isLength({min: 2, max: 100 })
-    }
-
-    public validateNumber = (fieldName: string) =>{
-        return body(fieldName).trim().escape()
-            .isNumeric()
-    }
-
-    public validateReferenceId = (paramName: string) =>{
-        return param(paramName).trim().escape()
-            .matches(/^[a-fA-F0-9]{24}$/)
-            .custom((value) => isValidObjectId(value))
-            .withMessage('Invalid reference Id')
-            
-    }
-    
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction) =>{
+    public handleValidationErrors = (req: Request, res: Response, 
+        next: NextFunction) =>{
             const errors = validationResult(req)
 
             if(!errors.isEmpty()){
                 res.status(400).json({ 
-                    errors: errors.array(),
-                    message: 'Invalid Input' 
+                    message: 'Invalid input or reference id.',
+                    errors: errors.array()
                 })
             } else {
                 next()
             }
     }
+
 }
