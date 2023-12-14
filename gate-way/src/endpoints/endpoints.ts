@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as proxies from "../proxy-config/proxy-config"
+import * as proxies from "../proxies/proxy-config"
 
 const endpoints = Router()
 
