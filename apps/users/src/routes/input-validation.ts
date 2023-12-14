@@ -1,4 +1,4 @@
-import { validator } from "../z-library/validation/validator";
+import { validator } from "../utils/validator";
 
 export const userValidators = [
     validator.validateRequiredField('first_name'),

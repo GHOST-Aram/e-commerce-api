@@ -1,8 +1,5 @@
 import { 
-    ValidationChain, 
-    body, 
-    param, 
-    validationResult 
+    ValidationChain, body, param, validationResult 
 } from 'express-validator'
 import { Response, Request, NextFunction } from 'express'
 
@@ -23,19 +20,16 @@ export class Validator {
         return param(paramName).matches(/^[a-fA-F0-9]{24}$/)
     }
 
-    public handleValidationErrors = (
-        req: Request, res: Response, next: NextFunction) =>{
-            const errors = validationResult(req)
+    public handleValidationErrors = (req: Request, res: Response, next: NextFunction) =>{
+        const errors = validationResult(req)
 
-            if(!errors.isEmpty()){
-                res.status(400).json({
-                    message: 'Invalid input',
-                    errors: errors.array()
-                })
-            } else{
-                next()
-            }
+        if(!errors.isEmpty()){
+            res.status(400).json({
+                message: 'Invalid input',
+                errors: errors.array()
+            })
+        } else{
+            next()
+        }
     }
 }
-
-export const validator = new Validator()
