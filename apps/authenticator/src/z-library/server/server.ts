@@ -1,7 +1,6 @@
 import express, { Application } from "express"
 import cors from 'cors'
 import helmet from "helmet"
-import mongoose from "mongoose"
 import morgan from 'morgan'
 
 export class Server{
