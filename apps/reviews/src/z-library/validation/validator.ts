@@ -1,7 +1,7 @@
 import { body, param, validationResult } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 
-class Validator{
+export class Validator{
 
     validateRequiredField = (fieldName: string) =>{
         return body(fieldName).trim().escape().notEmpty()
@@ -30,5 +30,3 @@ class Validator{
             }
     }
 }
-
-export const validator = new Validator()

@@ -1,4 +1,4 @@
-import { validator } from "../z-library/validation/validator";
+import { validator } from "../utils/validator";
 
 export const newReviewInputValidators = [
     validator.validateRequiredField('author').isLength({ min: 24, max: 24}), 
