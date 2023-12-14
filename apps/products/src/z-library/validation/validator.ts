@@ -15,20 +15,7 @@ export class Validator{
             .escape()
     }
 
-    public validatePriceRangeParam = (paramName: string) =>{
-        return param(paramName).custom((value) =>{
-            const { start, end } = formatter.convertToNumbers(value)
     
-            if(typeof start === 'number' && typeof end === 'number'){
-                if(start < end)
-                    return true
-                else if( end < start)
-                    return true
-            }
-            return false
-        })
-    }
-
     public validateNameField(fieldName: string): ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
 
@@ -38,15 +25,6 @@ export class Validator{
             .trim()
             .escape()
     }
-
-    public validateUrlField(fieldName: string): ValidationChain{
-        return  body(fieldName)
-    }
-
-    public validateFileField(fieldName: string): ValidationChain{
-        return body(fieldName).optional()
-    }
-
 
     public validateNumberField(fieldName: string):ValidationChain{
         const formattedName = formatter.formatFieldName(fieldName)
@@ -60,12 +38,6 @@ export class Validator{
             .withMessage(`${formattedName} must be greater than 1`)
     }
 
-    public validateSpecificationsField(fieldName: string): ValidationChain{
-        return  body(fieldName)
-            .isArray()
-            .withMessage('Specifications field must be an array')
-            .escape()
-    }
 
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction 
@@ -82,4 +54,4 @@ export class Validator{
             }
     }
 }
-export const validator = new Validator()
+

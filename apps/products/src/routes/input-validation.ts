@@ -1,11 +1,11 @@
-import { validator } from "../z-library/validation/validator"
+import { validator } from "../utils/validator"
 
 export const productValidators = [
     validator.validateNameField('name')
         .notEmpty()
         .withMessage(`Name field is required`),
 
-    validator.validateUrlField('image_url')
+    validator.validateImageUrl('image_url')
         .notEmpty()
         .withMessage('Image url is required'),
 
@@ -46,7 +46,7 @@ export const patchValidators = [
     validator.validateNameField('name')
         .optional(),
 
-    validator.validateUrlField('image_url')
+    validator.validateImageUrl('image_url')
         .optional(),
 
     validator.validateFileField('image_file'),
