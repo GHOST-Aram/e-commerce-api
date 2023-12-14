@@ -3,7 +3,7 @@ import { isValidObjectId } from "mongoose"
 import { validationResult, ValidationChain } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 
-class Validator{
+export class Validator{
 
     public validateRequiredField = (field: string) =>{
         return body(field).trim()
@@ -45,25 +45,7 @@ class Validator{
             .withMessage('Invalid reference Id')
             
     }
-
-    public validateItems = (field: string): ValidationChain =>{
-        return body(field).notEmpty()
-        .withMessage('Items field is required.')
-        .isArray({ min: 1})
-        .withMessage('Items must be an array.')
-        .custom(items =>{
-            if(Array.isArray(items)){
-                return items.every((item: object)=>{
-                    return item.hasOwnProperty('productId') &&
-                        item.hasOwnProperty('name') && 
-                        item.hasOwnProperty('price') &&
-                        item.hasOwnProperty('quantity')
-                })
-            }
-        })
-    }
-
-
+    
     public handleValidationErrors = (
         req: Request, res: Response, next: NextFunction) =>{
             const errors = validationResult(req)
@@ -78,5 +60,3 @@ class Validator{
             }
     }
 }
-
-export const validator = new Validator()

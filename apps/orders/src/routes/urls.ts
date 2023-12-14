@@ -1,7 +1,7 @@
 import Router from 'express'
 import { OrdersController } from '../controller/controller'
 import * as middlewear from './input-validation'
-import { validator } from '../z-library/validation/validator'
+import { validator } from '../utils/validator'
 import { Authenticatable, Authenticator, authenticator } from '../z-library/auth/auth'
 
 const router = Router()
