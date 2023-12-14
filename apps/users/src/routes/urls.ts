@@ -1,6 +1,6 @@
 import { UsersController } from "../controller/controller";
 import { Router } from "express";
-import * as middlewear from "../z-library/validation/middlewears";
+import * as middlewear from "./input-validation";
 import { validator } from "../z-library/validation/validator";
 import { Authenticatable, Authenticator } from "../z-library/auth/auth";
 

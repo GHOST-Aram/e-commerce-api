@@ -1,4 +1,4 @@
-import { validator } from "./validator"
+import { validator } from "../z-library/validation/validator"
 
 export const productValidators = [
     validator.validateNameField('name')

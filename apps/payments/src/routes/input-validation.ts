@@ -1,4 +1,4 @@
-import { validator } from "./validator"
+import { validator } from "../z-library/validators/validator"
 const required = 'Field is required'
 
 export const postValidators = [

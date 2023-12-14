@@ -1,6 +1,6 @@
 import Router from 'express'
 import { OrdersController } from '../controller/controller'
-import * as middlewear from '../z-library/validation/middlewear'
+import * as middlewear from './input-validation'
 import { validator } from '../z-library/validation/validator'
 import { Authenticatable, Authenticator, authenticator } from '../z-library/auth/auth'
 
