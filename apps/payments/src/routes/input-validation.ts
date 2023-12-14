@@ -1,4 +1,4 @@
-import { validator } from "../z-library/validators/validator"
+import { validator } from "../utils/validator"
 const required = 'Field is required'
 
 export const postValidators = [
@@ -8,7 +8,7 @@ export const postValidators = [
     validator.validateName('processor').notEmpty()
         .withMessage(`Processor ${required}`),
 
-    validator.validateAlphanumeric('receipt_number').notEmpty()
+    validator.validateReceiptNumber('receipt_number').notEmpty()
         .withMessage(`Receipt number ${required}`),
 
     validator.validateNumber('amount').notEmpty().withMessage(
@@ -31,7 +31,7 @@ export const referenceIdValidator = [
 export const patchValidators = [
     validator.validateObjectId('orderId').optional(),
     validator.validateName('processor').optional(),
-    validator.validateAlphanumeric('receipt_number').optional(),
+    validator.validateReceiptNumber('receipt_number').optional(),
     validator.validateNumber('amount').optional(),
     validator.validateName('currency').optional(),
     validator.validateNumber('transaction_date').optional(),

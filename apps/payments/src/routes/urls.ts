@@ -1,8 +1,8 @@
 import Router from 'express'
 import { PayController } from '../controller/controller'
 import * as middlewear from './input-validation'
-import { validator } from '../z-library/validators/validator'
-import { Authenticatable, Authenticator, authenticator } from '../z-library/auth/auth'
+import { validator } from '../utils/validator'
+import { Authenticatable, Authenticator } from '../z-library/auth/auth'
 
 const router = Router()
 

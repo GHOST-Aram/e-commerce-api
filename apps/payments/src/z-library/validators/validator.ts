@@ -1,7 +1,7 @@
 import { body, param, validationResult } from "express-validator"
 import { Response, Request, NextFunction } from "express"
 
-class Validator{
+export class Validator{
     private idValidationMessage = 'must be a hexadecimal string '+
         'of length 24'
     
@@ -30,10 +30,6 @@ class Validator{
                 `${fieldName} ${this.numberValiditionMessage}`)
     }
 
-    public validateAlphanumeric = (fieldName: string) =>{
-        return body(fieldName).isAlphanumeric()
-            .withMessage(`${fieldName} must be alphanumeric`)
-    }
 
     public validateReferencId = (paramName: string ) =>{
         return param(paramName).trim().matches(
@@ -55,5 +51,3 @@ class Validator{
 
     }
 }
-
-export const validator = new Validator()
