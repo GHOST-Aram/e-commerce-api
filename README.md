@@ -1,2 +1,2 @@
 # e-commerce-api
-A CRUD Backend API for a simple E-commerce applicationm the microservice architecture.
+A CRUD Backend API for a E-commerce system with the microservice architecture.
