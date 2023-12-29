@@ -14,6 +14,7 @@ export class AuthController extends HttpResponse {
     }
 
     public signIn = async(req: Request, res: Response, next: NextFunction) =>{
+        //Verify user details and issue authentication token
         const { email, password } = req.body
 
         const secretOrkey = process.env.TOKEN_SECRET
