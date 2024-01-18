@@ -13,10 +13,10 @@ All the microservices can be deployed on different servers or on the same host w
 6. Reviews
 7. Users
 
-All the microservices listed above use different mongodb databases under the same cluster. Each of the microservices has a default port configuration to run on jut in case you forget to provide one.
+All the microservices listed above use different mongodb databases. All the databases belong in the same mongodb cluster. Each of the microservices has a default port configuration to run on just in case you forget to provide one.
 
 ## Local Set Up
-The first action you will take towards setting up this project in your local machine is to clone  or download it. Feel free to decide which action suits you best and execute it.
+The first step setting up this project in your local machine is to clone  or download it. Feel free to decide which action suits you best and execute it.
 
 After creating a local copy of this repository, you can now start worrying about what technologies you need to start using it. The whole project is created using Nodejs and Typescript. You need the latest stable version of Nodejs and npm to run this app. Typescript will be auto-installed once we get to the modules installation part.
 
