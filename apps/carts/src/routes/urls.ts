@@ -55,6 +55,7 @@ export const routesWrapper = (
     router.delete('/', authenticator.authenticate(),
         controller.respondWithMethodNotAllowed
     )
+    
     router.delete('/:customerId',authenticator.authenticate(), 
         validator.validateReferenceId('customerId'),
         validator.handleValidationErrors,
