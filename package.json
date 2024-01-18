@@ -4,6 +4,7 @@
   "description": "A CRUD Backend API for a simple E-commerce applicationm the microservice architecture.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install:authenticator": " cd apps/authenticator && npm install",
     "test:authenticator": "cd apps/authenticator && jest",
     "build:authenticator": "cd apps/authenticator && tsc",
     "start:authenticator": "node apps/authenticator/build/app",
