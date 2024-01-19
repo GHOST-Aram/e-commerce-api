@@ -1,9 +1,22 @@
 # e-commerce-api
 This is a CRUD backend API for an e-commerce web application. The API has been implemented using the microservice architecture. All the components of this API are in one git repository. This documentation will serve as a brief guide on how you can locally install, test and run this e-commerce backend API.
 
-## Features
+This documentation covers the following sections:
+- [Features of the API](#features-of-the-api) 
+- [Cloning the source code](#cloning-the-source-code)
+- [Installing dependencies in the parent project.](#installing-dependencies-in-the-parent-project)
+- [Installing dependencies in the microservice applications.](#installing-dependencies-in-the-microservice-applications)
+- [Testing the microservice applications.](#testing-the-microservice-applications)
+- [Running the microservice applications in development mode.](#running-the-microservice-applications-in-development-mode)
+- [Compile Typescript code.](#compile-typescript-code)
+- [Installing dependencies in the api gateway app.](#installing-dependencies-in-the-api-gateway-app)
+- [## Running the API gateway application in development mode.](#running-the-api-gateway-application-in-development-mode)
+
+## Features of the API
 This API consist of seven independent microservices and an API gateway application. 
-All the microservices can be deployed on different servers or on the same host with distinct ports for each microservice. The microservices are as follows
+All the microservices can be deployed on different servers or on the same host with distinct ports for each microservice. 
+
+The following is the list of applications in this project.
 
 1. Authenticator
 2. Carts
@@ -12,16 +25,19 @@ All the microservices can be deployed on different servers or on the same host w
 5. Products
 6. Reviews
 7. Users
-8. API Gateway
 
 All the microservices listed above use different mongodb databases. All the databases belong in the same mongodb cluster. Each of the microservices has a default port configuration to run on just in case you forget to provide one.
 
-## Local Set Up
-The first step setting up this project in your local machine is to clone  or download it. Feel free to decide which action suits you best and execute it.
+## Cloning the source code.
+The first step setting up this project in your local machine is to clone it.
 
-After creating a local copy of this repository, you can now start worrying about what technologies you need to start using it. The whole project is created using Nodejs and Typescript. You need the latest stable version of Nodejs and npm to run this app. Typescript will be auto-installed once we get to the modules installation part.
+Execute the following command to clone this repository:
 
-### Installing dependencies in the parent project.
+```
+git clone https://github.com/GHOST-Aram/e-commerce-api
+```
+
+## Installing dependencies in the parent project.
 As you have probably noticed, we have a `package.json` file in the root directory of the whole project. This means that the root project folder was initialized as a Nodejs project. This does not mean that all the microservices depends on the root project directory. The root project directory was only initialized this way to facilitate working on the microservices from the root directory.
 
 Execute the following command in the root directory to install relevant modules.
@@ -30,12 +46,12 @@ Execute the following command in the root directory to install relevant modules.
 npm install
 ```
 
-The above command installs modules in the parent project. This command does not install the dependencies of the microservices. Each microservice has its own dependencies. The dependencies of the applications can be installed independent of each other or the parent project. Let us explore how to install dependencies for the individual application in the next section.
+The above command installs modules in the parent project. This command does not install the dependencies of the microservice applications. Each microservice has its own dependencies. The dependencies of the applications can be installed independent of each other or the parent project. Let us explore how to install dependencies for the individual application in the next section.
 
-## Installing Individual microservice dependencies.
+## Installing dependencies in the microservice applications.
 Each microservice has its own `package.json` file with the list of development and production dependencies. You can install the dependencies of each microservice in either of the following ways:
 
-### - Use the npm commands in the parent `package.json` file.
+### 1. Use the npm commands in the parent `package.json` file.
 Here you can install an application's dependency without manually navigating into the app directory.
 
 The  dependencies installation command of each application follows a convention that is shared throught the commands list. The command follows the format below.
@@ -52,7 +68,7 @@ npm run install:authenticator
 
 Installing dependencies of all the applications from the main project directory follows the above format.
 
-### - Navigate into each app directory and install dependencies.
+### 2. Navigate into each app directory and install dependencies.
 This alternative is obvious. You can manually navigate into an app and execute an npm installation command. 
 
 For example, to install dependencies in the authenticator application. Navigate into the authenticator app and execute the installation command as follows.
@@ -64,10 +80,10 @@ npm install
 
 All the microservices in this project share the same folder structure. You can easily install dependencies in the other applications using the above methods. All you need to do is substitute the target application name in the above commands.
 
-## Testing Individual Microservice.
+## Testing the microservice applications.
 After installing dependencies, the microservices can be tested independently. Testing of the microservices can be done in two way described below.
 
-### - Use npm commands in the parent `package.json` file.
+### 1. From the main project directory.
 The `package.json` file in the parent directory contains commands for testing each microservice independently. The custom cammands allow us to test without the need to physically navigate into each application. 
 
 The test command of each application follows a convention that is shared throught the commands list. The command follows the format below.
@@ -82,7 +98,7 @@ Following the above format, we can test the authenticator using the command belo
 npm run test:authenticator
 ```
 
-### - Navigate into each app directory and test.
+### 2. From within the tagert application directory.
 An alternative method of testing the microservices is to manually navigate into each then execute a test command.
 
 Execute the following commands to test the authenticator app:
@@ -95,10 +111,10 @@ npm test
 
 All the microservice applications in this project use the same testing library and configurations. To test the other applications, use either of the above methods. Remember to substitute the application name with the desired target application name.
 
-## Run an individual microservice in development mode.
+## Running the microservice applications in development mode.
 Similar to installing dependencies and testing, the microservices and also be run independently in development mode in two ways. The microservices can be run in two diffent ways:
 
-### Use npm commands in the parent `package.json` file.
+### 1. From the main project directory.
 The command for testing an individual microservice in dev mode follows the following format
 
 ```
@@ -116,7 +132,7 @@ To run any one of the applications, replace `carts` with the target app name. Fo
 npm run products
 ```
 
-### Navigate into each app directory and run.
+### 2. From within the tagert application directory.
 Each application in this project is designed to be run independent of other applications. In this alternative, you can manually navigate into an application of your choice and run. 
 
 We will use the `users` application for this demostration. Execute the following commands to  run the `users` microservice in dev mode.
