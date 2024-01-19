@@ -51,7 +51,10 @@ The above command installs modules in the parent project. This command does not 
 ## Installing dependencies in the microservice applications.
 Each microservice has its own `package.json` file with the list of development and production dependencies. You can install the dependencies of each microservice in either of the following ways:
 
-### 1. Use the npm commands in the parent `package.json` file.
+- From the main project directory
+- From Within the target application directory
+
+#### 1. From the parent project directory.
 Here you can install an application's dependency without manually navigating into the app directory.
 
 The  dependencies installation command of each application follows a convention that is shared throught the commands list. The command follows the format below.
@@ -68,7 +71,7 @@ npm run install:authenticator
 
 Installing dependencies of all the applications from the main project directory follows the above format.
 
-### 2. Navigate into each app directory and install dependencies.
+#### 2. From within the target application directory.
 This alternative is obvious. You can manually navigate into an app and execute an npm installation command. 
 
 For example, to install dependencies in the authenticator application. Navigate into the authenticator app and execute the installation command as follows.
@@ -83,7 +86,7 @@ All the microservices in this project share the same folder structure. You can e
 ## Testing the microservice applications.
 After installing dependencies, the microservices can be tested independently. Testing of the microservices can be done in two way described below.
 
-### 1. From the main project directory.
+#### 1. From the main project directory.
 The `package.json` file in the parent directory contains commands for testing each microservice independently. The custom cammands allow us to test without the need to physically navigate into each application. 
 
 The test command of each application follows a convention that is shared throught the commands list. The command follows the format below.
@@ -98,7 +101,7 @@ Following the above format, we can test the authenticator using the command belo
 npm run test:authenticator
 ```
 
-### 2. From within the tagert application directory.
+#### 2. From within the tagert application directory.
 An alternative method of testing the microservices is to manually navigate into each then execute a test command.
 
 Execute the following commands to test the authenticator app:
@@ -114,7 +117,7 @@ All the microservice applications in this project use the same testing library a
 ## Running the microservice applications in development mode.
 Similar to installing dependencies and testing, the microservices and also be run independently in development mode in two ways. The microservices can be run in two diffent ways:
 
-### 1. From the main project directory.
+#### 1. From the main project directory.
 The command for testing an individual microservice in dev mode follows the following format
 
 ```
@@ -132,7 +135,7 @@ To run any one of the applications, replace `carts` with the target app name. Fo
 npm run products
 ```
 
-### 2. From within the tagert application directory.
+#### 2. From within the tagert application directory.
 Each application in this project is designed to be run independent of other applications. In this alternative, you can manually navigate into an application of your choice and run. 
 
 We will use the `users` application for this demostration. Execute the following commands to  run the `users` microservice in dev mode.
@@ -153,7 +156,7 @@ This project is designed to allow for  independent code compilation in any appli
 - From the main project directory
 - From Within the target application directory
 
-### From the main project directory.
+#### From the main project directory.
 The `package.json` file in the main project directory contains commands for compiling the source code of each application. The commands follow an easy to remeber format. 
 
 To compile the source code of any application, use the following command:
@@ -168,7 +171,7 @@ The word 'application-name' in the angular brackets is meant to be replaced by t
 npm run build:reviews
 ```
 
-### From within the target application directory.
+#### From within the target application directory.
 A simpler and more straight-foward way to compile development code into production code is to navigate into the target directory and compile. Commands of the following format can be used to compile the development code of any application in this project:
 
 ```
