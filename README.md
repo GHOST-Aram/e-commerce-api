@@ -156,7 +156,7 @@ This project is designed to allow for  independent code compilation in any appli
 - From the main project directory
 - From Within the target application directory
 
-#### From the main project directory.
+#### 1. From the main project directory.
 The `package.json` file in the main project directory contains commands for compiling the source code of each application. The commands follow an easy to remeber format. 
 
 To compile the source code of any application, use the following command:
@@ -171,7 +171,7 @@ The word 'application-name' in the angular brackets is meant to be replaced by t
 npm run build:reviews
 ```
 
-#### From within the target application directory.
+#### 1. From within the target application directory.
 A simpler and more straight-foward way to compile development code into production code is to navigate into the target directory and compile. Commands of the following format can be used to compile the development code of any application in this project:
 
 ```
