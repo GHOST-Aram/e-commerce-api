@@ -9,13 +9,9 @@ This documentation covers the following sections:
 - [Testing the microservice applications.](#testing-the-microservice-applications)
 - [Running the microservice applications in development mode.](#running-the-microservice-applications-in-development-mode)
 - [Compile Typescript code.](#compile-typescript-code)
-- [Installing dependencies in the API gateway app.](#installing-dependencies-in-the-api-gateway-app)
-- [Running the API gateway application in development mode.](#running-the-api-gateway-application-in-development-mode)
-- [Accessing microservices through the gateway.](#accessing-microservices-through-the-gateway)
 
 ## Features of the API
-This API consists of seven independent microservices and an API gateway application. 
-All the microservices can be deployed on different servers or the same host with distinct ports for each microservice. 
+This API consists of seven independent microservices. All the microservices can be deployed on different servers or the same host with distinct ports for each microservice. 
 
 The following is the list of applications in this project.
 
@@ -199,53 +195,3 @@ npm run build
 
 Either of the above compilation procedures generates a `build` directory within the target application. The `build` directory contains plain JavaScript code without any Typescript features. The `build` directory will be deployed when the target app is ready for deployment.
 
-## Installing dependencies in the API gateway app.
-By the design of this project, all the microservices are accessible through one API gateway application. The dependencies of the API gateway application are fully independent of the other applications. 
-
-Follow the steps below to install the dependencies in the gateway application.
-1. Execute the following command to navigate into the gateway directory.
-
-```
-cd gate-way
-```
-
-2. Execute the following command install dependencies.
-
-```
-npm install
-```
-
-## Running the API gateway application in development mode. 
-Follow the procedure below to run the API gateway app in dev mode.
-
-1. Execute the following command to navigate to the API gateway directory.
-
-```
-cd gate-way
-```
-2. Execute the following command to run the API gateway application.
-
-```
-npm run dev
-```
-
-Running the API gateway only starts the gateway app but not the individual services. You must run the services you want to deliver through this gateway to make the accessible.
-
-The API gateway is set to run on port 5000. It can therefore be accessed through the following link:
-
-```
-http://localhost:5000
-```
-
-## Accessing microservices through the gateway.
-After starting the API gateway application, the running microservices can be accessed through the gateway. Before attempting to access a microservice through the gateway, ensure that the microservice application is running.
-
-The microservices are configure by their names for easy access. The following is a list of the links through which each microservice can be accessed.
-
-- Authenticator: `http://localhost:5000/auth`
-- Carts: `http://localhost:5000/carts`
-- Orders: `http://localhost:5000/orders`
-- Payments: `http://localhost:5000/payments`
-- Products: `http://localhost:5000/products`
-- Reviews: `http://localhost:5000/reviews`
-- Users: `http://localhost:5000/users`
