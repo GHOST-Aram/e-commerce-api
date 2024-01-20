@@ -1,17 +1,17 @@
 # e-commerce-api
-This is a CRUD backend API for an e-commerce web app. The API has been implemented using the microservice architecture. All the components of this API are in one git repository. This documentation will serve as a brief guide on how you can locally install, test, and run this e-commerce backend API.
+This is a CRUD backend API for an e-commerce web app. The API is implemented using the microservice architecture. All the components of this API are in one git repository. This documentation serves as a brief guide on how you can locally install, test, and run the API.
 
 This documentation covers the following sections:
-- [Features of the API](#features-of-the-api) 
+- [Components of the API](#components-of-the-api) 
 - [Cloning the source code](#cloning-the-source-code)
 - [Installing dependencies in the parent project.](#installing-dependencies-in-the-parent-project)
-- [Installing dependencies in the microservice apps.](#installing-dependencies-in-the-microservice-apps)
-- [Testing the microservice apps.](#testing-the-microservice-apps)
-- [Running the microservice apps in development mode.](#running-the-microservice-apps-in-development-mode)
+- [Installing dependencies in the apps.](#installing-dependencies-in-the-apps)
+- [Testing the apps.](#testing-the-apps)
+- [Running the apps in development mode.](#running-the-apps-in-development-mode)
 - [Compile Typescript code.](#compile-typescript-code)
 
-## Features of the API
-This API consists of seven independent microservices. All the microservices can be deployed on different servers or the same host with distinct ports for each microservice. 
+## Components of the API
+This API consists of seven independent apps. All the apps can be deployed on different servers or the same host with distinct ports for each app. 
 
 The following is the list of apps in this project.
 
@@ -23,7 +23,7 @@ The following is the list of apps in this project.
 6. [Reviews](./reviews.md)
 7. [Users](./users.md)
 
-All the microservices listed above use different MongoDB databases. All the databases belong in the same MongoDB cluster. Each of the microservices has a default port configuration to run on just in case you forget to provide one.
+All the apps listed above use different MongoDB databases. All the databases belong in the same MongoDB cluster. Each of the apps has a default port configuration to run on just in case you forget to provide one.
 
 ## Cloning the source code.
 The first step in setting up this project in your local machine is to clone it.
@@ -35,7 +35,7 @@ git clone https://github.com/GHOST-Aram/e-commerce-api
 ```
 
 ## Installing dependencies in the parent project.
-As you have probably noticed, we have a `package.json` file in the root directory of the whole project. This means that the root project folder was initialized as a Nodejs project. This does not mean that all the microservices depend on the root project directory. The root project directory was only initialized this way to facilitate working on the microservices from the root directory.
+As you have probably noticed, we have a `package.json` file in the root directory of the whole project. This means that the root project folder is initialized as a Nodejs project. This does not mean that all the apps depend on the root project directory. The root project directory is only initialized this way to facilitate working on the apps from the root directory.
 
 Execute the following command in the root directory to install relevant modules.
 
@@ -43,10 +43,10 @@ Execute the following command in the root directory to install relevant modules.
 npm install
 ```
 
-The above command installs modules in the parent project. This command does not install the dependencies of the microservice apps. Each microservice has its own dependencies. The dependencies of the apps can be installed independently of each other or the parent project. Let us explore how to install dependencies for the individual app in the next section.
+The command above installs modules in the parent project. This command does not install the dependencies of the apps. Each app has its own dependencies. The dependencies of the apps can be installed independently of each other or the parent project. Let us explore how to install dependencies for the individual app in the next section.
 
-## Installing dependencies in the microservice apps.
-Each microservice has its own `package.json` file with a list of development and production dependencies. You can install the dependencies of each microservice in either of the following ways:
+## Installing dependencies in the app apps.
+Each app has its own `package.json` file with a list of development and production dependencies. You can install the dependencies of each app in either of the following ways:
 
 - From the main project directory
 - From Within the target app directory
@@ -54,13 +54,13 @@ Each microservice has its own `package.json` file with a list of development and
 #### 1. From the parent project directory.
 Here you can install an app's dependency without manually navigating into the app directory.
 
-The dependencies installation command of each app follows a convention that is shared throughout the commands list. The command follows the format below.
+The dependencies installation command of each app follows a convention that is shared throughout the commands list. The commands are defined in the following format.
 
 ```
 npm run install:<app-name>
 ```
 
-Following the above format, we can install the dependencies of the authenticator app using the command below.
+We can install the dependencies of the Authenticator using the following command.
 
 ```
 npm run install:authenticator
@@ -71,40 +71,40 @@ Installing dependencies of all the apps from the main project directory follows 
 #### 2. From within the target app directory.
 This alternative is obvious. You can manually navigate into an app and execute the npm installation command. 
 
-For example, to install dependencies in the authenticator app. Navigate into the authenticator app and execute the installation command as follows.
+For example, to install dependencies in the Authenticator. Navigate into the Authenticator and execute the installation command as follows.
 ```
 cd app/authenticator 
 
 npm install
 ```
 
-All the microservices in this project share the same folder structure. You can easily install dependencies in the other apps using either of the above procedures. All you need to do is substitute the target app name in the above commands.
+All the apps in this project share the same folder structure. You can easily install dependencies in the other apps using either of the above procedures. All you need to do is substitute the target app name in the above commands.
 
-## Testing the microservice apps.
-After installing dependencies, the microservices can be tested independently. Testing of the microservices can be done in two ways.
+## Testing the apps.
+After installing dependencies, the apps can be tested independently. Testing of the apps can be done in two ways.
 
 - From the main project directory.
 - From within the target app.
 
 #### 1. From the main project directory.
-The `package.json` file in the parent directory contains commands for testing each microservice independently. The custom commands allow us to test without the need to physically navigate into each app. 
+The `package.json` file in the parent directory contains commands for testing each app independently. The custom commands allow us to test without the need to physically navigate into each app. 
 
-The test command of each app follows a convention that is shared throughout the commands list. The commands follow the format below.
+The test command of each app follows a convention that is shared throughout the commands list. The commands matche the following format.
 
 ```
 npm run test:<app-name>
 ```
 
-Following the above format, we can test the authenticator using the command below:
+We can test the Authenticator using the following command:
 
 ```
 npm run test:authenticator
 ```
 
 #### 2. From within the target app directory.
-An alternative method of testing the microservices is to manually navigate into each and then execute a test command.
+An alternative method of testing the apps is to manually navigate into each and then execute a test command.
 
-Execute the following commands to test the authenticator app:
+Execute the following commands to test the Authenticator:
 
 ```
 cd app/authenticator
@@ -112,17 +112,15 @@ cd app/authenticator
 npm test
 ```
 
-All the microservice apps in this project use the same testing library and configurations. To test the other apps, use either of the above methods. Remember to substitute the app name with the desired target app name.
+All the apps in this project use the same testing library and configurations. To test the other apps, use either of the above methods. Remember to substitute the app name with the desired target app name.
 
-## Running the microservice apps in development mode.
-Similar to installing dependencies and testing, the microservices and also be run independently in development mode. 
-
-The microservices can be run in two different ways:
+## Running the apps in development mode.
+The apps can be run independently in development mode using either of the following ways:
 - From the main project directory.
 - From within the target app.
 
 #### 1. From the main project directory.
-The command for testing an individual microservice in dev mode follows the following format
+The command for testing an individual app in dev mode follows the following format
 
 ```
 npm run <app-name>
@@ -133,7 +131,8 @@ Following the above command format we can run the `carts` app using the followin
 npm run carts
 ```
 
-To run any one of the apps, replace `carts` with the target app name. For example, the `products` products microservice can be run in development mode using the command below.
+To run any one of the apps, replace `carts` with the target app name.
+We can use the following command to run the `products` app in development mode.
 
 ```
 npm run products
@@ -142,7 +141,7 @@ npm run products
 #### 2. From within the target app directory.
 Each app in this project is designed to be run independently of other apps. In this alternative, you can manually navigate into an app of your choice and run it. 
 
-We will use the `users` app for this demonstration. Execute the following commands to run the `users` microservice in dev mode.
+Execute the following commands to run the `users` app in dev mode.
 
 ```
 cd apps/users
@@ -153,7 +152,7 @@ npm run dev
 You can use the same commands above to run the other apps in this project. Remember to substitute the app name with the target app name.
 
 ## Compile Typescript code.
-This project has been created using Typescript. It's OK to run Typescript code in development mode. When it's time for deployment, it's recommended to deploy a build code rather than the development code. This section of the documentation will guide you on how to compile the source code of each microservice app into JavaScript build code.
+This project is created using Typescript. While it's OK to run Typescript code in development mode, plain JavaScript is recommended for deployment. This section of the documentation provides a guide on how to compile the source code of each app into JavaScript build code.
 
 This project is designed to allow for independent code compilation in any app. Compiling the source code of an app in this project can be done in two ways:
 
@@ -193,7 +192,10 @@ npm run build
 ```
 
 
-Either of the above compilation procedures generates a `build` directory within the target app. The `build` directory contains plain JavaScript code without any Typescript features. The `build` directory will be deployed when the target app is ready for deployment.
+Either of the above compilation procedures generates a `build` directory within the target app. The `build` directory contains plain JavaScript code without any Typescript features. The `build` directory is be deployed when the target app is ready for deployment.
 
-This document has covered how to set up the project on a localhost. To learn how the authentication works, visit [the authenticator documentation](./authenticator.md)
+
+
+See also:
+[The Authenticator documentation](./authenticator.md)
 

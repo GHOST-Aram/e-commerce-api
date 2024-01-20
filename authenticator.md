@@ -1,8 +1,8 @@
-## Authenticator Service
+## Authenticator
 
-The Authenticator app in this project uses JSON Web tokens. It's purpose in the authentication process is to provide an authorizaion JSON web token. The authenticator verifies user details.The details required are a registered user `email` and a `password`. The authentication handler responds with a token if the user details are valid.  However, if `email` is not registered or the `password` is wrong, the authentication handler will respond with `401 Unauthorised` status.
+The Authenticator uses JSON Web tokens. It provides an authorizaion token. The details required are a registered `email` and a `password`. The authenticator verifies user details and responds with a token or an error. If the user details are valid, the Authenticator with an authorization token.  However, if the `email` is not registered or the `password` is wrong, the Authentication responds with `401 Unauthorised` status.
 
-An example of an authentication request.
+Here is an example of an authentication request.
 
 ```
 (async () => {
