@@ -195,3 +195,5 @@ npm run build
 
 Either of the above compilation procedures generates a `build` directory within the target application. The `build` directory contains plain JavaScript code without any Typescript features. The `build` directory will be deployed when the target app is ready for deployment.
 
+This document has covered how to set up the project on a localhost. To learn how the authentication works, visit [the authenticator documentation](./authenticator.md)
+
