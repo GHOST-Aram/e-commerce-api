@@ -15,13 +15,13 @@ This API consists of seven independent microservices. All the microservices can 
 
 The following is the list of applications in this project.
 
-1. [Authenticator]('./authenticator.md')
-2. [Carts]('./carts.md)
-3. [Orders]('./orders.md)
-4. [Payments]('payments./.md)
-5. [Products]('./products.md)
-6. [Reviews]('./reviews.md)
-7. [Users]('./users.md)
+1. [Authenticator](./authenticator.md)
+2. [Carts](./carts.md)
+3. [Orders](./orders.md)
+4. [Payments](payments./.md)
+5. [Products](./products.md)
+6. [Reviews](./reviews.md)
+7. [Users](./users.md)
 
 All the microservices listed above use different MongoDB databases. All the databases belong in the same MongoDB cluster. Each of the microservices has a default port configuration to run on just in case you forget to provide one.
 
