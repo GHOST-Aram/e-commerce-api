@@ -1,6 +1,6 @@
 ## Authenticator
 
-The Authenticator uses JSON Web tokens. It provides an authorizaion token. The details required are a registered `email` and a `password`. The authenticator verifies user details and responds with a token or an error. If the user details are valid, the Authenticator with an authorization token.  However, if the `email` is not registered or the `password` is wrong, the Authentication responds with `401 Unauthorised` status.
+The Authenticator issuess an authorizaion token. The details required are a registered `email` and a `password`. The authenticator verifies user details and responds with a token or an error. If the user details are valid, the Authenticator with an authorization token.  However, if the `email` is not registered or the `password` is wrong, the Authenticator responds with `401 Unauthorised` status.
 
 Here is an example of an authentication request.
 
