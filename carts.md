@@ -11,7 +11,7 @@ items: string[], // items Ids
 ```
 The Carts uses hexadecimal string ids to identify users and items. The ids must be 24 characters in length.
 
-Once the request has been processed, the server sends a response containing a message. The location url is sent in the location header of the response if a new item is successfully created.
+Once the request has been processed, the server sends a response containing a message and item location. The location url is sent in the location header of the response if a new item is successfully created.
 
 The following code snippet provides an example of how to create a cart:
 
@@ -22,7 +22,7 @@ The following code snippet provides an example of how to create a cart:
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IkFsbGFuNTFAZ21haWwuY29tIiwiaWF0IjoxNzA1ODA2NjU2LCJleHAiOjE3MDgzOTg2NTYsInN1YiI6IjY1NzJjM2U2ZWVhNDA1Nzc0NTVjMjY3YyJ9.buzpIR1VpItAA5zvpT1bxAVakVe7sOJzWr3sVbkC5pk'
+            'Authorization': 'Bearer <token>'
         },
         body: JSON.stringify({
             items: [
